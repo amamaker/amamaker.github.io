@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Cost Calculator</title>
+    <title>Delivery Calculator</title>
     <style>
         body {
             display: flex;
@@ -12,16 +12,16 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #121212;  /* Тёмный фон */
-            color: #ffffff;  /* Светлый текст */
+            background-color: #121212;
+            color: #ffffff;
         }
 
         .container {
             text-align: center;
-            background-color: #1e1e1e;  /* Тёмный контейнер */
+            background-color: #1e1e1e;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);  /* Тёмная тень */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         input[type="number"] {
@@ -29,9 +29,9 @@
             padding: 10px;
             margin: 10px 0;
             font-size: 1rem;
-            background-color: #2c2c2c;  /* Тёмный фон для ввода */
-            color: #ffffff;  /* Светлый текст */
-            border: 1px solid #444444;  /* Тёмная граница */
+            background-color: #2c2c2c;
+            color: #ffffff;
+            border: 1px solid #444444;
             border-radius: 5px;
         }
 
@@ -52,15 +52,15 @@
         button {
             padding: 10px 20px;
             font-size: 1rem;
-            background-color: #007bff;  /* Синий фон кнопки */
-            color: white;  /* Белый текст */
+            background-color: #007bff;
+            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
         button:hover {
-            background-color: #0056b3;  /* Более тёмный синий при наведении */
+            background-color: #0056b3;
         }
 
         .result {
@@ -69,7 +69,7 @@
         }
 
         input[type="radio"] {
-            accent-color: #007bff;  /* Цвет акцента радиокнопок */
+            accent-color: #007bff;
         }
     </style>
 </head>
@@ -77,11 +77,8 @@
     <div class="container">
         <h1>No Scope</h1>
         <h2>Delivery Calculator</h2>
-
-        <!-- Поле залога с ограничением от 1 до 100 триллионов -->
         <input type="number" id="insuranceValue" placeholder="Collateral" min="1" max="1000000000000" /><br/>
 
-        <!-- Поле расстояния с ограничением от 1 до 100 триллионов -->
         <input type="number" id="distanceKm" placeholder="Distance" min="1" max="1000000000000" />
 
         <div class="radio-group">
@@ -101,13 +98,11 @@
             const distanceKm = parseFloat(document.getElementById('distanceKm').value);
             const ratePercentage = parseFloat(document.querySelector('input[name="region"]:checked').value);
 
-            // Проверка на валидные данные
             if (isNaN(insuranceValue) || isNaN(distanceKm)) {
                 document.getElementById('resultText').innerText = "Please enter valid numbers for both fields.";
                 return;
             }
 
-            // Проверка на диапазон значений от 1 до 100 триллионов
             if (insuranceValue < 1 || insuranceValue > 100000000000000 || distanceKm < 1 || distanceKm > 100000000000000) {
                 document.getElementById('resultText').innerText = "Values must be between 1 and 100 trillion.";
                 return;
