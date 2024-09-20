@@ -77,7 +77,6 @@
     <div class="container">
         <h1>No Scope</h1>
         <h2>Delivery Calculator</h2>
-        <p>Volume up to 13.400 m3</p>
         <input type="number" id="insuranceValue" placeholder="Collateral" min="1" max="1000000000000" /><br/>
 
         <input type="number" id="distanceKm" placeholder="Distance" min="1" max="1000000000000" />
@@ -104,7 +103,7 @@
                 return;
             }
 
-            if (insuranceValue < 1 || insuranceValue > 100000000000000 || distanceKm < 1 || distanceKm > 100000000000000) {
+            if (insuranceValue < 1 || insuranceValue > 10000000000 || distanceKm < 1 || distanceKm > 10000000000) {
                 document.getElementById('resultText').innerText = "Values must be between 1 and 100 trillion.";
                 return;
             }
