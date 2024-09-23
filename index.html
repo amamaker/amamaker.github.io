@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Cost Calculator</title>
+    <title>Rush Delivery Calculator</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -36,9 +36,17 @@
 
         .card h2 {
             font-size: 18px;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
             text-align: center;
             color: #ffffff;
+        }
+
+        .card p {
+            font-size: 14px;
+            margin-bottom: 20px;
+            margin-top: 5px;
+            text-align: center;
+            color: #eadf04;
         }
 
         .input-group {
@@ -103,24 +111,6 @@
             border-color: #00bfff;
         }
 
-        button {
-            width: 100%;
-            padding: 15px;
-            font-size: 1rem;
-            background-color: #00bfff;
-            color: #1e1e1e;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        button:hover {
-            background-color: #009acd;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
         .result {
             margin-top: 20px;
             font-size: 1.2rem;
@@ -156,36 +146,44 @@
 <body>
 
     <div class="card">
-        <h1>No Scope</h1>
-        <h2>Delivery Calculator</h2>
+
+        <h1><i class="fa-sharp-duotone fa-solid fa-plane"></i> No Scope</h1>
+        <h2>Rush Delivery Calculator</h2>
+        <p><i class="fa-sharp-duotone fa-solid fa-box-open"></i> Volume up to 13.400 m3</p>
 
         <div class="input-group">
             <i class="fas fa-coins"></i>
-            <input type="text" id="insuranceValue" placeholder="Collateral (ISK)" oninput="formatNumber(this)" />
+            <input type="text" id="insuranceValue" placeholder="Collateral (ISK)" oninput="formatNumber(this); limitCollateral(this);" onkeypress="return isNumberKey(event)" />
         </div>
 
         <div class="input-group">
-            <i class="fas fa-road"></i>
-            <input type="number" id="distanceKm" placeholder="Distance (jumps)" min="1" max="100000000000000" />
+            <i class="fa-sharp-duotone fa-solid fa-route"></i>
+            <input type="number" id="distanceKm" placeholder="Distance (jumps)" min="1" max="100" step="1" oninput="limitDistance(this); calculate()" />
         </div>
 
         <div class="radio-group">
-            <input type="radio" id="highsec" name="region" value="0.03" checked />
+            <input type="radio" id="highsec" name="region" value="0.03" checked onchange="calculate()" />
             <label for="highsec">Highsec</label>
 
-            <input type="radio" id="lowsec" name="region" value="0.04" />
+            <input type="radio" id="lowsec" name="region" value="0.04" onchange="calculate()" />
             <label for="lowsec">Lowsec</label>
 
-            <input type="radio" id="nullsec" name="region" value="0.05" />
+            <input type="radio" id="nullsec" name="region" value="0.05" onchange="calculate()" />
             <label for="nullsec">Nullsec</label>
         </div>
-
-        <button onclick="calculate()">Calculate</button>
 
         <div class="result" id="resultText"></div>
     </div>
 
     <script>
+        function isNumberKey(evt) {
+            const charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
         function formatNumber(input) {
             let value = input.value.replace(/\D/g, '');
 
@@ -194,6 +192,27 @@
             }
         }
 
+        function limitCollateral(input) {
+            const maxCollateral = 10000000000;
+            let value = input.value.replace(/\./g, '');
+            if (parseInt(value) > maxCollateral) {
+                input.value = (maxCollateral).toLocaleString('de-DE');
+            }
+            calculate();
+        }
+
+        function limitDistance(input) {
+            const maxDistance = 100;
+            const minDistance = 1;
+            if (parseInt(input.value) < minDistance) {
+                input.value = minDistance;
+            } else if (parseInt(input.value) > maxDistance) {
+                input.value = maxDistance;
+            }
+            calculate();
+        }
+
+
         function calculate() {
             const insuranceValueFormatted = document.getElementById('insuranceValue').value;
             const insuranceValue = parseFloat(insuranceValueFormatted.replace(/\./g, ''));
@@ -201,7 +220,7 @@
             const ratePercentage = parseFloat(document.querySelector('input[name="region"]:checked').value);
 
             if (isNaN(insuranceValue) || isNaN(distanceKm)) {
-                document.getElementById('resultText').innerText = "Please enter valid numbers for both fields.";
+                document.getElementById('resultText').innerText = "";
                 return;
             }
 
@@ -210,8 +229,11 @@
 
             const finalCost = Math.max(costMethod1, costMethod2);
 
-            document.getElementById('resultText').innerText = `Cost of delivery: ${finalCost.toLocaleString('de-DE')} ISK`;
+            document.getElementById('resultText').innerHTML = `Cost of delivery: <span id="finalCost" style="color: #00ff00;">${finalCost.toLocaleString('de-DE')}</span> ISK`;
+
         }
+
+        window.onload = calculate;
     </script>
 
 </body>
