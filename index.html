@@ -37,7 +37,6 @@
             --success-soft: rgba(80, 227, 164, 0.1);
 
             --warning: #f2c94c;
-
             --danger: #ff6378;
 
             --radius-lg: 24px;
@@ -123,7 +122,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
 
-            overflow: hidden;
+            overflow: visible;
         }
 
         .calculator::before {
@@ -218,6 +217,115 @@
             border-radius: 99px;
         }
 
+        .language-selector {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+
+            z-index: 20;
+        }
+
+        .language-button {
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 0 10px;
+
+            color: var(--text-secondary);
+
+            background: rgba(255, 255, 255, 0.035);
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+
+            transition:
+                background-color 0.18s ease,
+                border-color 0.18s ease,
+                color 0.18s ease;
+        }
+
+        .language-button:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        .language-button svg {
+            width: 13px;
+            height: 13px;
+
+            transition: transform 0.18s ease;
+        }
+
+        .language-button.active svg {
+            transform: rotate(180deg);
+        }
+
+        .language-menu {
+            position: absolute;
+            top: calc(100% + 7px);
+            right: 0;
+
+            width: 165px;
+            padding: 5px;
+
+            background: rgba(14, 19, 27, 0.98);
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            box-shadow:
+                0 18px 45px rgba(0, 0, 0, 0.45);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .language-menu button {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 9px 10px;
+
+            color: var(--text-secondary);
+
+            background: transparent;
+
+            border: 0;
+            border-radius: 8px;
+
+            cursor: pointer;
+            text-align: left;
+
+            font-size: 12px;
+
+            transition:
+                background-color 0.15s ease,
+                color 0.15s ease;
+        }
+
+        .language-menu button:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+
+        .language-menu button.active {
+            color: var(--accent-light);
+            background: var(--accent-soft);
+        }
+
         .form-section {
             display: grid;
             gap: 21px;
@@ -300,7 +408,6 @@
 
         .input-wrapper input:focus {
             background: #10161f;
-
             border-color: rgba(57, 185, 255, 0.6);
 
             box-shadow:
@@ -311,7 +418,6 @@
             color: #4f5a68;
         }
 
-        /* Hide number arrows */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             margin: 0;
@@ -568,6 +674,16 @@
 
             .header {
                 margin-bottom: 23px;
+                padding-top: 16px;
+            }
+
+            .language-selector {
+                top: 13px;
+                right: 13px;
+            }
+
+            .language-button {
+                height: 32px;
             }
 
             .security-selector {
@@ -603,6 +719,77 @@
 
 <body>
     <main class="calculator">
+
+        <div class="language-selector">
+            <button
+                class="language-button"
+                id="languageButton"
+                type="button"
+                aria-label="Change language"
+                aria-expanded="false"
+            >
+                <span id="currentLanguage">EN</span>
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="m6 9 6 6 6-6"/>
+                </svg>
+            </button>
+
+            <div
+                class="language-menu"
+                id="languageMenu"
+                hidden
+            >
+                <button type="button" data-language="en">
+                    <span>🇬🇧</span>
+                    English
+                </button>
+
+                <button type="button" data-language="ru">
+                    <span>🇷🇺</span>
+                    Русский
+                </button>
+
+                <button type="button" data-language="de">
+                    <span>🇩🇪</span>
+                    Deutsch
+                </button>
+
+                <button type="button" data-language="fr">
+                    <span>🇫🇷</span>
+                    Français
+                </button>
+
+                <button type="button" data-language="es">
+                    <span>🇪🇸</span>
+                    Español
+                </button>
+
+                <button type="button" data-language="ja">
+                    <span>🇯🇵</span>
+                    日本語
+                </button>
+
+                <button type="button" data-language="ko">
+                    <span>🇰🇷</span>
+                    한국어
+                </button>
+
+                <button type="button" data-language="zh">
+                    <span>🇨🇳</span>
+                    简体中文
+                </button>
+            </div>
+        </div>
+
         <header class="header">
 
             <div class="brand">
@@ -623,15 +810,23 @@
                 No Scope
             </div>
 
-            <h1>Rush Delivery</h1>
+            <h1 data-i18n="title">
+                Rush Delivery
+            </h1>
 
-            <p class="subtitle">
+            <p
+                class="subtitle"
+                data-i18n="subtitle"
+            >
                 Calculate courier delivery cost instantly.
             </p>
 
             <div class="capacity">
                 <span>◆</span>
-                Maximum cargo: 13,400 m³
+
+                <span data-i18n="capacity">
+                    Maximum cargo: 13,400 m³
+                </span>
             </div>
 
         </header>
@@ -640,11 +835,18 @@
 
             <div class="field">
                 <div class="field-header">
-                    <label for="collateral">
+
+                    <label
+                        for="collateral"
+                        data-i18n="collateral"
+                    >
                         Collateral
                     </label>
 
-                    <span class="field-limit">
+                    <span
+                        class="field-limit"
+                        data-i18n="maxCollateral"
+                    >
                         Max 20B ISK
                     </span>
                 </div>
@@ -740,11 +942,18 @@
             <div class="field">
 
                 <div class="field-header">
-                    <label for="jumps">
+
+                    <label
+                        for="jumps"
+                        data-i18n="distance"
+                    >
                         Distance
                     </label>
 
-                    <span class="field-limit">
+                    <span
+                        class="field-limit"
+                        data-i18n="jumpsLimit"
+                    >
                         1–100 jumps
                     </span>
                 </div>
@@ -776,7 +985,10 @@
                         placeholder="Enter jumps"
                     >
 
-                    <span class="input-unit">
+                    <span
+                        class="input-unit"
+                        data-i18n="jumpsUnit"
+                    >
                         JUMPS
                     </span>
 
@@ -785,7 +997,10 @@
 
             <div>
 
-                <span class="section-label">
+                <span
+                    class="section-label"
+                    data-i18n="securitySpace"
+                >
                     Security space
                 </span>
 
@@ -809,7 +1024,10 @@
                                 Highsec
                             </span>
 
-                            <span class="security-rate">
+                            <span
+                                class="security-rate"
+                                data-i18n="highsecRate"
+                            >
                                 4% collateral
                             </span>
                         </label>
@@ -828,7 +1046,10 @@
                                 Lowsec
                             </span>
 
-                            <span class="security-rate">
+                            <span
+                                class="security-rate"
+                                data-i18n="lowsecRate"
+                            >
                                 5% collateral
                             </span>
                         </label>
@@ -847,7 +1068,10 @@
                                 Nullsec
                             </span>
 
-                            <span class="security-rate">
+                            <span
+                                class="security-rate"
+                                data-i18n="nullsecRate"
+                            >
                                 6% collateral
                             </span>
                         </label>
@@ -864,7 +1088,10 @@
             aria-live="polite"
         >
 
-            <div class="result-label">
+            <div
+                class="result-label"
+                data-i18n="deliveryCost"
+            >
                 Delivery cost
             </div>
 
@@ -892,7 +1119,10 @@
 
         </section>
 
-        <footer class="footer">
+        <footer
+            class="footer"
+            data-i18n="footer"
+        >
             Rush delivery price is calculated using the higher of
             collateral-based or distance-based pricing.
         </footer>
@@ -907,23 +1137,348 @@
             PRICE_PER_JUMP: 1_000_000
         };
 
-        const collateralInput = document.getElementById("collateral");
-        const jumpsInput = document.getElementById("jumps");
+        const translations = {
+            en: {
+                title: "Rush Delivery",
+                subtitle: "Calculate courier delivery cost instantly.",
+                capacity: "Maximum cargo: 13,400 m³",
 
-        const result = document.getElementById("result");
-        const resultNumber = document.getElementById("resultNumber");
-        const routeInfo = document.getElementById("routeInfo");
-        const pricingMethod = document.getElementById("pricingMethod");
+                collateral: "Collateral",
+                maxCollateral: "Max 20B ISK",
+
+                distance: "Distance",
+                jumpsLimit: "1–100 jumps",
+                jumpsUnit: "JUMPS",
+
+                securitySpace: "Security space",
+
+                highsecRate: "4% collateral",
+                lowsecRate: "5% collateral",
+                nullsecRate: "6% collateral",
+
+                deliveryCost: "Delivery cost",
+
+                footer:
+                    "Rush delivery price is calculated using the higher of collateral-based or distance-based pricing.",
+
+                collateralPlaceholder: "Enter collateral",
+                jumpsPlaceholder: "Enter jumps",
+
+                maxCollateralError:
+                    "Maximum collateral is 20B ISK.",
+
+                jump: "jump",
+                jumps: "jumps",
+
+                collateralRate: "collateral rate",
+                perJump: "ISK / jump"
+            },
+
+            ru: {
+                title: "Срочная доставка",
+                subtitle: "Мгновенный расчёт стоимости доставки.",
+                capacity: "Максимальный объём: 13 400 м³",
+
+                collateral: "Залог",
+                maxCollateral: "Макс. 20B ISK",
+
+                distance: "Расстояние",
+                jumpsLimit: "1–100 прыжков",
+                jumpsUnit: "ПРЫЖКИ",
+
+                securitySpace: "Тип пространства",
+
+                highsecRate: "4% от залога",
+                lowsecRate: "5% от залога",
+                nullsecRate: "6% от залога",
+
+                deliveryCost: "Стоимость доставки",
+
+                footer:
+                    "Стоимость срочной доставки рассчитывается по наибольшему значению: процент от залога или стоимость маршрута.",
+
+                collateralPlaceholder: "Введите сумму залога",
+                jumpsPlaceholder: "Введите количество прыжков",
+
+                maxCollateralError:
+                    "Максимальный залог — 20B ISK.",
+
+                jump: "прыжок",
+                jumps: "прыжков",
+
+                collateralRate: "от залога",
+                perJump: "ISK / прыжок"
+            },
+
+            de: {
+                title: "Expresslieferung",
+                subtitle: "Berechne die Lieferkosten sofort.",
+                capacity: "Maximales Volumen: 13.400 m³",
+
+                collateral: "Sicherheit",
+                maxCollateral: "Max. 20B ISK",
+
+                distance: "Entfernung",
+                jumpsLimit: "1–100 Sprünge",
+                jumpsUnit: "SPRÜNGE",
+
+                securitySpace: "Sicherheitsgebiet",
+
+                highsecRate: "4% Sicherheit",
+                lowsecRate: "5% Sicherheit",
+                nullsecRate: "6% Sicherheit",
+
+                deliveryCost: "Lieferkosten",
+
+                footer:
+                    "Der Preis wird anhand des höheren Werts aus Sicherheit oder Entfernung berechnet.",
+
+                collateralPlaceholder: "Sicherheit eingeben",
+                jumpsPlaceholder: "Sprünge eingeben",
+
+                maxCollateralError:
+                    "Maximale Sicherheit: 20B ISK.",
+
+                jump: "Sprung",
+                jumps: "Sprünge",
+
+                collateralRate: "Sicherheitsrate",
+                perJump: "ISK / Sprung"
+            },
+
+            fr: {
+                title: "Livraison express",
+                subtitle: "Calculez instantanément le coût de livraison.",
+                capacity: "Volume maximum : 13 400 m³",
+
+                collateral: "Garantie",
+                maxCollateral: "Max. 20B ISK",
+
+                distance: "Distance",
+                jumpsLimit: "1–100 sauts",
+                jumpsUnit: "SAUTS",
+
+                securitySpace: "Zone de sécurité",
+
+                highsecRate: "4% de garantie",
+                lowsecRate: "5% de garantie",
+                nullsecRate: "6% de garantie",
+
+                deliveryCost: "Coût de livraison",
+
+                footer:
+                    "Le prix est calculé selon le montant le plus élevé entre la garantie et la distance.",
+
+                collateralPlaceholder: "Saisissez la garantie",
+                jumpsPlaceholder: "Nombre de sauts",
+
+                maxCollateralError:
+                    "La garantie maximale est de 20B ISK.",
+
+                jump: "saut",
+                jumps: "sauts",
+
+                collateralRate: "de garantie",
+                perJump: "ISK / saut"
+            },
+
+            es: {
+                title: "Entrega urgente",
+                subtitle: "Calcula al instante el coste de entrega.",
+                capacity: "Volumen máximo: 13.400 m³",
+
+                collateral: "Garantía",
+                maxCollateral: "Máx. 20B ISK",
+
+                distance: "Distancia",
+                jumpsLimit: "1–100 saltos",
+                jumpsUnit: "SALTOS",
+
+                securitySpace: "Espacio de seguridad",
+
+                highsecRate: "4% de garantía",
+                lowsecRate: "5% de garantía",
+                nullsecRate: "6% de garantía",
+
+                deliveryCost: "Coste de entrega",
+
+                footer:
+                    "El precio se calcula utilizando el valor más alto entre la garantía y la distancia.",
+
+                collateralPlaceholder: "Introduce la garantía",
+                jumpsPlaceholder: "Introduce los saltos",
+
+                maxCollateralError:
+                    "La garantía máxima es de 20B ISK.",
+
+                jump: "salto",
+                jumps: "saltos",
+
+                collateralRate: "de garantía",
+                perJump: "ISK / salto"
+            },
+
+            ja: {
+                title: "緊急配送",
+                subtitle: "配送費用をすぐに計算できます。",
+                capacity: "最大容量: 13,400 m³",
+
+                collateral: "担保",
+                maxCollateral: "最大 20B ISK",
+
+                distance: "距離",
+                jumpsLimit: "1～100ジャンプ",
+                jumpsUnit: "ジャンプ",
+
+                securitySpace: "セキュリティ領域",
+
+                highsecRate: "担保の4%",
+                lowsecRate: "担保の5%",
+                nullsecRate: "担保の6%",
+
+                deliveryCost: "配送費用",
+
+                footer:
+                    "配送価格は担保ベースと距離ベースの料金のうち高い方で計算されます。",
+
+                collateralPlaceholder: "担保額を入力",
+                jumpsPlaceholder: "ジャンプ数を入力",
+
+                maxCollateralError:
+                    "最大担保額は20B ISKです。",
+
+                jump: "ジャンプ",
+                jumps: "ジャンプ",
+
+                collateralRate: "担保レート",
+                perJump: "ISK / ジャンプ"
+            },
+
+            ko: {
+                title: "긴급 배송",
+                subtitle: "배송 비용을 즉시 계산합니다.",
+                capacity: "최대 화물: 13,400 m³",
+
+                collateral: "담보",
+                maxCollateral: "최대 20B ISK",
+
+                distance: "거리",
+                jumpsLimit: "1–100 점프",
+                jumpsUnit: "점프",
+
+                securitySpace: "보안 구역",
+
+                highsecRate: "담보의 4%",
+                lowsecRate: "담보의 5%",
+                nullsecRate: "담보의 6%",
+
+                deliveryCost: "배송 비용",
+
+                footer:
+                    "배송 가격은 담보 기준과 거리 기준 중 더 높은 금액으로 계산됩니다.",
+
+                collateralPlaceholder: "담보 금액 입력",
+                jumpsPlaceholder: "점프 수 입력",
+
+                maxCollateralError:
+                    "최대 담보 금액은 20B ISK입니다.",
+
+                jump: "점프",
+                jumps: "점프",
+
+                collateralRate: "담보 요율",
+                perJump: "ISK / 점프"
+            },
+
+            zh: {
+                title: "加急运输",
+                subtitle: "即时计算快递运输费用。",
+                capacity: "最大货舱容量：13,400 m³",
+
+                collateral: "抵押金额",
+                maxCollateral: "最高 20B ISK",
+
+                distance: "距离",
+                jumpsLimit: "1–100 跳",
+                jumpsUnit: "跳",
+
+                securitySpace: "安全等级",
+
+                highsecRate: "抵押金额的 4%",
+                lowsecRate: "抵押金额的 5%",
+                nullsecRate: "抵押金额的 6%",
+
+                deliveryCost: "运输费用",
+
+                footer:
+                    "加急运输费用按照抵押金额计费与跳数计费中的较高金额计算。",
+
+                collateralPlaceholder: "输入抵押金额",
+                jumpsPlaceholder: "输入跳数",
+
+                maxCollateralError:
+                    "最大抵押金额为 20B ISK。",
+
+                jump: "跳",
+                jumps: "跳",
+
+                collateralRate: "抵押费率",
+                perJump: "ISK / 跳"
+            }
+        };
+
+        const languageCodes = {
+            en: "EN",
+            ru: "RU",
+            de: "DE",
+            fr: "FR",
+            es: "ES",
+            ja: "JA",
+            ko: "KO",
+            zh: "ZH"
+        };
+
+        const collateralInput =
+            document.getElementById("collateral");
+
+        const jumpsInput =
+            document.getElementById("jumps");
+
+        const result =
+            document.getElementById("result");
+
+        const resultNumber =
+            document.getElementById("resultNumber");
+
+        const routeInfo =
+            document.getElementById("routeInfo");
+
+        const pricingMethod =
+            document.getElementById("pricingMethod");
 
         const collateralError =
             document.getElementById("collateral-error");
 
-        const formatter = new Intl.NumberFormat("en-US", {
-            maximumFractionDigits: 0
-        });
+        const languageButton =
+            document.getElementById("languageButton");
+
+        const languageMenu =
+            document.getElementById("languageMenu");
+
+        const currentLanguageElement =
+            document.getElementById("currentLanguage");
+
+        const formatter =
+            new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 0
+            });
+
+        let currentLanguage =
+            localStorage.getItem("language") || "en";
 
         function parseNumber(value) {
-            const digits = String(value).replace(/[^\d]/g, "");
+            const digits =
+                String(value).replace(/[^\d]/g, "");
 
             return digits
                 ? Number(digits)
@@ -931,19 +1486,27 @@
         }
 
         function formatISK(value) {
-            return formatter.format(Math.round(value));
+            return formatter.format(
+                Math.round(value)
+            );
         }
 
         function formatCollateralInput() {
-            let value = parseNumber(collateralInput.value);
+            let value =
+                parseNumber(collateralInput.value);
 
             collateralError.hidden = true;
 
-            if (value > CONFIG.MAX_COLLATERAL) {
-                value = CONFIG.MAX_COLLATERAL;
+            if (
+                value >
+                CONFIG.MAX_COLLATERAL
+            ) {
+                value =
+                    CONFIG.MAX_COLLATERAL;
 
                 collateralError.textContent =
-                    "Maximum collateral is 20B ISK.";
+                    translations[currentLanguage]
+                        .maxCollateralError;
 
                 collateralError.hidden = false;
             }
@@ -955,25 +1518,39 @@
         }
 
         function validateJumps() {
-            if (jumpsInput.value === "") {
+            if (
+                jumpsInput.value === ""
+            ) {
                 return;
             }
 
-            let value = Number(jumpsInput.value);
+            let value =
+                Number(jumpsInput.value);
 
-            if (!Number.isFinite(value)) {
+            if (
+                !Number.isFinite(value)
+            ) {
                 jumpsInput.value = "";
                 return;
             }
 
-            value = Math.floor(value);
+            value =
+                Math.floor(value);
 
-            if (value < CONFIG.MIN_JUMPS) {
-                value = CONFIG.MIN_JUMPS;
+            if (
+                value <
+                CONFIG.MIN_JUMPS
+            ) {
+                value =
+                    CONFIG.MIN_JUMPS;
             }
 
-            if (value > CONFIG.MAX_JUMPS) {
-                value = CONFIG.MAX_JUMPS;
+            if (
+                value >
+                CONFIG.MAX_JUMPS
+            ) {
+                value =
+                    CONFIG.MAX_JUMPS;
             }
 
             jumpsInput.value = value;
@@ -981,10 +1558,14 @@
 
         function calculate() {
             const collateral =
-                parseNumber(collateralInput.value);
+                parseNumber(
+                    collateralInput.value
+                );
 
             const jumps =
-                Number(jumpsInput.value);
+                Number(
+                    jumpsInput.value
+                );
 
             const securityInput =
                 document.querySelector(
@@ -996,18 +1577,25 @@
                 !Number.isFinite(jumps) ||
                 jumps < CONFIG.MIN_JUMPS
             ) {
-                result.classList.add("empty");
+                result.classList.add(
+                    "empty"
+                );
+
                 return;
             }
 
             const securityRate =
-                Number(securityInput.value);
+                Number(
+                    securityInput.value
+                );
 
             const collateralPrice =
-                collateral * securityRate;
+                collateral *
+                securityRate;
 
             const distancePrice =
-                jumps * CONFIG.PRICE_PER_JUMP;
+                jumps *
+                CONFIG.PRICE_PER_JUMP;
 
             const finalPrice =
                 Math.max(
@@ -1016,7 +1604,8 @@
                 );
 
             const usedCollateralPricing =
-                collateralPrice >= distancePrice;
+                collateralPrice >=
+                distancePrice;
 
             const securityName =
                 securityInput.id === "highsec"
@@ -1025,18 +1614,116 @@
                     ? "Lowsec"
                     : "Nullsec";
 
+            const t =
+                translations[currentLanguage];
+
             resultNumber.textContent =
                 formatISK(finalPrice);
 
             routeInfo.textContent =
-                `${jumps} ${jumps === 1 ? "jump" : "jumps"} · ${securityName}`;
+                `${jumps} ${
+                    jumps === 1
+                        ? t.jump
+                        : t.jumps
+                } · ${securityName}`;
 
             pricingMethod.textContent =
                 usedCollateralPricing
-                    ? `${securityRate * 100}% collateral rate`
-                    : `${formatISK(CONFIG.PRICE_PER_JUMP)} ISK / jump`;
+                    ? `${securityRate * 100}% ${t.collateralRate}`
+                    : `${formatISK(CONFIG.PRICE_PER_JUMP)} ${t.perJump}`;
 
-            result.classList.remove("empty");
+            result.classList.remove(
+                "empty"
+            );
+        }
+
+        function setLanguage(language) {
+            if (
+                !translations[language]
+            ) {
+                language = "en";
+            }
+
+            currentLanguage =
+                language;
+
+            localStorage.setItem(
+                "language",
+                language
+            );
+
+            document.documentElement.lang =
+                language === "zh"
+                    ? "zh-CN"
+                    : language;
+
+            currentLanguageElement.textContent =
+                languageCodes[language];
+
+            document
+                .querySelectorAll(
+                    "[data-i18n]"
+                )
+                .forEach(element => {
+                    const key =
+                        element.dataset.i18n;
+
+                    const text =
+                        translations[language][key];
+
+                    if (text) {
+                        element.textContent =
+                            text;
+                    }
+                });
+
+            collateralInput.placeholder =
+                translations[language]
+                    .collateralPlaceholder;
+
+            jumpsInput.placeholder =
+                translations[language]
+                    .jumpsPlaceholder;
+
+            document
+                .querySelectorAll(
+                    ".language-menu button"
+                )
+                .forEach(button => {
+                    button.classList.toggle(
+                        "active",
+                        button.dataset.language ===
+                            language
+                    );
+                });
+
+            if (
+                !collateralError.hidden
+            ) {
+                collateralError.textContent =
+                    translations[language]
+                        .maxCollateralError;
+            }
+
+            calculate();
+        }
+
+        function toggleLanguageMenu() {
+            const opened =
+                !languageMenu.hidden;
+
+            languageMenu.hidden =
+                opened;
+
+            languageButton.classList.toggle(
+                "active",
+                !opened
+            );
+
+            languageButton.setAttribute(
+                "aria-expanded",
+                String(!opened)
+            );
         }
 
         collateralInput.addEventListener(
@@ -1044,6 +1731,18 @@
             () => {
                 formatCollateralInput();
                 calculate();
+            }
+        );
+
+        collateralInput.addEventListener(
+            "paste",
+            () => {
+                requestAnimationFrame(
+                    () => {
+                        formatCollateralInput();
+                        calculate();
+                    }
+                );
             }
         );
 
@@ -1056,7 +1755,9 @@
         );
 
         document
-            .querySelectorAll('input[name="security"]')
+            .querySelectorAll(
+                'input[name="security"]'
+            )
             .forEach(input => {
                 input.addEventListener(
                     "change",
@@ -1065,18 +1766,23 @@
             });
 
         document
-            .querySelectorAll(".quick-value")
+            .querySelectorAll(
+                ".quick-value"
+            )
             .forEach(button => {
                 button.addEventListener(
                     "click",
                     () => {
                         const value =
-                            Number(button.dataset.value);
+                            Number(
+                                button.dataset.value
+                            );
 
                         collateralInput.value =
                             formatISK(value);
 
-                        collateralError.hidden = true;
+                        collateralError.hidden =
+                            true;
 
                         calculate();
 
@@ -1085,14 +1791,92 @@
                 );
             });
 
-        collateralInput.addEventListener(
-            "paste",
-            () => {
-                requestAnimationFrame(() => {
-                    formatCollateralInput();
-                    calculate();
-                });
+        languageButton.addEventListener(
+            "click",
+            event => {
+                event.stopPropagation();
+
+                toggleLanguageMenu();
+            }
+        );
+
+        document
+            .querySelectorAll(
+                ".language-menu button"
+            )
+            .forEach(button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        setLanguage(
+                            button.dataset.language
+                        );
+
+                        languageMenu.hidden =
+                            true;
+
+                        languageButton.classList.remove(
+                            "active"
+                        );
+
+                        languageButton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+                    }
+                );
             });
+
+        document.addEventListener(
+            "click",
+            event => {
+                if (
+                    !languageMenu.contains(
+                        event.target
+                    ) &&
+                    !languageButton.contains(
+                        event.target
+                    )
+                ) {
+                    languageMenu.hidden =
+                        true;
+
+                    languageButton.classList.remove(
+                        "active"
+                    );
+
+                    languageButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            }
+        );
+
+        document.addEventListener(
+            "keydown",
+            event => {
+                if (
+                    event.key === "Escape"
+                ) {
+                    languageMenu.hidden =
+                        true;
+
+                    languageButton.classList.remove(
+                        "active"
+                    );
+
+                    languageButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            }
+        );
+
+        setLanguage(
+            currentLanguage
+        );
     </script>
 </body>
 </html>
