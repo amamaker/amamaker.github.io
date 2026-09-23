@@ -3,238 +3,1096 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rush Delivery Calculator</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <meta
+        name="description"
+        content="No Scope rush delivery calculator for EVE Online courier contracts."
+    >
+
+    <meta name="theme-color" content="#080b10">
+
+    <title>No Scope — Rush Delivery Calculator</title>
+
     <style>
+        :root {
+            --bg: #080b10;
+            --bg-secondary: #0d1118;
+
+            --surface: rgba(18, 24, 33, 0.92);
+            --surface-hover: #18212d;
+            --surface-light: #1a2431;
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+
+            --text: #f5f7fa;
+            --text-secondary: #8b98a8;
+            --text-muted: #667383;
+
+            --accent: #39b9ff;
+            --accent-light: #65c8ff;
+            --accent-soft: rgba(57, 185, 255, 0.11);
+
+            --success: #50e3a4;
+            --success-soft: rgba(80, 227, 164, 0.1);
+
+            --warning: #f2c94c;
+
+            --danger: #ff6378;
+
+            --radius-lg: 24px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+
+            --shadow:
+                0 30px 80px rgba(0, 0, 0, 0.45),
+                0 2px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: dark;
+        }
+
         body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            margin: 0;
+
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+
+            padding: 32px 16px;
+
+            font-family:
+                Inter,
+                ui-sans-serif,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(57, 185, 255, 0.09),
+                    transparent 28rem
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(80, 227, 164, 0.05),
+                    transparent 25rem
+                ),
+                var(--bg);
         }
 
-        .card {
-            background-color: #1e1e1e;
-            border-radius: 12px;
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .calculator {
+            position: relative;
+            width: min(100%, 500px);
+
             padding: 30px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
-            width: 90%;
-            box-sizing: border-box;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.025),
+                    transparent 38%
+                ),
+                var(--surface);
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            overflow: hidden;
         }
 
-        .card h1 {
+        .calculator::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(57, 185, 255, 0.7),
+                transparent
+            );
+        }
+
+        .header {
+            margin-bottom: 28px;
             text-align: center;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+
+            color: var(--accent);
+        }
+
+        .brand-icon {
+            width: 30px;
+            height: 30px;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--accent);
+
+            background: var(--accent-soft);
+
+            border: 1px solid rgba(57, 185, 255, 0.18);
+            border-radius: 9px;
+        }
+
+        .brand-icon svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        h1 {
             margin: 0;
-            color: #00bfff;
+
+            font-size: clamp(26px, 6vw, 34px);
+            line-height: 1.15;
+            letter-spacing: -0.035em;
         }
 
-        .card h2 {
-            font-size: 18px;
-            margin-bottom: 0px;
-            text-align: center;
-            color: #ffffff;
-        }
+        .subtitle {
+            margin: 9px 0 0;
 
-        .card p {
             font-size: 14px;
-            margin-bottom: 20px;
-            margin-top: 5px;
-            text-align: center;
-            color: #eadf04;
+            line-height: 1.5;
+
+            color: var(--text-secondary);
         }
 
-        .input-group {
+        .capacity {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-top: 13px;
+            padding: 7px 10px;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            color: var(--warning);
+
+            background: rgba(242, 201, 76, 0.08);
+
+            border: 1px solid rgba(242, 201, 76, 0.12);
+            border-radius: 99px;
+        }
+
+        .form-section {
+            display: grid;
+            gap: 21px;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field-header {
             display: flex;
             align-items: center;
-            margin: 10px 0;
-        }
-
-        .input-group i {
-            color: #00bfff;
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        .input-group input[type="text"], .input-group input[type="number"] {
-            flex: 1;
-            padding: 12px 10px;
-            font-size: 1rem;
-            background-color: #2c2c2c;
-            color: #ffffff;
-            border: 1px solid #444444;
-            border-radius: 5px;
-            outline: none;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .input-group input[type="text"]:focus, .input-group input[type="number"]:focus {
-            border-color: #00bfff;
-            background-color: #3a3a3a;
-        }
-
-        .radio-group {
-            display: flex;
             justify-content: space-between;
-            margin: 20px 0;
+            gap: 12px;
         }
 
-        .radio-group label {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #444444;
+        .field label,
+        .section-label {
+            font-size: 13px;
+            font-weight: 650;
+
+            color: #d8dee7;
+        }
+
+        .field-limit {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+
+            width: 18px;
+            height: 18px;
+
+            transform: translateY(-50%);
+
+            color: var(--text-muted);
+
+            pointer-events: none;
+
+            transition: color 0.2s ease;
+        }
+
+        .input-wrapper:focus-within .input-icon {
+            color: var(--accent);
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 52px;
+
+            padding: 0 52px 0 44px;
+
+            color: var(--text);
+
+            background: var(--bg-secondary);
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+
+            outline: none;
+
+            transition:
+                border-color 0.2s ease,
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .input-wrapper input:hover {
+            border-color: var(--border-hover);
+        }
+
+        .input-wrapper input:focus {
+            background: #10161f;
+
+            border-color: rgba(57, 185, 255, 0.6);
+
+            box-shadow:
+                0 0 0 3px rgba(57, 185, 255, 0.08);
+        }
+
+        .input-wrapper input::placeholder {
+            color: #4f5a68;
+        }
+
+        /* Hide number arrows */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            margin: 0;
+            -webkit-appearance: none;
+        }
+
+        input[type="number"] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+
+        .input-unit {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+
+            transform: translateY(-50%);
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+
+            color: var(--text-muted);
+
+            pointer-events: none;
+        }
+
+        .quick-values {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .quick-value {
+            padding: 6px 10px;
+
+            color: var(--text-secondary);
+
+            background: transparent;
+
+            border: 1px solid var(--border);
             border-radius: 8px;
-            background-color: #2c2c2c;
-            margin: 0 5px;
+
+            font-size: 11px;
+            font-weight: 600;
+
             cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+            transition:
+                color 0.15s ease,
+                background-color 0.15s ease,
+                border-color 0.15s ease,
+                transform 0.1s ease;
         }
 
-        .radio-group label:last-child {
-            margin-right: 0;
+        .quick-value:hover {
+            color: var(--text);
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
         }
 
-        .radio-group input[type="radio"] {
-            display: none;
+        .quick-value:active {
+            transform: scale(0.97);
         }
 
-        .radio-group input[type="radio"]:checked + label {
-            background-color: #00bfff;
-            color: #1e1e1e;
-            border-color: #00bfff;
+        .security-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+
+            margin-top: 8px;
+        }
+
+        .security-option {
+            position: relative;
+        }
+
+        .security-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .security-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+
+            min-height: 62px;
+            padding: 8px;
+
+            color: var(--text-secondary);
+
+            background: var(--bg-secondary);
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+
+            cursor: pointer;
+
+            transition:
+                color 0.18s ease,
+                background-color 0.18s ease,
+                border-color 0.18s ease,
+                transform 0.1s ease;
+        }
+
+        .security-option label:hover {
+            color: var(--text);
+            border-color: var(--border-hover);
+        }
+
+        .security-option label:active {
+            transform: scale(0.985);
+        }
+
+        .security-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .security-rate {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .security-option input:focus-visible + label {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .security-option input:checked + label {
+            color: var(--accent-light);
+
+            background: var(--accent-soft);
+
+            border-color: rgba(57, 185, 255, 0.45);
+
+            box-shadow:
+                inset 0 0 20px rgba(57, 185, 255, 0.025);
+        }
+
+        .security-option input:checked + label .security-rate {
+            color: rgba(101, 200, 255, 0.68);
         }
 
         .result {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            text-align: center;
-            color: #ffffff;
+            margin-top: 26px;
+            padding: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(80, 227, 164, 0.08),
+                    rgba(57, 185, 255, 0.035)
+                ),
+                var(--bg-secondary);
+
+            border: 1px solid rgba(80, 227, 164, 0.16);
+            border-radius: 18px;
+
+            transition:
+                opacity 0.2s ease,
+                transform 0.2s ease;
         }
 
-        @media (max-width: 500px) {
-            .card {
-                padding: 20px;
+        .result.empty {
+            display: none;
+        }
+
+        .result-label {
+            margin-bottom: 7px;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+
+            color: var(--text-muted);
+        }
+
+        .result-value {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 7px;
+
+            color: var(--success);
+        }
+
+        .result-number {
+            font-size: clamp(27px, 7vw, 35px);
+            font-weight: 750;
+            letter-spacing: -0.035em;
+        }
+
+        .result-currency {
+            font-size: 13px;
+            font-weight: 700;
+
+            color: rgba(80, 227, 164, 0.7);
+        }
+
+        .result-details {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+
+            margin-top: 13px;
+            padding-top: 13px;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .pricing-method {
+            text-align: right;
+            color: var(--text-secondary);
+        }
+
+        .error {
+            margin-top: 8px;
+
+            font-size: 11px;
+
+            color: var(--danger);
+        }
+
+        .footer {
+            margin-top: 22px;
+
+            text-align: center;
+
+            font-size: 10px;
+            line-height: 1.5;
+
+            color: #47515e;
+        }
+
+        @media (max-width: 520px) {
+            body {
+                align-items: flex-start;
+                padding: 14px;
             }
 
-            .input-group i {
-                font-size: 1rem;
+            .calculator {
+                padding: 23px 18px;
+                border-radius: 20px;
             }
 
-            button {
-                padding: 12px;
+            .header {
+                margin-bottom: 23px;
             }
 
-            .radio-group {
+            .security-selector {
+                gap: 5px;
+            }
+
+            .security-option label {
+                min-height: 58px;
+                padding-inline: 5px;
+            }
+
+            .result-details {
                 flex-direction: column;
-                align-items: center;
+                gap: 5px;
             }
 
-            .radio-group label {
-                margin: 5px 0;
-                width: 100%;
+            .pricing-method {
+                text-align: left;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
             }
         }
     </style>
 </head>
+
 <body>
+    <main class="calculator">
+        <header class="header">
 
-    <div class="card">
+            <div class="brand">
+                <span class="brand-icon" aria-hidden="true">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M22 2 9.6 14.4" />
+                        <path d="m22 2-7.9 20-4.5-7.6L2 9.9 22 2Z" />
+                    </svg>
+                </span>
 
-        <h1><i class="fa-sharp-duotone fa-solid fa-plane"></i> No Scope</h1>
-        <h2>Rush Delivery Calculator</h2>
-        <p><i class="fa-sharp-duotone fa-solid fa-box-open"></i> Volume up to 13.400 m3</p>
+                No Scope
+            </div>
 
-        <div class="input-group">
-            <i class="fas fa-coins"></i>
-            <input type="text" id="insuranceValue" placeholder="Collateral (ISK)" oninput="formatNumber(this); limitCollateral(this);" onkeypress="return isNumberKey(event)" />
-        </div>
+            <h1>Rush Delivery</h1>
 
-        <div class="input-group">
-            <i class="fa-sharp-duotone fa-solid fa-route"></i>
-            <input type="number" id="distanceKm" placeholder="Distance (jumps)" min="1" max="100" step="1" oninput="limitDistance(this); calculate()" />
-        </div>
+            <p class="subtitle">
+                Calculate courier delivery cost instantly.
+            </p>
 
-        <div class="radio-group">
-            <input type="radio" id="highsec" name="region" value="0.04" checked onchange="calculate()" />
-            <label for="highsec">Highsec</label>
+            <div class="capacity">
+                <span>◆</span>
+                Maximum cargo: 13,400 m³
+            </div>
 
-            <input type="radio" id="lowsec" name="region" value="0.05" onchange="calculate()" />
-            <label for="lowsec">Lowsec</label>
+        </header>
 
-            <input type="radio" id="nullsec" name="region" value="0.06" onchange="calculate()" />
-            <label for="nullsec">Nullsec</label>
-        </div>
+        <section class="form-section">
 
-        <div class="result" id="resultText"></div>
-    </div>
+            <div class="field">
+                <div class="field-header">
+                    <label for="collateral">
+                        Collateral
+                    </label>
+
+                    <span class="field-limit">
+                        Max 20B ISK
+                    </span>
+                </div>
+
+                <div class="input-wrapper">
+
+                    <svg
+                        class="input-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M16 8.5c-.7-.9-2-1.5-3.5-1.5-2 0-3.5 1-3.5 2.5S10.5 12 12.5 12s3.5 1 3.5 2.5S14.5 17 12.5 17c-1.5 0-2.8-.6-3.5-1.5" />
+                        <path d="M12.5 5v14" />
+                    </svg>
+
+                    <input
+                        id="collateral"
+                        type="text"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        placeholder="Enter collateral"
+                        aria-describedby="collateral-error"
+                    >
+
+                    <span class="input-unit">
+                        ISK
+                    </span>
+                </div>
+
+                <div class="quick-values">
+                    <button
+                        class="quick-value"
+                        type="button"
+                        data-value="100000000"
+                    >
+                        100M
+                    </button>
+
+                    <button
+                        class="quick-value"
+                        type="button"
+                        data-value="500000000"
+                    >
+                        500M
+                    </button>
+
+                    <button
+                        class="quick-value"
+                        type="button"
+                        data-value="1000000000"
+                    >
+                        1B
+                    </button>
+
+                    <button
+                        class="quick-value"
+                        type="button"
+                        data-value="5000000000"
+                    >
+                        5B
+                    </button>
+
+                    <button
+                        class="quick-value"
+                        type="button"
+                        data-value="10000000000"
+                    >
+                        10B
+                    </button>
+
+                    <button
+                        class="quick-value"
+                        type="button"
+                        data-value="20000000000"
+                    >
+                        20B
+                    </button>
+                </div>
+
+                <div
+                    id="collateral-error"
+                    class="error"
+                    hidden
+                ></div>
+            </div>
+
+            <div class="field">
+
+                <div class="field-header">
+                    <label for="jumps">
+                        Distance
+                    </label>
+
+                    <span class="field-limit">
+                        1–100 jumps
+                    </span>
+                </div>
+
+                <div class="input-wrapper">
+
+                    <svg
+                        class="input-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <circle cx="6" cy="18" r="2" />
+                        <circle cx="18" cy="6" r="2" />
+                        <path d="M8 18h2.5a3 3 0 0 0 3-3v-6a3 3 0 0 1 3-3H16" />
+                    </svg>
+
+                    <input
+                        id="jumps"
+                        type="number"
+                        inputmode="numeric"
+                        min="1"
+                        max="100"
+                        step="1"
+                        placeholder="Enter jumps"
+                    >
+
+                    <span class="input-unit">
+                        JUMPS
+                    </span>
+
+                </div>
+            </div>
+
+            <div>
+
+                <span class="section-label">
+                    Security space
+                </span>
+
+                <div
+                    class="security-selector"
+                    role="radiogroup"
+                    aria-label="Security space"
+                >
+
+                    <div class="security-option">
+                        <input
+                            type="radio"
+                            name="security"
+                            id="highsec"
+                            value="0.04"
+                            checked
+                        >
+
+                        <label for="highsec">
+                            <span class="security-name">
+                                Highsec
+                            </span>
+
+                            <span class="security-rate">
+                                4% collateral
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="security-option">
+                        <input
+                            type="radio"
+                            name="security"
+                            id="lowsec"
+                            value="0.05"
+                        >
+
+                        <label for="lowsec">
+                            <span class="security-name">
+                                Lowsec
+                            </span>
+
+                            <span class="security-rate">
+                                5% collateral
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="security-option">
+                        <input
+                            type="radio"
+                            name="security"
+                            id="nullsec"
+                            value="0.06"
+                        >
+
+                        <label for="nullsec">
+                            <span class="security-name">
+                                Nullsec
+                            </span>
+
+                            <span class="security-rate">
+                                6% collateral
+                            </span>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <section
+            id="result"
+            class="result empty"
+            aria-live="polite"
+        >
+
+            <div class="result-label">
+                Delivery cost
+            </div>
+
+            <div class="result-value">
+                <span
+                    id="resultNumber"
+                    class="result-number"
+                >
+                    0
+                </span>
+
+                <span class="result-currency">
+                    ISK
+                </span>
+            </div>
+
+            <div class="result-details">
+                <span id="routeInfo"></span>
+
+                <span
+                    id="pricingMethod"
+                    class="pricing-method"
+                ></span>
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            Rush delivery price is calculated using the higher of
+            collateral-based or distance-based pricing.
+        </footer>
+
+    </main>
 
     <script>
-        function isNumberKey(evt) {
-            const charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            return true;
+        const CONFIG = {
+            MAX_COLLATERAL: 20_000_000_000,
+            MIN_JUMPS: 1,
+            MAX_JUMPS: 100,
+            PRICE_PER_JUMP: 1_000_000
+        };
+
+        const collateralInput = document.getElementById("collateral");
+        const jumpsInput = document.getElementById("jumps");
+
+        const result = document.getElementById("result");
+        const resultNumber = document.getElementById("resultNumber");
+        const routeInfo = document.getElementById("routeInfo");
+        const pricingMethod = document.getElementById("pricingMethod");
+
+        const collateralError =
+            document.getElementById("collateral-error");
+
+        const formatter = new Intl.NumberFormat("en-US", {
+            maximumFractionDigits: 0
+        });
+
+        function parseNumber(value) {
+            const digits = String(value).replace(/[^\d]/g, "");
+
+            return digits
+                ? Number(digits)
+                : 0;
         }
 
-        function formatNumber(input) {
-            let value = input.value.replace(/\D/g, '');
-
-            if (value) {
-                input.value = parseInt(value).toLocaleString('de-DE');
-            }
+        function formatISK(value) {
+            return formatter.format(Math.round(value));
         }
 
-        function limitCollateral(input) {
-            const maxCollateral = 20000000000;
-            let value = input.value.replace(/\./g, '');
-            if (parseInt(value) > maxCollateral) {
-                input.value = (maxCollateral).toLocaleString('de-DE');
+        function formatCollateralInput() {
+            let value = parseNumber(collateralInput.value);
+
+            collateralError.hidden = true;
+
+            if (value > CONFIG.MAX_COLLATERAL) {
+                value = CONFIG.MAX_COLLATERAL;
+
+                collateralError.textContent =
+                    "Maximum collateral is 20B ISK.";
+
+                collateralError.hidden = false;
             }
-            calculate();
+
+            collateralInput.value =
+                value > 0
+                    ? formatISK(value)
+                    : "";
         }
 
-        function limitDistance(input) {
-            const maxDistance = 100;
-            const minDistance = 1;
-            if (parseInt(input.value) < minDistance) {
-                input.value = minDistance;
-            } else if (parseInt(input.value) > maxDistance) {
-                input.value = maxDistance;
-            }
-            calculate();
-        }
-
-
-        function calculate() {
-            const insuranceValueFormatted = document.getElementById('insuranceValue').value;
-            const insuranceValue = parseFloat(insuranceValueFormatted.replace(/\./g, ''));
-            const distanceKm = parseFloat(document.getElementById('distanceKm').value);
-            const ratePercentage = parseFloat(document.querySelector('input[name="region"]:checked').value);
-
-            if (isNaN(insuranceValue) || isNaN(distanceKm)) {
-                document.getElementById('resultText').innerText = "";
+        function validateJumps() {
+            if (jumpsInput.value === "") {
                 return;
             }
 
-            const costMethod1 = ratePercentage * insuranceValue;
-            const costMethod2 = 1 * 10 ** 6 * distanceKm;
+            let value = Number(jumpsInput.value);
 
-            const finalCost = Math.max(costMethod1, costMethod2);
+            if (!Number.isFinite(value)) {
+                jumpsInput.value = "";
+                return;
+            }
 
-            document.getElementById('resultText').innerHTML = `Cost of delivery: <span id="finalCost" style="color: #00ff00;">${finalCost.toLocaleString('de-DE')}</span> ISK`;
+            value = Math.floor(value);
 
+            if (value < CONFIG.MIN_JUMPS) {
+                value = CONFIG.MIN_JUMPS;
+            }
+
+            if (value > CONFIG.MAX_JUMPS) {
+                value = CONFIG.MAX_JUMPS;
+            }
+
+            jumpsInput.value = value;
         }
 
-        window.onload = calculate;
-    </script>
+        function calculate() {
+            const collateral =
+                parseNumber(collateralInput.value);
 
+            const jumps =
+                Number(jumpsInput.value);
+
+            const securityInput =
+                document.querySelector(
+                    'input[name="security"]:checked'
+                );
+
+            if (
+                !collateral ||
+                !Number.isFinite(jumps) ||
+                jumps < CONFIG.MIN_JUMPS
+            ) {
+                result.classList.add("empty");
+                return;
+            }
+
+            const securityRate =
+                Number(securityInput.value);
+
+            const collateralPrice =
+                collateral * securityRate;
+
+            const distancePrice =
+                jumps * CONFIG.PRICE_PER_JUMP;
+
+            const finalPrice =
+                Math.max(
+                    collateralPrice,
+                    distancePrice
+                );
+
+            const usedCollateralPricing =
+                collateralPrice >= distancePrice;
+
+            const securityName =
+                securityInput.id === "highsec"
+                    ? "Highsec"
+                    : securityInput.id === "lowsec"
+                    ? "Lowsec"
+                    : "Nullsec";
+
+            resultNumber.textContent =
+                formatISK(finalPrice);
+
+            routeInfo.textContent =
+                `${jumps} ${jumps === 1 ? "jump" : "jumps"} · ${securityName}`;
+
+            pricingMethod.textContent =
+                usedCollateralPricing
+                    ? `${securityRate * 100}% collateral rate`
+                    : `${formatISK(CONFIG.PRICE_PER_JUMP)} ISK / jump`;
+
+            result.classList.remove("empty");
+        }
+
+        collateralInput.addEventListener(
+            "input",
+            () => {
+                formatCollateralInput();
+                calculate();
+            }
+        );
+
+        jumpsInput.addEventListener(
+            "input",
+            () => {
+                validateJumps();
+                calculate();
+            }
+        );
+
+        document
+            .querySelectorAll('input[name="security"]')
+            .forEach(input => {
+                input.addEventListener(
+                    "change",
+                    calculate
+                );
+            });
+
+        document
+            .querySelectorAll(".quick-value")
+            .forEach(button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        const value =
+                            Number(button.dataset.value);
+
+                        collateralInput.value =
+                            formatISK(value);
+
+                        collateralError.hidden = true;
+
+                        calculate();
+
+                        jumpsInput.focus();
+                    }
+                );
+            });
+
+        collateralInput.addEventListener(
+            "paste",
+            () => {
+                requestAnimationFrame(() => {
+                    formatCollateralInput();
+                    calculate();
+                });
+            });
+    </script>
 </body>
 </html>
