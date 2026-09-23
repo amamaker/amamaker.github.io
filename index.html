@@ -144,8 +144,6 @@
             );
         }
 
-        /* Top controls */
-
         .top-controls {
             position: absolute;
             top: 18px;
@@ -193,9 +191,7 @@
         .info-button:hover,
         .language-button:hover {
             color: var(--accent-light);
-
             background: var(--accent-soft);
-
             border-color: rgba(57, 185, 255, 0.35);
         }
 
@@ -210,7 +206,6 @@
 
         .language-button {
             gap: 6px;
-
             padding: 0 10px;
 
             font-size: 11px;
@@ -285,11 +280,8 @@
             background: var(--accent-soft);
         }
 
-        /* Header */
-
         .header {
             margin-bottom: 28px;
-
             text-align: center;
         }
 
@@ -364,8 +356,6 @@
             border-radius: 99px;
         }
 
-        /* Fields */
-
         .form-section {
             display: grid;
             gap: 21px;
@@ -393,7 +383,6 @@
 
         .field-limit {
             font-size: 11px;
-
             color: var(--text-muted);
         }
 
@@ -487,49 +476,173 @@
             pointer-events: none;
         }
 
-        /* Quick collateral */
+        /* Collateral slider */
 
-        .quick-values {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+        .slider-block {
+            margin-top: 3px;
+            padding: 12px 2px 0;
         }
 
-        .quick-value {
-            padding: 6px 10px;
+        .slider-current {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
 
-            color: var(--text-secondary);
+            margin-bottom: 8px;
+
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .slider-current-value {
+            color: var(--accent-light);
+            font-weight: 700;
+        }
+
+        .collateral-slider {
+            --progress: 0%;
+
+            width: 100%;
+            height: 20px;
+
+            margin: 0;
+
+            appearance: none;
+            -webkit-appearance: none;
 
             background: transparent;
 
-            border: 1px solid var(--border);
-            border-radius: 8px;
-
-            font-size: 11px;
-            font-weight: 600;
-
             cursor: pointer;
+        }
+
+        .collateral-slider:focus-visible {
+            outline: none;
+        }
+
+        .collateral-slider::-webkit-slider-runnable-track {
+            height: 5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--accent) 0%,
+                    var(--accent) var(--progress),
+                    rgba(255,255,255,0.08) var(--progress),
+                    rgba(255,255,255,0.08) 100%
+                );
+
+            border-radius: 999px;
+        }
+
+        .collateral-slider::-webkit-slider-thumb {
+            width: 18px;
+            height: 18px;
+
+            margin-top: -6.5px;
+
+            appearance: none;
+            -webkit-appearance: none;
+
+            background: #dff5ff;
+
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 0 4px rgba(57, 185, 255, 0.09),
+                0 3px 8px rgba(0, 0, 0, 0.45);
 
             transition:
-                color 0.15s ease,
-                background-color 0.15s ease,
-                border-color 0.15s ease,
-                transform 0.1s ease;
+                transform 0.12s ease,
+                box-shadow 0.12s ease;
         }
 
-        .quick-value:hover {
-            color: var(--text);
+        .collateral-slider:hover::-webkit-slider-thumb {
+            transform: scale(1.08);
 
-            background: var(--surface-hover);
-
-            border-color: var(--border-hover);
+            box-shadow:
+                0 0 0 5px rgba(57, 185, 255, 0.12),
+                0 3px 8px rgba(0, 0, 0, 0.45);
         }
 
-        .quick-value:active {
-            transform: scale(0.97);
+        .collateral-slider:focus-visible::-webkit-slider-thumb {
+            box-shadow:
+                0 0 0 5px rgba(57, 185, 255, 0.18),
+                0 3px 8px rgba(0, 0, 0, 0.45);
         }
 
-        /* Security selector */
+        .collateral-slider::-moz-range-track {
+            height: 5px;
+
+            background: rgba(255,255,255,0.08);
+
+            border-radius: 999px;
+        }
+
+        .collateral-slider::-moz-range-progress {
+            height: 5px;
+
+            background: var(--accent);
+
+            border-radius: 999px;
+        }
+
+        .collateral-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+
+            background: #dff5ff;
+
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 0 4px rgba(57, 185, 255, 0.09),
+                0 3px 8px rgba(0, 0, 0, 0.45);
+        }
+
+        .slider-scale {
+            position: relative;
+
+            height: 25px;
+
+            margin-top: 1px;
+
+            color: #4e5967;
+
+            font-size: 9px;
+            font-weight: 600;
+
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .slider-scale span {
+            position: absolute;
+            top: 5px;
+
+            transform: translateX(-50%);
+
+            white-space: nowrap;
+        }
+
+        .slider-scale span:first-child {
+            transform: none;
+        }
+
+        .slider-scale span:last-child {
+            transform: translateX(-100%);
+        }
+
+        .slider-note {
+            margin-top: -3px;
+
+            font-size: 10px;
+            line-height: 1.45;
+
+            color: #46515f;
+        }
 
         .security-selector {
             display: grid;
@@ -545,7 +658,6 @@
 
         .security-option input {
             position: absolute;
-
             opacity: 0;
             pointer-events: none;
         }
@@ -578,7 +690,6 @@
 
         .security-option label:hover {
             color: var(--text);
-
             border-color: var(--border-hover);
         }
 
@@ -593,7 +704,6 @@
 
         .security-rate {
             font-size: 10px;
-
             color: var(--text-muted);
         }
 
@@ -616,8 +726,6 @@
         .security-option input:checked + label .security-rate {
             color: rgba(101, 200, 255, 0.68);
         }
-
-        /* Result */
 
         .result {
             margin-top: 26px;
@@ -683,13 +791,11 @@
             border-top: 1px solid rgba(255, 255, 255, 0.06);
 
             font-size: 11px;
-
             color: var(--text-muted);
         }
 
         .pricing-method {
             text-align: right;
-
             color: var(--text-secondary);
         }
 
@@ -711,8 +817,6 @@
 
             color: #47515e;
         }
-
-        /* Info modal */
 
         .info-overlay {
             position: fixed;
@@ -828,18 +932,11 @@
             font-size: 22px;
             font-weight: 300;
             line-height: 1;
-
-            transition:
-                color 0.18s ease,
-                background-color 0.18s ease,
-                border-color 0.18s ease;
         }
 
         .info-close:hover {
             color: var(--text);
-
             background: var(--surface-hover);
-
             border-color: var(--border-hover);
         }
 
@@ -896,18 +993,14 @@
             color: var(--text-secondary);
         }
 
-        /* Mobile */
-
         @media (max-width: 520px) {
             body {
                 align-items: flex-start;
-
                 padding: 14px;
             }
 
             .calculator {
                 padding: 23px 18px;
-
                 border-radius: 20px;
             }
 
@@ -936,13 +1029,11 @@
 
             .security-option label {
                 min-height: 58px;
-
                 padding-inline: 5px;
             }
 
             .result-details {
                 flex-direction: column;
-
                 gap: 5px;
             }
 
@@ -950,9 +1041,12 @@
                 text-align: left;
             }
 
+            .slider-scale {
+                font-size: 8px;
+            }
+
             .info-overlay {
                 align-items: end;
-
                 padding: 10px;
             }
 
@@ -972,7 +1066,6 @@
             *,
             *::before,
             *::after {
-                scroll-behavior: auto !important;
                 transition: none !important;
                 animation: none !important;
             }
@@ -1005,9 +1098,7 @@
                     aria-label="Change language"
                     aria-expanded="false"
                 >
-                    <span id="currentLanguage">
-                        EN
-                    </span>
+                    <span id="currentLanguage">EN</span>
 
                     <svg
                         viewBox="0 0 24 24"
@@ -1028,43 +1119,35 @@
                     hidden
                 >
                     <button type="button" data-language="en">
-                        <span>🇬🇧</span>
-                        English
+                        <span>🇬🇧</span> English
                     </button>
 
                     <button type="button" data-language="ru">
-                        <span>🇷🇺</span>
-                        Русский
+                        <span>🇷🇺</span> Русский
                     </button>
 
                     <button type="button" data-language="de">
-                        <span>🇩🇪</span>
-                        Deutsch
+                        <span>🇩🇪</span> Deutsch
                     </button>
 
                     <button type="button" data-language="fr">
-                        <span>🇫🇷</span>
-                        Français
+                        <span>🇫🇷</span> Français
                     </button>
 
                     <button type="button" data-language="es">
-                        <span>🇪🇸</span>
-                        Español
+                        <span>🇪🇸</span> Español
                     </button>
 
                     <button type="button" data-language="ja">
-                        <span>🇯🇵</span>
-                        日本語
+                        <span>🇯🇵</span> 日本語
                     </button>
 
                     <button type="button" data-language="ko">
-                        <span>🇰🇷</span>
-                        한국어
+                        <span>🇰🇷</span> 한국어
                     </button>
 
                     <button type="button" data-language="zh">
-                        <span>🇨🇳</span>
-                        简体中文
+                        <span>🇨🇳</span> 简体中文
                     </button>
                 </div>
 
@@ -1075,10 +1158,7 @@
 
             <div class="brand">
 
-                <span
-                    class="brand-icon"
-                    aria-hidden="true"
-                >
+                <span class="brand-icon" aria-hidden="true">
                     <svg
                         viewBox="0 0 24 24"
                         fill="none"
@@ -1107,9 +1187,7 @@
             </p>
 
             <div class="capacity">
-                <span>
-                    ◆
-                </span>
+                <span>◆</span>
 
                 <span data-i18n="capacity">
                     Maximum cargo: 13,400 m³
@@ -1152,19 +1230,9 @@
                         stroke-linejoin="round"
                         aria-hidden="true"
                     >
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="9"
-                        />
-
-                        <path
-                            d="M16 8.5c-.7-.9-2-1.5-3.5-1.5-2 0-3.5 1-3.5 2.5S10.5 12 12.5 12s3.5 1 3.5 2.5S14.5 17 12.5 17c-1.5 0-2.8-.6-3.5-1.5"
-                        />
-
-                        <path
-                            d="M12.5 5v14"
-                        />
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M16 8.5c-.7-.9-2-1.5-3.5-1.5-2 0-3.5 1-3.5 2.5S10.5 12 12.5 12s3.5 1 3.5 2.5S14.5 17 12.5 17c-1.5 0-2.8-.6-3.5-1.5"/>
+                        <path d="M12.5 5v14"/>
                     </svg>
 
                     <input
@@ -1182,55 +1250,64 @@
 
                 </div>
 
-                <div class="quick-values">
+                <div class="slider-block">
 
-                    <button
-                        class="quick-value"
-                        type="button"
-                        data-value="100000000"
-                    >
-                        100M
-                    </button>
+                    <div class="slider-current">
+                        <span data-i18n="sliderLabel">
+                            Quick adjustment
+                        </span>
 
-                    <button
-                        class="quick-value"
-                        type="button"
-                        data-value="500000000"
-                    >
-                        500M
-                    </button>
+                        <span
+                            class="slider-current-value"
+                            id="sliderValue"
+                        >
+                            1B ISK
+                        </span>
+                    </div>
 
-                    <button
-                        class="quick-value"
-                        type="button"
-                        data-value="1000000000"
+                    <input
+                        class="collateral-slider"
+                        id="collateralSlider"
+                        type="range"
+                        min="0"
+                        max="1000"
+                        value="400"
+                        step="1"
+                        aria-label="Collateral slider"
                     >
-                        1B
-                    </button>
 
-                    <button
-                        class="quick-value"
-                        type="button"
-                        data-value="5000000000"
-                    >
-                        5B
-                    </button>
+                    <div class="slider-scale">
+                        <span style="left: 0%">
+                            100M
+                        </span>
 
-                    <button
-                        class="quick-value"
-                        type="button"
-                        data-value="10000000000"
-                    >
-                        10B
-                    </button>
+                        <span style="left: 16%">
+                            300M
+                        </span>
 
-                    <button
-                        class="quick-value"
-                        type="button"
-                        data-value="20000000000"
+                        <span style="left: 39%">
+                            1B
+                        </span>
+
+                        <span style="left: 66%">
+                            3B
+                        </span>
+
+                        <span style="left: 82%">
+                            5B
+                        </span>
+
+                        <span style="left: 100%">
+                            10B
+                        </span>
+                    </div>
+
+                    <div
+                        class="slider-note"
+                        data-i18n="sliderNote"
                     >
-                        20B
-                    </button>
+                        Use the slider for common orders. Values up to 20B ISK can still be entered manually.
+                    </div>
 
                 </div>
 
@@ -1274,21 +1351,9 @@
                         stroke-linejoin="round"
                         aria-hidden="true"
                     >
-                        <circle
-                            cx="6"
-                            cy="18"
-                            r="2"
-                        />
-
-                        <circle
-                            cx="18"
-                            cy="6"
-                            r="2"
-                        />
-
-                        <path
-                            d="M8 18h2.5a3 3 0 0 0 3-3v-6a3 3 0 0 1 3-3H16"
-                        />
+                        <circle cx="6" cy="18" r="2"/>
+                        <circle cx="18" cy="6" r="2"/>
+                        <path d="M8 18h2.5a3 3 0 0 0 3-3v-6a3 3 0 0 1 3-3H16"/>
                     </svg>
 
                     <input
@@ -1457,8 +1522,7 @@
             class="footer"
             data-i18n="footer"
         >
-            Rush delivery price is calculated using the higher of
-            collateral-based or distance-based pricing.
+            Rush delivery price is calculated using the higher of collateral-based or distance-based pricing.
         </footer>
 
     </main>
@@ -1584,6 +1648,8 @@
     <script>
         const CONFIG = {
             MAX_COLLATERAL: 20_000_000_000,
+            SLIDER_MIN_COLLATERAL: 100_000_000,
+            SLIDER_MAX_COLLATERAL: 10_000_000_000,
             MIN_JUMPS: 1,
             MAX_JUMPS: 100,
             PRICE_PER_JUMP: 1_000_000
@@ -1598,6 +1664,10 @@
 
                 collateral: "Collateral",
                 maxCollateral: "Max 20B ISK",
+
+                sliderLabel: "Quick adjustment",
+                sliderNote:
+                    "Use the slider for common orders. Values up to 20B ISK can still be entered manually.",
 
                 distance: "Distance",
                 jumpsLimit: "1–100 jumps",
@@ -1650,6 +1720,10 @@
                 collateral: "Залог",
                 maxCollateral: "Макс. 20B ISK",
 
+                sliderLabel: "Быстрая настройка",
+                sliderNote:
+                    "Ползунок рассчитан на типовые заказы. Суммы до 20B ISK можно ввести вручную.",
+
                 distance: "Расстояние",
                 jumpsLimit: "1–100 прыжков",
                 jumpsUnit: "ПРЫЖКИ",
@@ -1700,6 +1774,10 @@
 
                 collateral: "Sicherheit",
                 maxCollateral: "Max. 20B ISK",
+
+                sliderLabel: "Schnelleinstellung",
+                sliderNote:
+                    "Der Regler ist für übliche Aufträge optimiert. Bis zu 20B ISK können weiterhin manuell eingegeben werden.",
 
                 distance: "Entfernung",
                 jumpsLimit: "1–100 Sprünge",
@@ -1752,6 +1830,10 @@
                 collateral: "Garantie",
                 maxCollateral: "Max. 20B ISK",
 
+                sliderLabel: "Réglage rapide",
+                sliderNote:
+                    "Le curseur est optimisé pour les commandes courantes. Les valeurs jusqu’à 20B ISK peuvent être saisies manuellement.",
+
                 distance: "Distance",
                 jumpsLimit: "1–100 sauts",
                 jumpsUnit: "SAUTS",
@@ -1802,6 +1884,10 @@
 
                 collateral: "Garantía",
                 maxCollateral: "Máx. 20B ISK",
+
+                sliderLabel: "Ajuste rápido",
+                sliderNote:
+                    "El control está optimizado para pedidos habituales. Los valores de hasta 20B ISK pueden introducirse manualmente.",
 
                 distance: "Distancia",
                 jumpsLimit: "1–100 saltos",
@@ -1854,6 +1940,10 @@
                 collateral: "担保",
                 maxCollateral: "最大 20B ISK",
 
+                sliderLabel: "クイック調整",
+                sliderNote:
+                    "スライダーは一般的な注文向けです。20B ISKまで手動入力できます。",
+
                 distance: "距離",
                 jumpsLimit: "1～100ジャンプ",
                 jumpsUnit: "ジャンプ",
@@ -1904,6 +1994,10 @@
 
                 collateral: "담보",
                 maxCollateral: "최대 20B ISK",
+
+                sliderLabel: "빠른 조정",
+                sliderNote:
+                    "슬라이더는 일반적인 주문에 최적화되어 있습니다. 최대 20B ISK까지 직접 입력할 수 있습니다.",
 
                 distance: "거리",
                 jumpsLimit: "1–100 점프",
@@ -1956,6 +2050,10 @@
                 collateral: "抵押金额",
                 maxCollateral: "最高 20B ISK",
 
+                sliderLabel: "快速调整",
+                sliderNote:
+                    "滑块适用于常规订单。最高 20B ISK 的金额仍可手动输入。",
+
                 distance: "距离",
                 jumpsLimit: "1–100 跳",
                 jumpsUnit: "跳",
@@ -1998,7 +2096,6 @@
                 infoCustomText:
                     "如果货物超出标准订单范围，或有特殊运输需求，请通过 EVE Mail 联系 Amamaker 协商定制运输。"
             }
-
         };
 
         const languageCodes = {
@@ -2014,6 +2111,12 @@
 
         const collateralInput =
             document.getElementById("collateral");
+
+        const collateralSlider =
+            document.getElementById("collateralSlider");
+
+        const sliderValue =
+            document.getElementById("sliderValue");
 
         const jumpsInput =
             document.getElementById("jumps");
@@ -2052,22 +2155,16 @@
             document.getElementById("infoClose");
 
         const formatter =
-            new Intl.NumberFormat(
-                "en-US",
-                {
-                    maximumFractionDigits: 0
-                }
-            );
+            new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 0
+            });
 
         let currentLanguage =
             localStorage.getItem("language") || "en";
 
         function parseNumber(value) {
             const digits =
-                String(value).replace(
-                    /[^\d]/g,
-                    ""
-                );
+                String(value).replace(/[^\d]/g, "");
 
             return digits
                 ? Number(digits)
@@ -2080,13 +2177,207 @@
             );
         }
 
+        function formatShortISK(value) {
+            if (value >= 1_000_000_000) {
+                const billions =
+                    value / 1_000_000_000;
+
+                return `${Number.isInteger(billions)
+                    ? billions
+                    : billions.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")
+                }B ISK`;
+            }
+
+            return `${Math.round(
+                value / 1_000_000
+            )}M ISK`;
+        }
+
+        /*
+            Piecewise non-linear slider.
+
+            Slider:
+            0–160    = 100M–300M
+            160–390  = 300M–1B
+            390–660  = 1B–3B
+            660–820  = 3B–5B
+            820–1000 = 5B–10B
+
+            Most slider travel is therefore focused
+            on the commonly used 300M–5B range.
+        */
+
+        const sliderSegments = [
+            {
+                p1: 0,
+                p2: 160,
+                v1: 100_000_000,
+                v2: 300_000_000,
+                step: 25_000_000
+            },
+            {
+                p1: 160,
+                p2: 390,
+                v1: 300_000_000,
+                v2: 1_000_000_000,
+                step: 50_000_000
+            },
+            {
+                p1: 390,
+                p2: 660,
+                v1: 1_000_000_000,
+                v2: 3_000_000_000,
+                step: 100_000_000
+            },
+            {
+                p1: 660,
+                p2: 820,
+                v1: 3_000_000_000,
+                v2: 5_000_000_000,
+                step: 100_000_000
+            },
+            {
+                p1: 820,
+                p2: 1000,
+                v1: 5_000_000_000,
+                v2: 10_000_000_000,
+                step: 250_000_000
+            }
+        ];
+
+        function roundToStep(value, step) {
+            return Math.round(value / step) * step;
+        }
+
+        function sliderPositionToCollateral(position) {
+            position = Number(position);
+
+            const segment =
+                sliderSegments.find(
+                    item =>
+                        position >= item.p1 &&
+                        position <= item.p2
+                ) ||
+                sliderSegments[
+                    sliderSegments.length - 1
+                ];
+
+            const progress =
+                (position - segment.p1) /
+                (segment.p2 - segment.p1);
+
+            const raw =
+                segment.v1 +
+                progress *
+                (segment.v2 - segment.v1);
+
+            const rounded =
+                roundToStep(
+                    raw,
+                    segment.step
+                );
+
+            return Math.min(
+                segment.v2,
+                Math.max(
+                    segment.v1,
+                    rounded
+                )
+            );
+        }
+
+        function collateralToSliderPosition(value) {
+            value =
+                Math.min(
+                    CONFIG.SLIDER_MAX_COLLATERAL,
+                    Math.max(
+                        CONFIG.SLIDER_MIN_COLLATERAL,
+                        value
+                    )
+                );
+
+            const segment =
+                sliderSegments.find(
+                    item =>
+                        value >= item.v1 &&
+                        value <= item.v2
+                ) ||
+                sliderSegments[
+                    sliderSegments.length - 1
+                ];
+
+            const progress =
+                (value - segment.v1) /
+                (segment.v2 - segment.v1);
+
+            return Math.round(
+                segment.p1 +
+                progress *
+                (segment.p2 - segment.p1)
+            );
+        }
+
+        function updateSliderVisual() {
+            const value =
+                Number(collateralSlider.value);
+
+            const percent =
+                value / 10;
+
+            collateralSlider.style.setProperty(
+                "--progress",
+                `${percent}%`
+            );
+        }
+
+        function updateSliderFromCollateral(value) {
+            if (!value) {
+                return;
+            }
+
+            if (
+                value >=
+                CONFIG.SLIDER_MIN_COLLATERAL &&
+                value <=
+                CONFIG.SLIDER_MAX_COLLATERAL
+            ) {
+                collateralSlider.value =
+                    collateralToSliderPosition(
+                        value
+                    );
+
+                sliderValue.textContent =
+                    formatShortISK(value);
+
+                updateSliderVisual();
+            } else if (
+                value >
+                CONFIG.SLIDER_MAX_COLLATERAL
+            ) {
+                collateralSlider.value = 1000;
+
+                sliderValue.textContent =
+                    formatShortISK(value);
+
+                updateSliderVisual();
+            } else {
+                collateralSlider.value = 0;
+
+                sliderValue.textContent =
+                    formatShortISK(value);
+
+                updateSliderVisual();
+            }
+        }
+
         function formatCollateralInput() {
             let value =
                 parseNumber(
                     collateralInput.value
                 );
 
-            collateralError.hidden = true;
+            collateralError.hidden =
+                true;
 
             if (
                 value >
@@ -2107,6 +2398,12 @@
                 value > 0
                     ? formatISK(value)
                     : "";
+
+            if (value > 0) {
+                updateSliderFromCollateral(
+                    value
+                );
+            }
         }
 
         function validateJumps() {
@@ -2385,6 +2682,29 @@
             }
         );
 
+        collateralSlider.addEventListener(
+            "input",
+            () => {
+                const collateral =
+                    sliderPositionToCollateral(
+                        collateralSlider.value
+                    );
+
+                collateralInput.value =
+                    formatISK(collateral);
+
+                sliderValue.textContent =
+                    formatShortISK(collateral);
+
+                collateralError.hidden =
+                    true;
+
+                updateSliderVisual();
+
+                calculate();
+            }
+        );
+
         jumpsInput.addEventListener(
             "input",
             () => {
@@ -2402,36 +2722,6 @@
                     input.addEventListener(
                         "change",
                         calculate
-                    );
-                }
-            );
-
-        document
-            .querySelectorAll(
-                ".quick-value"
-            )
-            .forEach(
-                button => {
-                    button.addEventListener(
-                        "click",
-                        () => {
-                            const value =
-                                Number(
-                                    button.dataset.value
-                                );
-
-                            collateralInput.value =
-                                formatISK(
-                                    value
-                                );
-
-                            collateralError.hidden =
-                                true;
-
-                            calculate();
-
-                            jumpsInput.focus();
-                        }
                     );
                 }
             );
@@ -2521,6 +2811,23 @@
                 closeLanguageMenu();
             }
         );
+
+        /* Initial slider state = 1B */
+
+        const initialCollateral =
+            1_000_000_000;
+
+        collateralSlider.value =
+            collateralToSliderPosition(
+                initialCollateral
+            );
+
+        sliderValue.textContent =
+            formatShortISK(
+                initialCollateral
+            );
+
+        updateSliderVisual();
 
         setLanguage(
             currentLanguage
