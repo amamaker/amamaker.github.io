@@ -11,7 +11,7 @@
 
     <meta name="theme-color" content="#080b10">
 
-    <title>No Scope — Rush Delivery Calculator</title>
+    <title>No Scope — Courier Delivery Calculator</title>
 
     <style>
         :root {
@@ -29,8 +29,9 @@
             --text-muted: #667383;
 
             --accent: #39b9ff;
+            --accent-rgb: 57, 185, 255;
             --accent-light: #65c8ff;
-            --accent-soft: rgba(57, 185, 255, 0.11);
+            --accent-soft: rgba(var(--accent-rgb), 0.11);
 
             --success: #50e3a4;
 
@@ -77,7 +78,7 @@
             background:
                 radial-gradient(
                     circle at 20% 20%,
-                    rgba(57, 185, 255, 0.09),
+                    rgba(var(--accent-rgb), 0.09),
                     transparent 28rem
                 ),
                 radial-gradient(
@@ -139,7 +140,7 @@
             background: linear-gradient(
                 90deg,
                 transparent,
-                rgba(57, 185, 255, 0.7),
+                rgba(var(--accent-rgb), 0.7),
                 transparent
             );
         }
@@ -192,7 +193,7 @@
         .language-button:hover {
             color: var(--accent-light);
             background: var(--accent-soft);
-            border-color: rgba(57, 185, 255, 0.35);
+            border-color: rgba(var(--accent-rgb), 0.35);
         }
 
         .info-button:active,
@@ -311,7 +312,7 @@
 
             background: var(--accent-soft);
 
-            border: 1px solid rgba(57, 185, 255, 0.18);
+            border: 1px solid rgba(var(--accent-rgb), 0.18);
             border-radius: 9px;
         }
 
@@ -439,10 +440,10 @@
         .input-wrapper input:focus {
             background: #10161f;
 
-            border-color: rgba(57, 185, 255, 0.6);
+            border-color: rgba(var(--accent-rgb), 0.6);
 
             box-shadow:
-                0 0 0 3px rgba(57, 185, 255, 0.08);
+                0 0 0 3px rgba(var(--accent-rgb), 0.08);
         }
 
         .input-wrapper input::placeholder {
@@ -550,7 +551,7 @@
             border-radius: 50%;
 
             box-shadow:
-                0 0 0 4px rgba(57, 185, 255, 0.09),
+                0 0 0 4px rgba(var(--accent-rgb), 0.09),
                 0 3px 8px rgba(0, 0, 0, 0.45);
 
             transition:
@@ -562,13 +563,13 @@
             transform: scale(1.08);
 
             box-shadow:
-                0 0 0 5px rgba(57, 185, 255, 0.12),
+                0 0 0 5px rgba(var(--accent-rgb), 0.12),
                 0 3px 8px rgba(0, 0, 0, 0.45);
         }
 
         .collateral-slider:focus-visible::-webkit-slider-thumb {
             box-shadow:
-                0 0 0 5px rgba(57, 185, 255, 0.18),
+                0 0 0 5px rgba(var(--accent-rgb), 0.18),
                 0 3px 8px rgba(0, 0, 0, 0.45);
         }
 
@@ -598,7 +599,7 @@
             border-radius: 50%;
 
             box-shadow:
-                0 0 0 4px rgba(57, 185, 255, 0.09),
+                0 0 0 4px rgba(var(--accent-rgb), 0.09),
                 0 3px 8px rgba(0, 0, 0, 0.45);
         }
 
@@ -642,6 +643,168 @@
             line-height: 1.45;
 
             color: #46515f;
+        }
+
+
+        body {
+            transition: background-color 0.25s ease;
+        }
+
+        body.heavy-mode {
+            --accent: #f0a53a;
+            --accent-rgb: 240, 165, 58;
+            --accent-light: #ffc46b;
+            --accent-soft: rgba(240, 165, 58, 0.12);
+        }
+
+        .mode-settings {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 2px;
+        }
+
+        .mode-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .segmented-control {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 6px;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+
+        .segment-button {
+            min-width: 0;
+            min-height: 52px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition:
+                color 0.18s ease,
+                background-color 0.18s ease,
+                border-color 0.18s ease,
+                transform 0.1s ease;
+        }
+
+        .segment-button:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .segment-button:active {
+            transform: scale(0.985);
+        }
+
+        .segment-button.active {
+            color: var(--accent-light);
+            background: var(--accent-soft);
+            border-color: rgba(var(--accent-rgb), 0.42);
+        }
+
+        .segment-button strong {
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .segment-button small {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        .segment-button.active small {
+            color: rgba(var(--accent-rgb), 0.72);
+        }
+
+        .mode-note {
+            margin-top: -1px;
+            font-size: 10px;
+            line-height: 1.45;
+            color: #46515f;
+        }
+
+        .mode-note.rush-highlight {
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            gap: 10px;
+            align-items: center;
+
+            margin-top: 2px;
+            padding: 11px 12px;
+
+            color: #d7dde6;
+            background: rgba(240, 165, 58, 0.08);
+
+            border: 1px solid rgba(240, 165, 58, 0.28);
+            border-radius: 12px;
+
+            box-shadow:
+                inset 0 0 24px rgba(240, 165, 58, 0.025);
+        }
+
+        .rush-highlight-icon {
+            width: 30px;
+            height: 30px;
+
+            display: grid;
+            place-items: center;
+
+            color: #ffc46b;
+            background: rgba(240, 165, 58, 0.12);
+
+            border: 1px solid rgba(240, 165, 58, 0.22);
+            border-radius: 9px;
+
+            font-size: 15px;
+        }
+
+        .rush-highlight-copy {
+            display: grid;
+            gap: 1px;
+        }
+
+        .rush-highlight-title {
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.35;
+
+            color: #ffd18a;
+        }
+
+        .rush-highlight-subtitle {
+            font-size: 10px;
+            line-height: 1.4;
+
+            color: #8e98a6;
+        }
+
+        .capacity {
+            transition:
+                color 0.2s ease,
+                background-color 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        body.heavy-mode .capacity {
+            color: var(--accent-light);
+            background: var(--accent-soft);
+            border-color: rgba(var(--accent-rgb), 0.22);
         }
 
         .security-selector {
@@ -717,10 +880,10 @@
 
             background: var(--accent-soft);
 
-            border-color: rgba(57, 185, 255, 0.45);
+            border-color: rgba(var(--accent-rgb), 0.45);
 
             box-shadow:
-                inset 0 0 20px rgba(57, 185, 255, 0.025);
+                inset 0 0 20px rgba(var(--accent-rgb), 0.025);
         }
 
         .security-option input:checked + label .security-rate {
@@ -735,7 +898,7 @@
                 linear-gradient(
                     135deg,
                     rgba(80, 227, 164, 0.08),
-                    rgba(57, 185, 255, 0.035)
+                    rgba(var(--accent-rgb), 0.035)
                 ),
                 var(--bg-secondary);
 
@@ -797,18 +960,6 @@
         .pricing-method {
             text-align: right;
             color: var(--text-secondary);
-        }
-
-        .result-note {
-            margin-top: 11px;
-            padding-top: 11px;
-
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-
-            font-size: 10px;
-            line-height: 1.45;
-
-            color: var(--text-muted);
         }
 
         .error {
@@ -888,7 +1039,7 @@
             background: linear-gradient(
                 90deg,
                 transparent,
-                rgba(57, 185, 255, 0.75),
+                rgba(var(--accent-rgb), 0.75),
                 transparent
             );
         }
@@ -981,7 +1132,7 @@
 
             background: var(--accent-soft);
 
-            border: 1px solid rgba(57, 185, 255, 0.15);
+            border: 1px solid rgba(var(--accent-rgb), 0.15);
             border-radius: 10px;
 
             font-size: 15px;
@@ -1003,10 +1154,6 @@
             line-height: 1.6;
 
             color: var(--text-secondary);
-        }
-
-        .info-section p[data-i18n="infoHowText"] {
-            white-space: pre-line;
         }
 
         @media (max-width: 520px) {
@@ -1214,6 +1361,70 @@
 
         <section class="form-section">
 
+            <div class="mode-settings">
+
+                <div class="mode-group">
+                    <span class="section-label" data-i18n="cargoSize">
+                        Cargo size
+                    </span>
+
+                    <div class="segmented-control" id="cargoMode" aria-label="Cargo size">
+                        <button
+                            class="segment-button active"
+                            type="button"
+                            data-cargo-mode="standard"
+                            aria-pressed="true"
+                        >
+                            <strong>13,400 m³</strong>
+                            <small data-i18n="standardCargo">Standard cargo</small>
+                        </button>
+
+                        <button
+                            class="segment-button"
+                            type="button"
+                            data-cargo-mode="heavy"
+                            aria-pressed="false"
+                        >
+                            <strong>62,500 m³</strong>
+                            <small data-i18n="heavyCargo">Heavy cargo</small>
+                        </button>
+                    </div>
+
+                    <div class="mode-note" id="cargoModeNote"></div>
+                </div>
+
+                <div class="mode-group">
+                    <span class="section-label" data-i18n="deliveryMode">
+                        Delivery mode
+                    </span>
+
+                    <div class="segmented-control" id="priorityMode" aria-label="Delivery mode">
+                        <button
+                            class="segment-button"
+                            type="button"
+                            data-priority-mode="standard"
+                            aria-pressed="false"
+                        >
+                            <strong data-i18n="standardDelivery">Standard</strong>
+                            <small data-i18n="standardDeliveryHint">Lower cost</small>
+                        </button>
+
+                        <button
+                            class="segment-button active"
+                            type="button"
+                            data-priority-mode="rush"
+                            aria-pressed="true"
+                        >
+                            <strong data-i18n="rushDelivery">⚡ Rush</strong>
+                            <small data-i18n="rushDeliveryHint">Priority handling</small>
+                        </button>
+                    </div>
+
+                    <div class="mode-note" id="priorityModeNote"></div>
+                </div>
+
+            </div>
+
             <div class="field">
 
                 <div class="field-header">
@@ -1254,7 +1465,6 @@
                     <input
                         id="collateral"
                         type="text"
-                        enterkeyhint="done"
                         inputmode="numeric"
                         autocomplete="off"
                         placeholder="Enter collateral"
@@ -1376,7 +1586,6 @@
                     <input
                         id="jumps"
                         type="number"
-                        enterkeyhint="done"
                         inputmode="numeric"
                         min="1"
                         max="100"
@@ -1534,13 +1743,6 @@
 
             </div>
 
-            <div
-                class="result-note"
-                data-i18n="rushResultNote"
-            >
-                Priority-service pricing for time-sensitive deliveries.
-            </div>
-
         </section>
 
         <footer
@@ -1602,26 +1804,6 @@
                 <div class="info-section">
 
                     <div class="info-section-icon">
-                        ⚡
-                    </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoRushTitle">
-                            Why Rush Delivery costs more
-                        </h3>
-
-                        <p data-i18n="infoRushText">
-                            Rush Delivery is a priority service for time-sensitive cargo. The higher reward reflects priority handling and the risk associated with high-value collateral. For non-urgent cargo, standard public courier contracts may be more economical.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
                         ◇
                     </div>
 
@@ -1632,8 +1814,7 @@
                         </h3>
 
                         <p data-i18n="infoPricingText">
-                            The final delivery price is based on whichever is higher:
-                            the collateral-based rate or 1,000,000 ISK per jump.
+                            The calculator uses the higher of collateral-based or distance-based pricing. The selected cargo size and delivery mode adjust both rates.
                         </p>
 
                     </div>
@@ -1656,46 +1837,6 @@
                             The specific origin and destination systems do not affect
                             the price. The pickup location must be a public station,
                             while the destination may be non-public.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
-                        ▣
-                    </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoLimitsTitle">
-                            Service limits
-                        </h3>
-
-                        <p data-i18n="infoLimitsText">
-                            Up to 13,400 m³ cargo, 20B ISK collateral and 1–100 jumps per standard delivery.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
-                        →
-                    </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoHowTitle">
-                            How to create the contract
-                        </h3>
-
-                        <p data-i18n="infoHowText">
-                            1. Create a Courier contract. 2. Set collateral to the cargo value. 3. Set the reward to the delivery cost shown by the calculator.
                         </p>
 
                     </div>
@@ -1737,15 +1878,43 @@
             SLIDER_MAX_COLLATERAL: 10_000_000_000,
             MIN_JUMPS: 1,
             MAX_JUMPS: 100,
-            PRICE_PER_JUMP: 1_000_000
+            PRICE_PER_JUMP: 1_000_000,
+            STANDARD_PRIORITY_MULTIPLIER: 0.8,
+            HEAVY_CARGO_MULTIPLIER: 1.25,
+            LONG_HAUL_THRESHOLD: 30,
+            LONG_HAUL_MULTIPLIER: 2,
+            STANDARD_SMALL_HIGHSEC_RATE: 0.02,
+            STANDARD_SMALL_LOWSEC_RATE: 0.025,
+            STANDARD_SMALL_NULLSEC_RATE: 0.03,
+            STANDARD_SMALL_BASE_PRICE: 40_000_000,
+            STANDARD_SMALL_BASE_JUMPS: 30,
+            STANDARD_SMALL_EXTRA_JUMP_PRICE: 2_000_000
         };
 
         const translations = {
 
             en: {
-                title: "Rush Delivery",
-                subtitle: "Priority courier service for time-sensitive cargo.",
+                title: "Courier Delivery",
+                subtitle: "Calculate courier delivery cost instantly.",
                 capacity: "Maximum cargo: 13,400 m³",
+
+                cargoSize: "Cargo size",
+                standardCargo: "Standard cargo",
+                heavyCargo: "Heavy cargo",
+                deliveryMode: "Delivery mode",
+                standardDelivery: "Standard",
+                standardDeliveryHint: "Lower cost",
+                rushDelivery: "⚡ Rush",
+                rushDeliveryHint: "Priority handling",
+                cargoStandardNote: "Fast, flexible hauling for cargo up to 13,400 m³.",
+                cargoHeavyNote: "Larger cargo requires slower, more vulnerable hauling ships and carries higher transport risk.",
+                priorityStandardNote: "Lower-cost delivery for cargo that does not require priority handling.",
+                priorityRushNote: "Delivery within 1 hour after the contract is accepted.",
+                priorityRushHeadline: "Delivery within 1 hour",
+                priorityRushSubtitle: "after the contract is accepted",
+                capacityStandard: "Maximum cargo: 13,400 m³",
+                capacityHeavy: "Heavy cargo: up to 62,500 m³",
+                rateSuffix: "collateral",
 
                 collateral: "Collateral",
                 maxCollateral: "Max 20B ISK",
@@ -1780,27 +1949,15 @@
 
                 collateralRate: "collateral rate",
                 perJump: "ISK / jump",
+                longHaulNote: "Jumps beyond 30 are charged at double the per-jump rate.",
+                smallStandardNote: "13,400 m³ Standard has a 40M ISK minimum route price for up to 30 jumps, then +2M ISK per additional jump.",
 
                 infoKicker: "Delivery information",
                 infoTitle: "How pricing works",
 
-                rushResultNote: "Priority-service pricing for time-sensitive deliveries.",
-
-                infoRushTitle: "Why Rush Delivery costs more",
-                infoRushText:
-                    "Rush Delivery is a priority service for time-sensitive cargo. The higher reward reflects priority handling and the risk associated with high-value collateral. For non-urgent cargo, standard public courier contracts may be more economical.",
-
-                infoLimitsTitle: "Service limits",
-                infoLimitsText:
-                    "Up to 13,400 m³ cargo, 20B ISK collateral and 1–100 jumps per standard delivery.",
-
-                infoHowTitle: "How to create the contract",
-                infoHowText:
-                    "1. Create a Courier contract.\n2. Set collateral to the cargo value.\n3. Set the reward to the delivery cost shown by the calculator.",
-
                 infoPricingTitle: "Delivery price",
                 infoPricingText:
-                    "The final delivery price is based on whichever is higher: the collateral-based rate or 1,000,000 ISK per jump.",
+                    "The calculator uses the higher of collateral-based or distance-based pricing. The selected cargo size and delivery mode adjust both rates.",
 
                 infoRouteTitle: "Route requirements",
                 infoRouteText:
@@ -1812,9 +1969,27 @@
             },
 
             ru: {
-                title: "Срочная доставка",
-                subtitle: "Приоритетная доставка для грузов, которые не могут ждать.",
+                title: "Курьерская доставка",
+                subtitle: "Мгновенный расчёт стоимости доставки.",
                 capacity: "Максимальный объём: 13 400 м³",
+
+                cargoSize: "Объём груза",
+                standardCargo: "Обычный груз",
+                heavyCargo: "Крупный груз",
+                deliveryMode: "Режим доставки",
+                standardDelivery: "Обычная",
+                standardDeliveryHint: "Дешевле",
+                rushDelivery: "⚡ Срочная",
+                rushDeliveryHint: "Приоритетная",
+                cargoStandardNote: "Быстрая и гибкая перевозка грузов объёмом до 13 400 м³.",
+                cargoHeavyNote: "Для крупного груза нужны более медленные и уязвимые корабли, поэтому риск перевозки выше.",
+                priorityStandardNote: "Более доступная доставка для грузов, которым не требуется приоритет.",
+                priorityRushNote: "Доставка до 1 часа после принятия контракта.",
+                priorityRushHeadline: "Доставка до 1 часа",
+                priorityRushSubtitle: "после принятия контракта",
+                capacityStandard: "Максимальный объём: 13 400 м³",
+                capacityHeavy: "Крупный груз: до 62 500 м³",
+                rateSuffix: "от залога",
 
                 collateral: "Залог",
                 maxCollateral: "Макс. 20B ISK",
@@ -1849,27 +2024,15 @@
 
                 collateralRate: "от залога",
                 perJump: "ISK / прыжок",
+                longHaulNote: "Прыжки после 30-го рассчитываются по двойной ставке.",
+                smallStandardNote: "Для 13 400 м³ Standard минимальная стоимость маршрута — 40M ISK до 30 прыжков, затем +2M ISK за каждый следующий прыжок.",
 
                 infoKicker: "Информация о доставке",
                 infoTitle: "Как рассчитывается цена",
 
-                rushResultNote: "Приоритетный тариф для срочных доставок.",
-
-                infoRushTitle: "Почему Rush Delivery стоит дороже",
-                infoRushText:
-                    "Rush Delivery — приоритетная услуга для срочных грузов. Более высокая награда учитывает приоритет выполнения и риск, связанный с перевозкой груза с высоким залогом. Для несрочных грузов обычные публичные курьерские контракты могут быть выгоднее.",
-
-                infoLimitsTitle: "Ограничения сервиса",
-                infoLimitsText:
-                    "До 13 400 м³ груза, залог до 20B ISK и маршрут от 1 до 100 прыжков для стандартной доставки.",
-
-                infoHowTitle: "Как создать контракт",
-                infoHowText:
-                    "1. Создайте контракт типа Courier.\n2. Укажите залог, равный стоимости груза.\n3. Укажите награду, рассчитанную калькулятором.",
-
                 infoPricingTitle: "Стоимость доставки",
                 infoPricingText:
-                    "Итоговая стоимость определяется по большему из двух значений: тарифу от суммы залога или стоимости маршрута из расчёта 1 000 000 ISK за прыжок.",
+                    "Калькулятор выбирает большее из двух значений: тариф от залога или стоимость маршрута. Выбранный объём груза и режим доставки изменяют обе ставки.",
 
                 infoRouteTitle: "Требования к маршруту",
                 infoRouteText:
@@ -1881,9 +2044,27 @@
             },
 
             de: {
-                title: "Expresslieferung",
-                subtitle: "Priorisierter Kurierdienst für zeitkritische Fracht.",
+                title: "Kurierlieferung",
+                subtitle: "Berechne die Lieferkosten sofort.",
                 capacity: "Maximales Volumen: 13.400 m³",
+
+                cargoSize: "Frachtgröße",
+                standardCargo: "Standardfracht",
+                heavyCargo: "Großfracht",
+                deliveryMode: "Liefermodus",
+                standardDelivery: "Standard",
+                standardDeliveryHint: "Günstiger",
+                rushDelivery: "⚡ Express",
+                rushDeliveryHint: "Priorisiert",
+                cargoStandardNote: "Flexible Lieferung für Fracht bis 13.400 m³.",
+                cargoHeavyNote: "Größere Fracht erfordert langsamere, verwundbarere Schiffe und erhöht das Transportrisiko.",
+                priorityStandardNote: "Günstigere Lieferung ohne Prioritätsabwicklung.",
+                priorityRushNote: "Lieferung innerhalb von 1 Stunde nach Annahme des Vertrags.",
+                priorityRushHeadline: "Lieferung innerhalb von 1 Stunde",
+                priorityRushSubtitle: "nach Annahme des Vertrags",
+                capacityStandard: "Maximales Volumen: 13.400 m³",
+                capacityHeavy: "Großfracht: bis 62.500 m³",
+                rateSuffix: "der Sicherheit",
 
                 collateral: "Sicherheit",
                 maxCollateral: "Max. 20B ISK",
@@ -1918,27 +2099,15 @@
 
                 collateralRate: "Sicherheitsrate",
                 perJump: "ISK / Sprung",
+                longHaulNote: "Sprünge über 30 werden zum doppelten Preis pro Sprung berechnet.",
+                smallStandardNote: "Für 13.400 m³ Standard beträgt der Mindestpreis bis 30 Sprünge 40M ISK, danach +2M ISK pro weiterem Sprung.",
 
                 infoKicker: "Lieferinformationen",
                 infoTitle: "So wird der Preis berechnet",
 
-                rushResultNote: "Prioritätstarif für zeitkritische Lieferungen.",
-
-                infoRushTitle: "Warum Rush Delivery mehr kostet",
-                infoRushText:
-                    "Rush Delivery ist ein priorisierter Service für zeitkritische Fracht. Die höhere Belohnung berücksichtigt die bevorzugte Bearbeitung und das Risiko bei hohem Sicherheitsbetrag. Für nicht dringende Fracht können normale öffentliche Kurierverträge günstiger sein.",
-
-                infoLimitsTitle: "Servicelimits",
-                infoLimitsText:
-                    "Bis zu 13.400 m³ Fracht, 20B ISK Sicherheit und 1–100 Sprünge pro Standardlieferung.",
-
-                infoHowTitle: "So erstellst du den Vertrag",
-                infoHowText:
-                    "1. Erstelle einen Kuriervertrag.\n2. Setze die Sicherheit auf den Warenwert.\n3. Setze die Belohnung auf die vom Rechner angezeigten Lieferkosten.",
-
                 infoPricingTitle: "Lieferpreis",
                 infoPricingText:
-                    "Der endgültige Preis richtet sich nach dem höheren der beiden Werte: dem Tarif auf Basis der Sicherheit oder 1.000.000 ISK pro Sprung.",
+                    "Der Rechner verwendet den höheren Wert aus sicherheits- oder entfernungsbasierter Berechnung. Frachtgröße und Liefermodus passen beide Tarife an.",
 
                 infoRouteTitle: "Routenanforderungen",
                 infoRouteText:
@@ -1950,9 +2119,27 @@
             },
 
             fr: {
-                title: "Livraison express",
-                subtitle: "Service de livraison prioritaire pour les cargaisons urgentes.",
+                title: "Livraison par coursier",
+                subtitle: "Calculez instantanément le coût de livraison.",
                 capacity: "Volume maximum : 13 400 m³",
+
+                cargoSize: "Volume de cargaison",
+                standardCargo: "Cargaison standard",
+                heavyCargo: "Cargaison lourde",
+                deliveryMode: "Mode de livraison",
+                standardDelivery: "Standard",
+                standardDeliveryHint: "Moins cher",
+                rushDelivery: "⚡ Express",
+                rushDeliveryHint: "Prioritaire",
+                cargoStandardNote: "Transport flexible pour les cargaisons jusqu’à 13 400 m³.",
+                cargoHeavyNote: "Les cargaisons plus volumineuses nécessitent des vaisseaux plus lents et vulnérables, avec un risque accru.",
+                priorityStandardNote: "Livraison moins coûteuse sans traitement prioritaire.",
+                priorityRushNote: "Livraison sous 1 heure après acceptation du contrat.",
+                priorityRushHeadline: "Livraison sous 1 heure",
+                priorityRushSubtitle: "après acceptation du contrat",
+                capacityStandard: "Volume maximum : 13 400 m³",
+                capacityHeavy: "Cargaison lourde : jusqu’à 62 500 m³",
+                rateSuffix: "de garantie",
 
                 collateral: "Garantie",
                 maxCollateral: "Max. 20B ISK",
@@ -1987,27 +2174,15 @@
 
                 collateralRate: "de garantie",
                 perJump: "ISK / saut",
+                longHaulNote: "Les sauts au-delà de 30 sont facturés au double du tarif par saut.",
+                smallStandardNote: "Pour 13 400 m³ Standard, le prix minimum est de 40M ISK jusqu’à 30 sauts, puis +2M ISK par saut supplémentaire.",
 
                 infoKicker: "Informations de livraison",
                 infoTitle: "Calcul du tarif",
 
-                rushResultNote: "Tarif prioritaire pour les livraisons urgentes.",
-
-                infoRushTitle: "Pourquoi Rush Delivery coûte plus cher",
-                infoRushText:
-                    "Rush Delivery est un service prioritaire destiné aux cargaisons urgentes. La récompense plus élevée reflète le traitement prioritaire et le risque lié à une garantie de grande valeur. Pour une cargaison non urgente, un contrat public standard peut être plus économique.",
-
-                infoLimitsTitle: "Limites du service",
-                infoLimitsText:
-                    "Jusqu’à 13 400 m³ de cargaison, 20B ISK de garantie et 1–100 sauts par livraison standard.",
-
-                infoHowTitle: "Comment créer le contrat",
-                infoHowText:
-                    "1. Créez un contrat de type Courier.\n2. Définissez la garantie selon la valeur de la cargaison.\n3. Définissez la récompense selon le coût affiché par le calculateur.",
-
                 infoPricingTitle: "Prix de livraison",
                 infoPricingText:
-                    "Le prix final correspond au montant le plus élevé entre le tarif basé sur la garantie et 1 000 000 ISK par saut.",
+                    "Le calculateur utilise le montant le plus élevé entre le tarif basé sur la garantie et celui basé sur la distance. Le volume et le mode de livraison ajustent les deux tarifs.",
 
                 infoRouteTitle: "Conditions de l’itinéraire",
                 infoRouteText:
@@ -2019,9 +2194,27 @@
             },
 
             es: {
-                title: "Entrega urgente",
-                subtitle: "Servicio de mensajería prioritario para cargas urgentes.",
+                title: "Entrega por mensajería",
+                subtitle: "Calcula al instante el coste de entrega.",
                 capacity: "Volumen máximo: 13.400 m³",
+
+                cargoSize: "Volumen de carga",
+                standardCargo: "Carga estándar",
+                heavyCargo: "Carga pesada",
+                deliveryMode: "Modo de entrega",
+                standardDelivery: "Estándar",
+                standardDeliveryHint: "Más barato",
+                rushDelivery: "⚡ Urgente",
+                rushDeliveryHint: "Prioritario",
+                cargoStandardNote: "Transporte flexible para cargas de hasta 13.400 m³.",
+                cargoHeavyNote: "Las cargas grandes requieren naves más lentas y vulnerables, lo que aumenta el riesgo del transporte.",
+                priorityStandardNote: "Entrega más económica sin tratamiento prioritario.",
+                priorityRushNote: "Entrega en un plazo de 1 hora tras aceptar el contrato.",
+                priorityRushHeadline: "Entrega en 1 hora",
+                priorityRushSubtitle: "después de aceptar el contrato",
+                capacityStandard: "Volumen máximo: 13.400 m³",
+                capacityHeavy: "Carga pesada: hasta 62.500 m³",
+                rateSuffix: "de garantía",
 
                 collateral: "Garantía",
                 maxCollateral: "Máx. 20B ISK",
@@ -2056,27 +2249,15 @@
 
                 collateralRate: "de garantía",
                 perJump: "ISK / salto",
+                longHaulNote: "Los saltos después del 30 se cobran al doble de la tarifa por salto.",
+                smallStandardNote: "Para 13.400 m³ Standard, el precio mínimo es de 40M ISK hasta 30 saltos y luego +2M ISK por cada salto adicional.",
 
                 infoKicker: "Información de entrega",
                 infoTitle: "Cómo se calcula el precio",
 
-                rushResultNote: "Tarifa prioritaria para entregas urgentes.",
-
-                infoRushTitle: "Por qué Rush Delivery cuesta más",
-                infoRushText:
-                    "Rush Delivery es un servicio prioritario para cargas urgentes. La recompensa más alta refleja la atención prioritaria y el riesgo asociado a garantías de gran valor. Para cargas no urgentes, los contratos públicos estándar pueden ser más económicos.",
-
-                infoLimitsTitle: "Límites del servicio",
-                infoLimitsText:
-                    "Hasta 13.400 m³ de carga, 20B ISK de garantía y 1–100 saltos por entrega estándar.",
-
-                infoHowTitle: "Cómo crear el contrato",
-                infoHowText:
-                    "1. Crea un contrato de tipo Courier.\n2. Establece la garantía según el valor de la carga.\n3. Establece la recompensa según el coste mostrado por la calculadora.",
-
                 infoPricingTitle: "Precio de entrega",
                 infoPricingText:
-                    "El precio final se calcula utilizando el valor más alto entre la tarifa basada en la garantía y 1.000.000 ISK por salto.",
+                    "La calculadora utiliza el valor más alto entre la tarifa basada en la garantía y la basada en la distancia. El volumen y el modo de entrega ajustan ambas tarifas.",
 
                 infoRouteTitle: "Requisitos de ruta",
                 infoRouteText:
@@ -2088,9 +2269,27 @@
             },
 
             ja: {
-                title: "緊急配送",
-                subtitle: "時間を優先した貨物向けの優先配送サービス。",
+                title: "クーリエ配送",
+                subtitle: "配送費用をすぐに計算できます。",
                 capacity: "最大容量: 13,400 m³",
+
+                cargoSize: "貨物サイズ",
+                standardCargo: "通常貨物",
+                heavyCargo: "大型貨物",
+                deliveryMode: "配送モード",
+                standardDelivery: "通常",
+                standardDeliveryHint: "低コスト",
+                rushDelivery: "⚡ 緊急",
+                rushDeliveryHint: "優先対応",
+                cargoStandardNote: "13,400 m³までの貨物向けの柔軟な配送です。",
+                cargoHeavyNote: "大型貨物にはより遅く脆弱な船が必要となり、輸送リスクが高くなります。",
+                priorityStandardNote: "優先対応を必要としない貨物向けの低コスト配送です。",
+                priorityRushNote: "契約受諾後1時間以内に配送します。",
+                priorityRushHeadline: "1時間以内に配送",
+                priorityRushSubtitle: "契約受諾後",
+                capacityStandard: "最大容量: 13,400 m³",
+                capacityHeavy: "大型貨物: 最大 62,500 m³",
+                rateSuffix: "担保",
 
                 collateral: "担保",
                 maxCollateral: "最大 20B ISK",
@@ -2125,27 +2324,15 @@
 
                 collateralRate: "担保レート",
                 perJump: "ISK / ジャンプ",
+                longHaulNote: "30ジャンプを超える分は、1ジャンプあたりの料金が2倍になります。",
+                smallStandardNote: "13,400 m³ Standardは30ジャンプまで最低40M ISK、31ジャンプ目以降は1ジャンプごとに+2M ISKです。",
 
                 infoKicker: "配送情報",
                 infoTitle: "料金の計算方法",
 
-                rushResultNote: "時間を優先する配送向けの優先料金です。",
-
-                infoRushTitle: "Rush Delivery の料金が高い理由",
-                infoRushText:
-                    "Rush Delivery は時間を優先する貨物向けの優先サービスです。高い報酬には優先対応と、高額な担保を伴う輸送リスクが反映されています。急ぎでない貨物では、通常の公開クーリエ契約の方が経済的な場合があります。",
-
-                infoLimitsTitle: "サービス上限",
-                infoLimitsText:
-                    "標準配送は貨物13,400 m³まで、担保20B ISKまで、1～100ジャンプに対応します。",
-
-                infoHowTitle: "契約の作成方法",
-                infoHowText:
-                    "1. Courier 契約を作成します。\n2. 担保を貨物の価値に設定します。\n3. 報酬を計算機に表示された配送費用に設定します。",
-
                 infoPricingTitle: "配送料金",
                 infoPricingText:
-                    "最終料金は、担保額に基づく料金と1ジャンプあたり1,000,000 ISKのうち、高い方が適用されます。",
+                    "担保額ベースと距離ベースの料金のうち高い方が適用されます。貨物サイズと配送モードによって両方の料金が調整されます。",
 
                 infoRouteTitle: "ルート条件",
                 infoRouteText:
@@ -2157,9 +2344,27 @@
             },
 
             ko: {
-                title: "긴급 배송",
-                subtitle: "시간이 중요한 화물을 위한 우선 배송 서비스.",
+                title: "택배 배송",
+                subtitle: "배송 비용을 즉시 계산합니다.",
                 capacity: "최대 화물: 13,400 m³",
+
+                cargoSize: "화물 크기",
+                standardCargo: "일반 화물",
+                heavyCargo: "대형 화물",
+                deliveryMode: "배송 모드",
+                standardDelivery: "일반",
+                standardDeliveryHint: "저렴한 요금",
+                rushDelivery: "⚡ 긴급",
+                rushDeliveryHint: "우선 처리",
+                cargoStandardNote: "13,400 m³ 이하 화물을 위한 유연한 운송입니다.",
+                cargoHeavyNote: "대형 화물은 더 느리고 취약한 함선을 필요로 하므로 운송 위험이 더 높습니다.",
+                priorityStandardNote: "우선 처리가 필요하지 않은 화물을 위한 저렴한 배송입니다.",
+                priorityRushNote: "계약 수락 후 1시간 이내에 배송됩니다.",
+                priorityRushHeadline: "1시간 이내 배송",
+                priorityRushSubtitle: "계약 수락 후",
+                capacityStandard: "최대 화물: 13,400 m³",
+                capacityHeavy: "대형 화물: 최대 62,500 m³",
+                rateSuffix: "담보",
 
                 collateral: "담보",
                 maxCollateral: "최대 20B ISK",
@@ -2194,27 +2399,15 @@
 
                 collateralRate: "담보 요율",
                 perJump: "ISK / 점프",
+                longHaulNote: "30점을 초과한 점프는 점프당 요금의 2배로 계산됩니다.",
+                smallStandardNote: "13,400 m³ Standard는 30점프까지 최소 40M ISK이며, 이후 점프당 +2M ISK가 추가됩니다.",
 
                 infoKicker: "배송 안내",
                 infoTitle: "가격 계산 방식",
 
-                rushResultNote: "시간이 중요한 배송을 위한 우선 서비스 요금입니다.",
-
-                infoRushTitle: "Rush Delivery 요금이 더 높은 이유",
-                infoRushText:
-                    "Rush Delivery는 시간이 중요한 화물을 위한 우선 서비스입니다. 더 높은 보상에는 우선 처리와 고액 담보 화물 운송에 따른 위험이 반영됩니다. 긴급하지 않은 화물은 일반 공개 운송 계약이 더 경제적일 수 있습니다.",
-
-                infoLimitsTitle: "서비스 한도",
-                infoLimitsText:
-                    "표준 배송 기준 화물 최대 13,400 m³, 담보 최대 20B ISK, 1–100 점프까지 지원합니다.",
-
-                infoHowTitle: "계약 생성 방법",
-                infoHowText:
-                    "1. Courier 계약을 생성합니다.\n2. 담보를 화물 가치에 맞게 설정합니다.\n3. 보상을 계산기에 표시된 배송 비용으로 설정합니다.",
-
                 infoPricingTitle: "배송 가격",
                 infoPricingText:
-                    "최종 배송 가격은 담보 기준 요금과 점프당 1,000,000 ISK 중 더 높은 금액으로 계산됩니다.",
+                    "담보 기준 요금과 거리 기준 요금 중 더 높은 금액이 적용됩니다. 화물 크기와 배송 모드에 따라 두 요금이 모두 조정됩니다.",
 
                 infoRouteTitle: "경로 조건",
                 infoRouteText:
@@ -2226,9 +2419,27 @@
             },
 
             zh: {
-                title: "加急运输",
-                subtitle: "面向时效敏感货物的优先运输服务。",
+                title: "快递运输",
+                subtitle: "即时计算快递运输费用。",
                 capacity: "最大货舱容量：13,400 m³",
+
+                cargoSize: "货物体积",
+                standardCargo: "标准货物",
+                heavyCargo: "大型货物",
+                deliveryMode: "运输模式",
+                standardDelivery: "标准",
+                standardDeliveryHint: "价格更低",
+                rushDelivery: "⚡ 加急",
+                rushDeliveryHint: "优先处理",
+                cargoStandardNote: "适用于不超过 13,400 m³ 货物的灵活运输。",
+                cargoHeavyNote: "大型货物需要更慢、更脆弱的运输舰船，因此运输风险更高。",
+                priorityStandardNote: "适用于无需优先处理货物的低成本运输。",
+                priorityRushNote: "合同接受后 1 小时内完成运输。",
+                priorityRushHeadline: "1 小时内完成运输",
+                priorityRushSubtitle: "合同接受后",
+                capacityStandard: "最大货舱容量：13,400 m³",
+                capacityHeavy: "大型货物：最高 62,500 m³",
+                rateSuffix: "抵押金额",
 
                 collateral: "抵押金额",
                 maxCollateral: "最高 20B ISK",
@@ -2263,27 +2474,15 @@
 
                 collateralRate: "抵押费率",
                 perJump: "ISK / 跳",
+                longHaulNote: "超过 30 跳的部分按每跳费率的 2 倍计算。",
+                smallStandardNote: "13,400 m³ Standard 在 30 跳以内最低为 40M ISK，超过 30 跳后每跳增加 2M ISK。",
 
                 infoKicker: "运输说明",
                 infoTitle: "价格计算方式",
 
-                rushResultNote: "面向时效敏感运输的优先服务定价。",
-
-                infoRushTitle: "为什么 Rush Delivery 价格更高",
-                infoRushText:
-                    "Rush Delivery 是面向时效敏感货物的优先服务。更高的报酬体现了优先处理以及高额抵押运输所承担的风险。对于不紧急的货物，普通公开快递合同可能更经济。",
-
-                infoLimitsTitle: "服务限制",
-                infoLimitsText:
-                    "标准运输支持最高 13,400 m³ 货物、20B ISK 抵押金额以及 1–100 跳的路线。",
-
-                infoHowTitle: "如何创建合同",
-                infoHowText:
-                    "1. 创建 Courier 合同。\n2. 将抵押金额设为货物价值。\n3. 将报酬设为计算器显示的运输费用。",
-
                 infoPricingTitle: "运输费用",
                 infoPricingText:
-                    "最终运输费用取两种计算方式中的较高值：按抵押金额计算的费用，或每跳 1,000,000 ISK。",
+                    "计算器会采用抵押金额计价和距离计价中较高的一项。货物体积和运输模式会同时调整两种费率。",
 
                 infoRouteTitle: "路线要求",
                 infoRouteText:
@@ -2351,6 +2550,27 @@
         const infoClose =
             document.getElementById("infoClose");
 
+        const capacityElement =
+            document.querySelector(".capacity [data-i18n='capacity']");
+
+        const cargoModeNote =
+            document.getElementById("cargoModeNote");
+
+        const priorityModeNote =
+            document.getElementById("priorityModeNote");
+
+        const cargoModeButtons =
+            document.querySelectorAll("[data-cargo-mode]");
+
+        const priorityModeButtons =
+            document.querySelectorAll("[data-priority-mode]");
+
+        const securityRateElements = {
+            highsec: document.querySelector("#highsec + label .security-rate"),
+            lowsec: document.querySelector("#lowsec + label .security-rate"),
+            nullsec: document.querySelector("#nullsec + label .security-rate")
+        };
+
         const formatter =
             new Intl.NumberFormat("en-US", {
                 maximumFractionDigits: 0
@@ -2358,6 +2578,147 @@
 
         let currentLanguage =
             localStorage.getItem("language") || "en";
+
+        let selectedCargoMode =
+            "standard";
+
+        let selectedPriorityMode =
+            "rush";
+
+        function getModeMultiplier() {
+            const cargoMultiplier =
+                selectedCargoMode === "heavy"
+                    ? CONFIG.HEAVY_CARGO_MULTIPLIER
+                    : 1;
+
+            const priorityMultiplier =
+                selectedPriorityMode === "standard"
+                    ? CONFIG.STANDARD_PRIORITY_MULTIPLIER
+                    : 1;
+
+            return cargoMultiplier * priorityMultiplier;
+        }
+
+        function formatPercent(value) {
+            const percent = value * 100;
+
+            return Number.isInteger(percent)
+                ? String(percent)
+                : percent
+                    .toFixed(2)
+                    .replace(/0+$/, "")
+                    .replace(/\.$/, "");
+        }
+
+        function updateModeUI() {
+            const t =
+                translations[currentLanguage];
+
+            const multiplier =
+                getModeMultiplier();
+
+            document.body.classList.toggle(
+                "heavy-mode",
+                selectedCargoMode === "heavy"
+            );
+
+            cargoModeButtons.forEach(
+                button => {
+                    const active =
+                        button.dataset.cargoMode ===
+                        selectedCargoMode;
+
+                    button.classList.toggle(
+                        "active",
+                        active
+                    );
+
+                    button.setAttribute(
+                        "aria-pressed",
+                        String(active)
+                    );
+                }
+            );
+
+            priorityModeButtons.forEach(
+                button => {
+                    const active =
+                        button.dataset.priorityMode ===
+                        selectedPriorityMode;
+
+                    button.classList.toggle(
+                        "active",
+                        active
+                    );
+
+                    button.setAttribute(
+                        "aria-pressed",
+                        String(active)
+                    );
+                }
+            );
+
+            capacityElement.textContent =
+                selectedCargoMode === "heavy"
+                    ? t.capacityHeavy
+                    : t.capacityStandard;
+
+            cargoModeNote.textContent =
+                selectedCargoMode === "heavy"
+                    ? t.cargoHeavyNote
+                    : t.cargoStandardNote;
+
+            if (selectedPriorityMode === "rush") {
+                priorityModeNote.classList.add(
+                    "rush-highlight"
+                );
+
+                priorityModeNote.innerHTML =
+                    `<span class="rush-highlight-icon" aria-hidden="true">⚡</span>` +
+                    `<span class="rush-highlight-copy">` +
+                        `<strong class="rush-highlight-title">${t.priorityRushHeadline}</strong>` +
+                        `<span class="rush-highlight-subtitle">${t.priorityRushSubtitle}</span>` +
+                    `</span>`;
+            } else {
+                priorityModeNote.classList.remove(
+                    "rush-highlight"
+                );
+
+                priorityModeNote.textContent =
+                    t.priorityStandardNote;
+            }
+
+            const isSmallStandard =
+                selectedCargoMode === "standard" &&
+                selectedPriorityMode === "standard";
+
+            ["highsec", "lowsec", "nullsec"].forEach(
+                id => {
+                    const input =
+                        document.getElementById(id);
+
+                    let effectiveRate;
+
+                    if (isSmallStandard) {
+                        effectiveRate =
+                            id === "highsec"
+                                ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
+                                : id === "lowsec"
+                                ? CONFIG.STANDARD_SMALL_LOWSEC_RATE
+                                : CONFIG.STANDARD_SMALL_NULLSEC_RATE;
+                    } else {
+                        effectiveRate =
+                            Number(input.value) *
+                            multiplier;
+                    }
+
+                    securityRateElements[id].textContent =
+                        `${formatPercent(effectiveRate)}% ${t.rateSuffix}`;
+                }
+            );
+
+            calculate();
+        }
 
         function parseNumber(value) {
             const digits =
@@ -2673,18 +3034,67 @@
                 return;
             }
 
-            const securityRate =
-                Number(
-                    securityInput.value
-                );
+            const modeMultiplier =
+                getModeMultiplier();
+
+            const isSmallStandard =
+                selectedCargoMode === "standard" &&
+                selectedPriorityMode === "standard";
+
+            let securityRate;
+            let pricePerJump;
+
+            if (isSmallStandard) {
+                securityRate =
+                    securityInput.id === "highsec"
+                        ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
+                        : securityInput.id === "lowsec"
+                        ? CONFIG.STANDARD_SMALL_LOWSEC_RATE
+                        : CONFIG.STANDARD_SMALL_NULLSEC_RATE;
+
+                pricePerJump = 0;
+            } else {
+                securityRate =
+                    Number(
+                        securityInput.value
+                    ) *
+                    modeMultiplier;
+
+                pricePerJump =
+                    CONFIG.PRICE_PER_JUMP *
+                    modeMultiplier;
+            }
 
             const collateralPrice =
                 collateral *
                 securityRate;
 
+            const regularJumps =
+                Math.min(
+                    jumps,
+                    CONFIG.LONG_HAUL_THRESHOLD
+                );
+
+            const longHaulJumps =
+                Math.max(
+                    0,
+                    jumps - CONFIG.LONG_HAUL_THRESHOLD
+                );
+
             const distancePrice =
-                jumps *
-                CONFIG.PRICE_PER_JUMP;
+                isSmallStandard
+                    ? CONFIG.STANDARD_SMALL_BASE_PRICE +
+                      Math.max(
+                          0,
+                          jumps -
+                              CONFIG.STANDARD_SMALL_BASE_JUMPS
+                      ) *
+                          CONFIG.STANDARD_SMALL_EXTRA_JUMP_PRICE
+                    : regularJumps *
+                          pricePerJump +
+                      longHaulJumps *
+                          pricePerJump *
+                          CONFIG.LONG_HAUL_MULTIPLIER;
 
             const finalPrice =
                 Math.max(
@@ -2711,17 +3121,43 @@
                     finalPrice
                 );
 
+            const modeLabel =
+                selectedPriorityMode === "rush"
+                    ? t.rushDelivery.replace("⚡ ", "")
+                    : t.standardDelivery;
+
+            const cargoLabel =
+                selectedCargoMode === "heavy"
+                    ? "62,500 m³"
+                    : "13,400 m³";
+
             routeInfo.textContent =
                 `${jumps} ${
                     jumps === 1
                         ? t.jump
                         : t.jumps
-                } · ${securityName}`;
+                } · ${securityName} · ${modeLabel} · ${cargoLabel}`;
 
             pricingMethod.textContent =
                 usedCollateralPricing
                     ? `${securityRate * 100}% ${t.collateralRate}`
-                    : `${formatISK(CONFIG.PRICE_PER_JUMP)} ${t.perJump}`;
+                    : isSmallStandard
+                    ? `40M base · +2M after 30`
+                    : `${formatISK(pricePerJump)} ${t.perJump}`;
+
+            if (
+                !usedCollateralPricing &&
+                !isSmallStandard &&
+                jumps > CONFIG.LONG_HAUL_THRESHOLD
+            ) {
+                pricingMethod.textContent +=
+                    ` · ${t.longHaulNote}`;
+            }
+
+            if (isSmallStandard) {
+                pricingMethod.textContent +=
+                    ` · ${t.smallStandardNote}`;
+            }
 
             result.classList.remove(
                 "empty"
@@ -2800,7 +3236,7 @@
                         .maxCollateralError;
             }
 
-            calculate();
+            updateModeUI();
         }
 
         function toggleLanguageMenu() {
@@ -2910,35 +3346,29 @@
             }
         );
 
-        function finishInput(input) {
-            if (
-                input === collateralInput
-            ) {
-                formatCollateralInput();
-            } else {
-                validateJumps();
+        cargoModeButtons.forEach(
+            button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        selectedCargoMode =
+                            button.dataset.cargoMode;
+
+                        updateModeUI();
+                    }
+                );
             }
+        );
 
-            calculate();
-            input.blur();
-        }
+        priorityModeButtons.forEach(
+            button => {
+                button.addEventListener(
+                    "click",
+                    () => {
+                        selectedPriorityMode =
+                            button.dataset.priorityMode;
 
-        [
-            collateralInput,
-            jumpsInput
-        ].forEach(
-            input => {
-                input.addEventListener(
-                    "keydown",
-                    event => {
-                        if (
-                            event.key !== "Enter"
-                        ) {
-                            return;
-                        }
-
-                        event.preventDefault();
-                        finishInput(input);
+                        updateModeUI();
                     }
                 );
             }
@@ -2956,6 +3386,27 @@
                     );
                 }
             );
+
+
+        [collateralInput, jumpsInput].forEach(
+            input => {
+                input.setAttribute(
+                    "enterkeyhint",
+                    "done"
+                );
+
+                input.addEventListener(
+                    "keydown",
+                    event => {
+                        if (event.key === "Enter") {
+                            event.preventDefault();
+                            input.blur();
+                            calculate();
+                        }
+                    }
+                );
+            }
+        );
 
         languageButton.addEventListener(
             "click",
