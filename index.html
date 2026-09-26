@@ -1,19 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta
-        name="description"
-        content="No Scope rush delivery calculator for EVE Online courier contracts."
-    >
-
-    <meta name="theme-color" content="#080b10">
-
-    <title>No Scope — Courier Delivery Calculator</title>
-
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="No Scope rush delivery calculator for EVE Online courier contracts." name="description"/>
+<meta content="#080b10" name="theme-color"/>
+<title>No Scope — Courier Delivery Calculator</title>
+<style>
         :root {
             --bg: #080b10;
             --bg-secondary: #0d1118;
@@ -419,19 +413,55 @@
             background: rgba(255,255,255,0.018);
         }
 
+        /* Security-space color accents */
+        #highsec + label .security-name {
+            color: #69c9ff;
+        }
+
+        #lowsec + label .security-name {
+            color: #f2b84b;
+        }
+
+        #nullsec + label .security-name {
+            color: #ff7474;
+        }
+
+        .wormhole-option {
+            grid-column: 1 / -1;
+        }
+
         .wormhole-option label {
-            border-color: rgba(255, 82, 82, 0.22);
+            min-height: 42px;
+            padding: 7px 13px;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 12px;
+            border-color: rgba(155, 48, 68, 0.34);
+            border-radius: 10px;
+            background: rgba(125, 32, 48, 0.055);
+        }
+
+        .wormhole-option .security-name {
+            color: #c75b70;
+        }
+
+        .wormhole-option .security-rate {
+            text-align: right;
         }
 
         .wormhole-option input:checked + label {
-            color: #ffb0b0;
-            background: rgba(255, 74, 74, 0.09);
-            border-color: rgba(255, 82, 82, 0.52);
-            box-shadow: inset 0 0 20px rgba(255, 70, 70, 0.035);
+            color: #f0bcc6;
+            background: rgba(139, 38, 57, 0.16);
+            border-color: rgba(190, 67, 89, 0.62);
+            box-shadow: inset 0 0 20px rgba(145, 35, 53, 0.075);
+        }
+
+        .wormhole-option input:checked + label .security-name {
+            color: #d8788a;
         }
 
         .wormhole-option input:checked + label .security-rate {
-            color: rgba(255, 165, 165, 0.74);
+            color: rgba(220, 133, 149, 0.86);
         }
 
         .security-mode-note {
@@ -778,7 +808,27 @@
 
         @media (max-width: 560px) {
             .security-selector {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .security-option label {
+                padding-inline: 5px;
+            }
+
+            .security-name {
+                font-size: 12px;
+            }
+
+            .security-rate {
+                font-size: 9px;
+            }
+
+            .wormhole-option {
+                grid-column: 1 / -1;
+            }
+
+            .wormhole-option label {
+                padding-inline: 11px;
             }
         }
 
@@ -968,7 +1018,7 @@
 
         .security-selector {
             display: grid;
-            grid-template-columns: repeat(3, 1fr) 0.78fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 7px;
 
             margin-top: 8px;
@@ -1392,710 +1442,925 @@
                 animation: none !important;
             }
         }
-    </style>
+    
+        .cargo-volume-field {
+            margin-top: 2px;
+        }
+
+        .bundle-recommendation {
+            display: grid;
+            grid-template-columns: 30px minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            margin-top: 2px;
+            padding: 11px 12px;
+            color: #d7e8e2;
+            background: rgba(80, 227, 164, 0.065);
+            border: 1px solid rgba(80, 227, 164, 0.24);
+            border-radius: 12px;
+            box-shadow: inset 0 0 24px rgba(80, 227, 164, 0.02);
+        }
+
+        .bundle-recommendation[hidden] {
+            display: none;
+        }
+
+        .bundle-icon {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            color: #78e9ba;
+            background: rgba(80, 227, 164, 0.10);
+            border: 1px solid rgba(80, 227, 164, 0.20);
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .bundle-copy {
+            min-width: 0;
+            display: grid;
+            gap: 2px;
+        }
+
+        .bundle-copy strong {
+            color: #92efca;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .bundle-copy span,
+        .bundle-copy small {
+            font-size: 10px;
+            line-height: 1.4;
+            color: #8e9d99;
+        }
+
+        .bundle-copy small {
+            color: #72cda8;
+        }
+
+        .bundle-action {
+            padding: 7px 9px;
+            color: #b8f5dc;
+            background: rgba(80, 227, 164, 0.08);
+            border: 1px solid rgba(80, 227, 164, 0.22);
+            border-radius: 9px;
+            font: inherit;
+            font-size: 10px;
+            font-weight: 750;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .bundle-action:hover {
+            background: rgba(80, 227, 164, 0.13);
+            border-color: rgba(80, 227, 164, 0.38);
+        }
+
+        @media (max-width: 430px) {
+            .bundle-recommendation {
+                grid-template-columns: 30px 1fr;
+            }
+
+            .bundle-action {
+                grid-column: 2;
+                justify-self: start;
+            }
+        }
+
+    
+        @media (min-width: 860px) {
+            .calculator {
+                width: min(100%, 980px);
+                display: grid;
+                grid-template-columns: minmax(0, 1.42fr) minmax(300px, 0.82fr);
+                column-gap: 28px;
+                align-items: start;
+            }
+
+            .header {
+                grid-column: 1 / -1;
+            }
+
+            .form-section {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .result {
+                grid-column: 2;
+                grid-row: 2;
+                position: sticky;
+                top: 24px;
+                margin-top: 0;
+                min-height: 180px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .result.empty {
+                display: none;
+            }
+
+            .footer {
+                grid-column: 1 / -1;
+                grid-row: 3;
+            }
+
+            .result-number {
+                font-size: clamp(31px, 4vw, 42px);
+            }
+
+            .result-details {
+                flex-direction: column;
+                gap: 7px;
+            }
+
+            .pricing-method {
+                text-align: left;
+            }
+        }
+
+
+        /* v23 desktop layout: exact two-column composition */
+        @media (min-width: 860px) {
+            .calculator {
+                width: min(100%, 1120px);
+                display: block;
+                padding: 34px;
+            }
+
+            .header {
+                width: 100%;
+                max-width: none;
+                margin: 0 0 30px;
+                text-align: center;
+            }
+
+            .brand {
+                justify-content: center;
+            }
+
+            .capacity {
+                width: max-content;
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .form-section {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                grid-template-areas:
+                    "cargo    volume"
+                    "mode     collateral"
+                    "security distance"
+                    ".        result";
+                gap: 18px 24px;
+                align-items: start;
+            }
+
+            .mode-settings {
+                display: contents;
+            }
+
+            .mode-settings > .mode-group:nth-child(1) {
+                grid-area: cargo;
+            }
+
+            .mode-settings > .cargo-volume-field {
+                grid-area: volume;
+            }
+
+            .mode-settings > .mode-group:nth-child(3) {
+                grid-area: mode;
+            }
+
+            .collateral-field {
+                grid-area: collateral;
+            }
+
+            .distance-field {
+                grid-area: distance;
+            }
+
+            .security-field {
+                grid-area: security;
+                min-width: 0;
+            }
+
+            #result {
+                grid-area: result;
+                width: 100%;
+                margin-top: 0;
+                min-height: 156px;
+                position: static;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            #result.empty {
+                display: flex;
+                background:
+                    linear-gradient(145deg, rgba(255,255,255,.018), transparent 60%),
+                    var(--bg-secondary);
+                border-color: rgba(255,255,255,.075);
+                box-shadow: none;
+            }
+
+            #result.empty .result-value {
+                color: #687483;
+            }
+
+            #result.empty .result-currency {
+                color: #515b68;
+            }
+
+            #result.empty .result-details {
+                display: none;
+            }
+
+            .result-number {
+                font-size: clamp(31px, 4vw, 42px);
+            }
+
+            .result-details {
+                flex-direction: column;
+                gap: 7px;
+            }
+
+            .pricing-method {
+                text-align: left;
+            }
+
+            .footer {
+                margin-top: 24px;
+            }
+        }
+
+
+        /* v24: tighter desktop rhythm */
+        @media (min-width: 860px) {
+            .form-section {
+                gap: 10px 18px;
+            }
+
+            .mode-settings,
+            .mode-group,
+            .cargo-volume-field,
+            .collateral-field,
+            .distance-field,
+            .security-field {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+
+            .mode-settings {
+                gap: 0 !important;
+            }
+
+            .mode-group {
+                gap: 6px;
+            }
+
+            .field-header {
+                margin-bottom: 7px;
+            }
+
+            .security-selector {
+                margin-top: 6px;
+            }
+
+            #result {
+                margin-top: 0;
+                min-height: 142px;
+            }
+        }
+
+        .contract-count-note {
+            min-height: 17px;
+            margin-top: 7px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--text-secondary);
+        }
+
+        .contract-count-note strong {
+            color: var(--text);
+            font-weight: 750;
+        }
+
+        .contract-breakdown {
+            margin-top: 8px;
+            font-size: 12px;
+            line-height: 1.45;
+            color: var(--text-secondary);
+        }
+
+        .result.empty .contract-breakdown {
+            display: none;
+        }
+
+
+        .cargo-tier-guidance {
+            margin-top: 8px;
+            padding: 11px 12px;
+            border: 1px solid rgba(91, 192, 190, .24);
+            border-radius: 12px;
+            background: rgba(91, 192, 190, .07);
+        }
+
+        .cargo-tier-guidance[hidden] {
+            display: none !important;
+        }
+
+        .cargo-tier-guidance-title {
+            font-size: 12px;
+            font-weight: 750;
+            color: var(--text);
+        }
+
+        .cargo-tier-guidance-text {
+            margin-top: 3px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--text-secondary);
+        }
+
+        .cargo-tier-guidance-action {
+            margin-top: 8px;
+            padding: 7px 10px;
+            border: 1px solid rgba(91, 192, 190, .35);
+            border-radius: 9px;
+            background: rgba(91, 192, 190, .09);
+            color: var(--text);
+            font: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .cargo-tier-guidance-action:hover {
+            background: rgba(91, 192, 190, .15);
+        }
+
+
+        .cargo-auto-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            z-index: 9999;
+            width: min(calc(100% - 32px), 460px);
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 12px;
+            background: rgba(20, 24, 31, .96);
+            box-shadow: 0 14px 40px rgba(0,0,0,.28);
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.45;
+            transform: translate(-50%, 16px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .18s ease, transform .18s ease;
+        }
+
+        .cargo-auto-toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+    
+        /* v27 compact independent columns */
+        .form-column { display: contents; }
+        .contract-breakdown { display: grid; gap: 7px; }
+        .contract-summary {
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 750;
+            color: var(--text);
+        }
+        .contract-price-list { display: grid; gap: 5px; padding-top: 2px; }
+        .contract-price-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 14px;
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: var(--text-secondary);
+        }
+        .contract-price-row strong {
+            flex: 0 0 auto;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        @media (min-width: 860px) {
+            .form-section {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 18px;
+                align-items: start;
+            }
+            .form-column {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                min-width: 0;
+            }
+            .form-column .mode-group,
+            .form-column .field,
+            .form-column .security-field,
+            .form-column #result {
+                margin: 0 !important;
+            }
+            .form-column .mode-group,
+            .form-column .field { gap: 6px; }
+            .form-column .field-header { margin-bottom: 0; }
+            .form-column .security-selector { margin-top: 5px; }
+            .form-column-right #result {
+                grid-area: auto !important;
+                width: 100% !important;
+                position: static !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                padding: 18px !important;
+            }
+            .form-column-right .result-details {
+                margin-top: 11px;
+                padding-top: 11px;
+            }
+            .form-column-right .contract-breakdown {
+                margin-top: 11px;
+                padding-top: 11px;
+                border-top: 1px solid rgba(255,255,255,.06);
+            }
+        }
+
+        /* v28: main form on the left, Delivery Mode + price on the right */
+        @media (min-width: 860px) {
+            .form-section {
+                display: grid !important;
+                grid-template-columns: minmax(0, 1.18fr) minmax(320px, .82fr) !important;
+                gap: 22px !important;
+                align-items: start !important;
+            }
+
+            .form-column {
+                display: flex !important;
+                flex-direction: column !important;
+                min-width: 0 !important;
+            }
+
+            .form-column-left {
+                gap: 14px !important;
+            }
+
+            .form-column-right {
+                gap: 14px !important;
+                position: sticky;
+                top: 18px;
+            }
+
+            .form-column .mode-group,
+            .form-column .field,
+            .form-column .security-field,
+            .form-column #result {
+                margin: 0 !important;
+            }
+
+            .form-column-right #result {
+                grid-area: auto !important;
+                width: 100% !important;
+                position: static !important;
+                min-height: 0 !important;
+                padding: 18px !important;
+            }
+
+            .form-column-right .mode-group {
+                padding-bottom: 0 !important;
+            }
+
+            .form-column-left .mode-group,
+            .form-column-left .field {
+                gap: 6px !important;
+            }
+
+            .form-column-left .field-header {
+                margin-bottom: 0 !important;
+            }
+
+            .form-column-left .security-selector {
+                margin-top: 5px !important;
+            }
+        }
+
+        @media (max-width: 859px) {
+            .form-column {
+                display: contents !important;
+            }
+        }
+
+
+        /* v30: actually narrower desktop shell */
+        @media (min-width: 1000px) {
+            .calculator {
+                width: min(calc(100% - 40px), 880px) !important;
+                max-width: 880px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                padding: 28px !important;
+            }
+
+            .form-section {
+                grid-template-columns: minmax(0, 1.2fr) minmax(285px, 0.8fr) !important;
+                gap: 18px !important;
+            }
+        }
+
+        @media (min-width: 860px) and (max-width: 999px) {
+            .calculator {
+                width: calc(100% - 32px) !important;
+                max-width: 880px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+        }
+
+        /* v31: keep contract breakdown bounded for unusually large Standard splits */
+        .contract-price-list {
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+</style>
 </head>
-
 <body>
-
-    <main class="calculator">
-
-        <div class="top-controls">
-
-            <button
-                class="info-button"
-                id="infoButton"
-                type="button"
-                aria-label="Delivery information"
-                title="Delivery information"
-            >
+<main class="calculator">
+<div class="top-controls">
+<button aria-label="Delivery information" class="info-button" id="infoButton" title="Delivery information" type="button">
                 i
             </button>
-
-            <div class="language-selector">
-
-                <button
-                    class="language-button"
-                    id="languageButton"
-                    type="button"
-                    aria-label="Change language"
-                    aria-expanded="false"
-                >
-                    <span id="currentLanguage">EN</span>
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                    >
-                        <path d="m6 9 6 6 6-6"/>
-                    </svg>
-                </button>
-
-                <div
-                    class="language-menu"
-                    id="languageMenu"
-                    hidden
-                >
-                    <button type="button" data-language="en">
-                        <span>🇬🇧</span> English
+<div class="language-selector">
+<button aria-expanded="false" aria-label="Change language" class="language-button" id="languageButton" type="button">
+<span id="currentLanguage">EN</span>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="m6 9 6 6 6-6"></path>
+</svg>
+</button>
+<div class="language-menu" hidden="" id="languageMenu">
+<button data-language="en" type="button">
+<span>🇬🇧</span> English
                     </button>
-
-                    <button type="button" data-language="ru">
-                        <span>🇷🇺</span> Русский
+<button data-language="ru" type="button">
+<span>🇷🇺</span> Русский
                     </button>
-
-                    <button type="button" data-language="de">
-                        <span>🇩🇪</span> Deutsch
+<button data-language="de" type="button">
+<span>🇩🇪</span> Deutsch
                     </button>
-
-                    <button type="button" data-language="fr">
-                        <span>🇫🇷</span> Français
+<button data-language="fr" type="button">
+<span>🇫🇷</span> Français
                     </button>
-
-                    <button type="button" data-language="es">
-                        <span>🇪🇸</span> Español
+<button data-language="es" type="button">
+<span>🇪🇸</span> Español
                     </button>
-
-                    <button type="button" data-language="ja">
-                        <span>🇯🇵</span> 日本語
+<button data-language="ja" type="button">
+<span>🇯🇵</span> 日本語
                     </button>
-
-                    <button type="button" data-language="ko">
-                        <span>🇰🇷</span> 한국어
+<button data-language="ko" type="button">
+<span>🇰🇷</span> 한국어
                     </button>
-
-                    <button type="button" data-language="zh">
-                        <span>🇨🇳</span> 简体中文
+<button data-language="zh" type="button">
+<span>🇨🇳</span> 简体中文
                     </button>
-                </div>
-
-            </div>
-        </div>
-
-        <header class="header">
-
-            <div class="brand">
-
-                <span class="brand-icon" aria-hidden="true">
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M22 2 9.6 14.4"/>
-                        <path d="m22 2-7.9 20-4.5-7.6L2 9.9 22 2Z"/>
-                    </svg>
-                </span>
+</div>
+</div>
+</div>
+<header class="header">
+<div class="brand">
+<span aria-hidden="true" class="brand-icon">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M22 2 9.6 14.4"></path>
+<path d="m22 2-7.9 20-4.5-7.6L2 9.9 22 2Z"></path>
+</svg>
+</span>
 
                 No Scope
             </div>
-
-            <h1 data-i18n="title">
+<h1 data-i18n="title">
                 Rush Delivery
             </h1>
-
-            <p
-                class="subtitle"
-                data-i18n="subtitle"
-            >
+<p class="subtitle" data-i18n="subtitle">
                 Calculate courier delivery cost instantly.
             </p>
-
-            <div class="capacity">
-                <span>◆</span>
-
-                <span data-i18n="capacity">
+<div class="capacity">
+<span>◆</span>
+<span data-i18n="capacity">
                     Maximum cargo: 13,400 m³
                 </span>
-            </div>
-
-        </header>
-
-        <section class="form-section">
-
-            <div class="mode-settings">
-
-                <div class="mode-group">
-                    <span class="section-label" data-i18n="cargoSize">
+</div>
+</header>
+<section class="form-section"><div class="form-column form-column-left"><div class="mode-group">
+<span class="section-label" data-i18n="cargoSize">
                         Cargo size
                     </span>
-
-                    <div class="segmented-control" id="cargoMode" aria-label="Cargo size">
-                        <button
-                            class="segment-button active"
-                            type="button"
-                            data-cargo-mode="standard"
-                            aria-pressed="true"
-                        >
-                            <strong>13,400 m³</strong>
-                            <small data-i18n="standardCargo">Standard cargo</small>
+<div aria-label="Cargo size" class="segmented-control" id="cargoMode">
+<button aria-pressed="true" class="segment-button active" data-cargo-mode="standard" type="button">
+<strong>13,400 m³</strong>
+<small data-i18n="standardCargo">Standard cargo</small>
+</button>
+<button aria-pressed="false" class="segment-button" data-cargo-mode="heavy" type="button">
+<strong>62,500 m³</strong>
+<small data-i18n="heavyCargo">Heavy cargo</small>
+</button>
+<button aria-pressed="false" class="segment-button freighter-button" data-cargo-mode="freighter" type="button">
+<strong>Freighter</strong>
+<small data-i18n="freighterCargo">Highsec only</small>
+</button>
+</div>
+<div class="mode-note" id="cargoModeNote"></div>
+</div><div class="field cargo-volume-field">
+<div class="field-header">
+<label data-i18n="cargoVolume" for="cargoVolume">
+                            Total cargo volume
+                        </label>
+<span class="field-limit" data-i18n="cargoVolumeHint">
+                            Optional
+                        </span>
+</div>
+<div class="input-wrapper">
+<svg aria-hidden="true" class="input-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z"></path>
+<path d="m4 7.5 8 4.5 8-4.5"></path>
+<path d="M12 12v9"></path>
+</svg>
+<input autocomplete="off" id="cargoVolume" inputmode="numeric" placeholder="Enter total volume" type="text"/>
+<span class="input-unit">
+                            m³
+                        </span>
+</div>
+<div aria-live="polite" class="contract-count-note" id="contractCountNote"></div>
+<div class="cargo-tier-guidance" hidden="" id="cargoTierGuidance" style="display:none !important;">
+<div class="cargo-tier-guidance-title" id="cargoTierGuidanceTitle"></div>
+<div class="cargo-tier-guidance-text" id="cargoTierGuidanceText"></div>
+<button class="cargo-tier-guidance-action" id="cargoTierGuidanceAction" type="button"></button>
+</div>
+<div aria-live="polite" class="bundle-recommendation" hidden="" id="bundleRecommendation">
+<div aria-hidden="true" class="bundle-icon">✓</div>
+<div class="bundle-copy">
+<strong data-i18n="bestValue">Best value</strong>
+<span id="bundleRecommendationText"></span>
+<small id="bundleSavingText"></small>
+</div>
+<button class="bundle-action" data-i18n="useStandard" id="useStandardBundle" type="button">
+                            Use Standard
                         </button>
-
-                        <button
-                            class="segment-button"
-                            type="button"
-                            data-cargo-mode="heavy"
-                            aria-pressed="false"
-                        >
-                            <strong>62,500 m³</strong>
-                            <small data-i18n="heavyCargo">Heavy cargo</small>
-                        </button>
-
-                        <button
-                            class="segment-button freighter-button"
-                            type="button"
-                            data-cargo-mode="freighter"
-                            aria-pressed="false"
-                        >
-                            <strong>Freighter</strong>
-                            <small data-i18n="freighterCargo">Highsec only</small>
-                        </button>
-                    </div>
-
-                    <div class="mode-note" id="cargoModeNote"></div>
-                </div>
-
-                <div class="mode-group">
-                    <span class="section-label" data-i18n="deliveryMode">
-                        Delivery mode
-                    </span>
-
-                    <div class="segmented-control" id="priorityMode" aria-label="Delivery mode">
-                        <button
-                            class="segment-button"
-                            type="button"
-                            data-priority-mode="standard"
-                            aria-pressed="false"
-                        >
-                            <strong data-i18n="standardDelivery">Standard</strong>
-                            <small data-i18n="standardDeliveryHint">Lower cost</small>
-                        </button>
-
-                        <button
-                            class="segment-button active"
-                            type="button"
-                            data-priority-mode="rush"
-                            aria-pressed="true"
-                        >
-                            <strong data-i18n="rushDelivery">⚡ Rush</strong>
-                            <small data-i18n="rushDeliveryHint">Priority handling</small>
-                        </button>
-                    </div>
-
-                    <div class="mode-note" id="priorityModeNote"></div>
-                </div>
-
-            </div>
-
-            <div class="field">
-
-                <div class="field-header">
-
-                    <label
-                        for="collateral"
-                        data-i18n="collateral"
-                    >
+</div>
+</div><div class="field collateral-field">
+<div class="field-header">
+<label data-i18n="collateral" for="collateral">
                         Collateral
                     </label>
-
-                    <span
-                        class="field-limit"
-                        id="collateralLimit"
-                        data-i18n="maxCollateral"
-                    >
+<span class="field-limit" data-i18n="maxCollateral" id="collateralLimit">
                         Max 20B ISK
                     </span>
-
-                </div>
-
-                <div class="input-wrapper">
-
-                    <svg
-                        class="input-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                    >
-                        <circle cx="12" cy="12" r="9"/>
-                        <path d="M16 8.5c-.7-.9-2-1.5-3.5-1.5-2 0-3.5 1-3.5 2.5S10.5 12 12.5 12s3.5 1 3.5 2.5S14.5 17 12.5 17c-1.5 0-2.8-.6-3.5-1.5"/>
-                        <path d="M12.5 5v14"/>
-                    </svg>
-
-                    <input
-                        id="collateral"
-                        type="text"
-                        inputmode="numeric"
-                        autocomplete="off"
-                        placeholder="Enter collateral"
-                        aria-describedby="collateral-error"
-                    >
-
-                    <span class="input-unit">
+</div>
+<div class="input-wrapper">
+<svg aria-hidden="true" class="input-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="9"></circle>
+<path d="M16 8.5c-.7-.9-2-1.5-3.5-1.5-2 0-3.5 1-3.5 2.5S10.5 12 12.5 12s3.5 1 3.5 2.5S14.5 17 12.5 17c-1.5 0-2.8-.6-3.5-1.5"></path>
+<path d="M12.5 5v14"></path>
+</svg>
+<input aria-describedby="collateral-error" autocomplete="off" id="collateral" inputmode="numeric" placeholder="Enter collateral" type="text"/>
+<span class="input-unit">
                         ISK
                     </span>
-
-                </div>
-
-                <div class="slider-block">
-
-                    <div class="slider-current">
-                        <span data-i18n="sliderLabel">
+</div>
+<div class="slider-block">
+<div class="slider-current">
+<span data-i18n="sliderLabel">
                             Quick adjustment
                         </span>
-
-                        <span
-                            class="slider-current-value"
-                            id="sliderValue"
-                        >
+<span class="slider-current-value" id="sliderValue">
                             1B ISK
                         </span>
-                    </div>
-
-                    <input
-                        class="collateral-slider"
-                        id="collateralSlider"
-                        type="range"
-                        min="0"
-                        max="1000"
-                        value="400"
-                        step="1"
-                        aria-label="Collateral slider"
-                    >
-
-                    <div class="slider-scale">
-                        <span style="left: 0%">
+</div>
+<input aria-label="Collateral slider" class="collateral-slider" id="collateralSlider" max="1000" min="0" step="1" type="range" value="400"/>
+<div class="slider-scale">
+<span style="left: 0%">
                             100M
                         </span>
-
-                        <span style="left: 16%">
+<span style="left: 16%">
                             300M
                         </span>
-
-                        <span style="left: 39%">
+<span style="left: 39%">
                             1B
                         </span>
-
-                        <span style="left: 66%">
+<span style="left: 66%">
                             3B
                         </span>
-
-                        <span style="left: 82%">
+<span style="left: 82%">
                             5B
                         </span>
-
-                        <span style="left: 100%">
+<span style="left: 100%">
                             10B
                         </span>
-                    </div>
-
-                    <div
-                        class="slider-note"
-                        data-i18n="sliderNote"
-                    >
+</div>
+<div class="slider-note" data-i18n="sliderNote">
                         Use the slider for common orders. Values up to 20B ISK can still be entered manually.
                     </div>
-
-                </div>
-
-                <div
-                    id="collateral-error"
-                    class="error"
-                    hidden
-                ></div>
-
-            </div>
-
-            <div class="field">
-
-                <div class="field-header">
-
-                    <label
-                        for="jumps"
-                        data-i18n="distance"
-                    >
+</div>
+<div class="error" hidden="" id="collateral-error"></div>
+</div><div class="field distance-field">
+<div class="field-header">
+<label data-i18n="distance" for="jumps">
                         Distance
                     </label>
-
-                    <button
-                        class="field-help"
-                        id="distanceHelp"
-                        type="button"
-                        title="Distance is calculated using the shortest route, not the safest route."
-                    >
-                        <span aria-hidden="true">ⓘ</span>
-                        <span data-i18n="distanceHint">Shortest route</span>
-                    </button>
-
-                </div>
-
-                <div class="input-wrapper">
-
-                    <svg
-                        class="input-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                    >
-                        <circle cx="6" cy="18" r="2"/>
-                        <circle cx="18" cy="6" r="2"/>
-                        <path d="M8 18h2.5a3 3 0 0 0 3-3v-6a3 3 0 0 1 3-3H16"/>
-                    </svg>
-
-                    <input
-                        id="jumps"
-                        type="number"
-                        inputmode="numeric"
-                        min="1"
-                        max="100"
-                        step="1"
-                        placeholder="Enter jumps"
-                    >
-
-                    <span
-                        class="input-unit"
-                        data-i18n="jumpsUnit"
-                    >
+<button class="field-help" id="distanceHelp" title="Distance is calculated using the shortest route, not the safest route." type="button">
+<span aria-hidden="true">ⓘ</span>
+<span data-i18n="distanceHint">Shortest route</span>
+</button>
+</div>
+<div class="input-wrapper">
+<svg aria-hidden="true" class="input-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24">
+<circle cx="6" cy="18" r="2"></circle>
+<circle cx="18" cy="6" r="2"></circle>
+<path d="M8 18h2.5a3 3 0 0 0 3-3v-6a3 3 0 0 1 3-3H16"></path>
+</svg>
+<input id="jumps" inputmode="numeric" max="100" min="1" placeholder="Enter jumps" step="1" type="number"/>
+<span class="input-unit" data-i18n="jumpsUnit">
                         JUMPS
                     </span>
-
-                </div>
-
-            </div>
-
-            <div>
-
-                <span
-                    class="section-label"
-                    data-i18n="securitySpace"
-                >
+</div>
+</div><div class="security-field">
+<span class="section-label" data-i18n="securitySpace">
                     Security space
                 </span>
-
-                <div
-                    class="security-selector"
-                    role="radiogroup"
-                    aria-label="Security space"
-                >
-
-                    <div class="security-option">
-
-                        <input
-                            type="radio"
-                            name="security"
-                            id="highsec"
-                            value="0.02"
-                            checked
-                        >
-
-                        <label for="highsec">
-
-                            <span class="security-name">
+<div aria-label="Security space" class="security-selector" role="radiogroup">
+<div class="security-option">
+<input checked="" id="highsec" name="security" type="radio" value="0.02"/>
+<label for="highsec">
+<span class="security-name">
                                 Highsec
                             </span>
-
-                            <span
-                                class="security-rate"
-                                data-i18n="highsecRate"
-                            >
+<span class="security-rate" data-i18n="highsecRate">
                                 4% collateral
                             </span>
-
-                        </label>
-
-                    </div>
-
-                    <div class="security-option">
-
-                        <input
-                            type="radio"
-                            name="security"
-                            id="lowsec"
-                            value="0.025"
-                        >
-
-                        <label for="lowsec">
-
-                            <span class="security-name">
+</label>
+</div>
+<div class="security-option">
+<input id="lowsec" name="security" type="radio" value="0.025"/>
+<label for="lowsec">
+<span class="security-name">
                                 Lowsec
                             </span>
-
-                            <span
-                                class="security-rate"
-                                data-i18n="lowsecRate"
-                            >
+<span class="security-rate" data-i18n="lowsecRate">
                                 5% collateral
                             </span>
-
-                        </label>
-
-                    </div>
-
-                    <div class="security-option">
-
-                        <input
-                            type="radio"
-                            name="security"
-                            id="nullsec"
-                            value="0.03"
-                        >
-
-                        <label for="nullsec">
-
-                            <span class="security-name">
+</label>
+</div>
+<div class="security-option">
+<input id="nullsec" name="security" type="radio" value="0.03"/>
+<label for="nullsec">
+<span class="security-name">
                                 Nullsec
                             </span>
-
-                            <span
-                                class="security-rate"
-                                data-i18n="nullsecRate"
-                            >
+<span class="security-rate" data-i18n="nullsecRate">
                                 3% collateral
                             </span>
-
-                        </label>
-
-                    </div>
-
-                    <div class="security-option wormhole-option">
-
-                        <input
-                            type="radio"
-                            name="security"
-                            id="wormhole"
-                            value="0"
-                        >
-
-                        <label for="wormhole">
-
-                            <span class="security-name">
-                                Wormhole
+</label>
+</div>
+<div class="security-option wormhole-option">
+<input id="wormhole" name="security" type="radio" value="0"/>
+<label for="wormhole">
+<span class="security-name">
+                                Pochven / Thera
                             </span>
-
-                            <span
-                                class="security-rate"
-                                data-i18n="wormholeRate"
-                            >
-                                WH / Thera / Pochven
+<span class="security-rate" data-i18n="wormholeRate">
+                                Pochven / Thera
                             </span>
-
-                        </label>
-
-                    </div>
-
-                </div>
-
-                <div
-                    class="security-mode-note"
-                    id="securityModeNote"
-                ></div>
-
-            </div>
-
-        </section>
-
-        <section
-            id="result"
-            class="result empty"
-            aria-live="polite"
-        >
-
-            <div
-                class="result-label"
-                data-i18n="deliveryCost"
-            >
+</label>
+</div>
+</div>
+<div class="security-mode-note" id="securityModeNote"></div>
+</div></div><div class="form-column form-column-right"><div class="mode-group">
+<span class="section-label" data-i18n="deliveryMode">
+                        Delivery mode
+                    </span>
+<div aria-label="Delivery mode" class="segmented-control" id="priorityMode">
+<button aria-pressed="false" class="segment-button" data-priority-mode="standard" type="button">
+<strong data-i18n="standardDelivery">Standard</strong>
+<small data-i18n="standardDeliveryHint">Lower cost</small>
+</button>
+<button aria-pressed="true" class="segment-button active" data-priority-mode="rush" type="button">
+<strong data-i18n="rushDelivery">⚡ Rush</strong>
+<small data-i18n="rushDeliveryHint">Priority handling</small>
+</button>
+</div>
+<div class="mode-note" id="priorityModeNote"></div>
+</div><section aria-live="polite" class="result empty" id="result">
+<div class="result-label" data-i18n="deliveryCost">
                 Delivery cost
             </div>
-
-            <div class="result-value">
-
-                <span
-                    id="resultNumber"
-                    class="result-number"
-                >
-                    0
+<div class="result-value">
+<span class="result-number" id="resultNumber">
+                    —
                 </span>
-
-                <span class="result-currency">
+<span class="result-currency">
                     ISK
                 </span>
-
-            </div>
-
-            <div class="result-details">
-
-                <span id="routeInfo"></span>
-
-                <span
-                    id="pricingMethod"
-                    class="pricing-method"
-                ></span>
-
-            </div>
-
-        </section>
-
-        <footer
-            class="footer"
-            data-i18n="footer"
-        >
+</div>
+<div aria-live="polite" class="contract-breakdown" id="contractBreakdown"></div>
+<div class="result-details">
+<span id="routeInfo"></span>
+<span class="pricing-method" id="pricingMethod"></span>
+</div>
+</section></div></section>
+<footer class="footer" data-i18n="footer">
             Rush delivery price is calculated using the higher of collateral-based or distance-based pricing.
         </footer>
-
-    </main>
-
-    <div
-        class="info-overlay"
-        id="infoOverlay"
-        hidden
-    >
-
-        <div
-            class="info-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="infoTitle"
-        >
-
-            <div class="info-modal-header">
-
-                <div>
-
-                    <div
-                        class="info-kicker"
-                        data-i18n="infoKicker"
-                    >
+</main>
+<div class="info-overlay" hidden="" id="infoOverlay">
+<div aria-labelledby="infoTitle" aria-modal="true" class="info-modal" role="dialog">
+<div class="info-modal-header">
+<div>
+<div class="info-kicker" data-i18n="infoKicker">
                         Delivery information
                     </div>
-
-                    <h2
-                        class="info-title"
-                        id="infoTitle"
-                        data-i18n="infoTitle"
-                    >
+<h2 class="info-title" data-i18n="infoTitle" id="infoTitle">
                         How pricing works
                     </h2>
-
-                </div>
-
-                <button
-                    class="info-close"
-                    id="infoClose"
-                    type="button"
-                    aria-label="Close"
-                >
+</div>
+<button aria-label="Close" class="info-close" id="infoClose" type="button">
                     ×
                 </button>
-
-            </div>
-
-            <div class="info-content">
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
+</div>
+<div class="info-content">
+<div class="info-section">
+<div class="info-section-icon">
                         ◇
                     </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoPricingTitle">
+<div>
+<h3 data-i18n="infoPricingTitle">
                             Delivery price
                         </h3>
-
-                        <p data-i18n="infoPricingText">
-                            The calculator uses the higher of collateral-based or distance-based pricing. The selected cargo size and delivery mode adjust both rates.
+<p data-i18n="infoPricingText">
+                            The calculator compares route-based and collateral-based pricing and uses the applicable amount for the selected service. Cargo size, delivery priority and delivery zone can change the final price. For eligible multi-contract Standard cargo, the calculator may offer a bundled price when it is cheaper than Heavy Cargo.
                         </p>
-
-                    </div>
-
-                </div>
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
+</div>
+</div>
+<div class="info-section">
+<div class="info-section-icon">
                         ◎
                     </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoRouteTitle">
+<div>
+<h3 data-i18n="infoRouteTitle">
                             Route requirements
                         </h3>
-
-                        <p data-i18n="infoRouteText">
+<p data-i18n="infoRouteText">
                             The specific origin and destination systems do not affect
                             the price. The pickup location must be a public station,
                             while the destination may be non-public.
                         </p>
-
-                    </div>
-
-                </div>
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
+</div>
+</div>
+<div class="info-section">
+<div class="info-section-icon">
                         ✎
                     </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoContractTitle">
+<div>
+<h3 data-i18n="infoContractTitle">
                             Contract description
                         </h3>
-
-                        <p data-i18n="infoContractText">
+<p data-i18n="infoContractText">
                             When creating the courier contract, specify Standard or Rush in the contract description so the delivery priority is unambiguous.
                         </p>
-
-                    </div>
-
-                </div>
-
-                <div class="info-section">
-
-                    <div class="info-section-icon">
+</div>
+</div>
+<div class="info-section">
+<div class="info-section-icon">
                         ✦
                     </div>
-
-                    <div>
-
-                        <h3 data-i18n="infoCustomTitle">
+<div>
+<h3 data-i18n="infoCustomTitle">
                             Custom deliveries
                         </h3>
-
-                        <p data-i18n="infoCustomText">
+<p data-i18n="infoCustomText">
                             Need to move cargo outside the standard limits or have a
                             special request? Contact Amamaker via EVE Mail to discuss
                             a custom delivery.
                         </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
         const CONFIG = {
             MAX_COLLATERAL: 20_000_000_000,
             SLIDER_MIN_COLLATERAL: 100_000_000,
@@ -2105,6 +2370,11 @@
             HEAVY_CARGO_MULTIPLIER: 1.25,
             RUSH_MULTIPLIER: 1.30,
             WORMHOLE_PREMIUM: 1.30,
+            STANDARD_CARGO_CAPACITY: 13_400,
+            HEAVY_CARGO_CAPACITY: 62_500,
+            FREIGHTER_CARGO_CAPACITY: 1_080_000,
+            STANDARD_BUNDLE_MAX_CONTRACTS: 4,
+            STANDARD_BUNDLE_FACTOR: 0.88,
             STANDARD_SMALL_HIGHSEC_RATE: 0.02,
             STANDARD_SMALL_LOWSEC_RATE: 0.025,
             STANDARD_SMALL_NULLSEC_RATE: 0.03,
@@ -2124,13 +2394,37 @@
                 title: "Courier Delivery",
                 subtitle: "Calculate courier delivery cost instantly.",
                 capacity: "Maximum cargo: 13,400 m³",
+                cargoVolume: "Total cargo volume",
+                cargoVolumeHint: "Optional",
+                cargoVolumePlaceholder: "Enter total volume",
+                bestValue: "Best value",
+                useStandard: "Use Standard Cargo",
+                bundleContracts: "{count} × Standard Cargo contracts · {capacity} m³ capacity",
+                bundleSaving: "Bundle price saves {saving} vs Heavy Cargo",
+                contractCountOne: "{count} Standard Cargo contract required",
+                contractCountMany: "{count} Standard Cargo contracts required",
+                contractSplit: "Contract split: {split}",
+                cargoTierTitle: "A smaller cargo tier fits this shipment",
+                cargoTierStandardText: "Your cargo fits Standard Cargo, so Heavy Cargo is unnecessary.",
+                cargoTierHeavyText: "Your cargo fits Heavy Cargo, so Freighter is unnecessary.",
+                useStandardCargo: "Use Standard Cargo",
+                useHeavyCargo: "Use Heavy Cargo",
+                autoStandard: "Cargo is too small for the selected tier. Switched automatically to Standard Cargo.",
+                autoHeavy: "Cargo is too small for Freighter. Switched automatically to Heavy Cargo.",
+                heavyVolumeLimit: "Heavy Cargo supports a maximum volume of 62,500 m³.",
+                freighterVolumeLimit: "Freighter supports a maximum volume of 1,080,000 m³.",
+                switchedToFreighter: "Cargo exceeds the Heavy Cargo limit. Switched automatically to Freighter.",
+                singleContractRequired: "1 contract required",
+                contractsRequired: "{count} contract required",
+                contractsRequiredMany: "{count} contracts required",
+                contractLine: "Contract {index}",
 
                 cargoSize: "Cargo size",
                 standardCargo: "Standard cargo",
                 heavyCargo: "Heavy cargo",
                 freighterCargo: "Highsec only",
                 deliveryMode: "Delivery mode",
-                standardDelivery: "Standard",
+                standardDelivery: "Standard delivery",
                 standardDeliveryHint: "Lower cost",
                 rushDelivery: "⚡ Rush",
                 rushDeliveryHint: "Priority handling",
@@ -2164,8 +2458,8 @@
                 highsecRate: "2% collateral",
                 lowsecRate: "2.5% collateral",
                 nullsecRate: "3% collateral",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · distance is ignored · price is based on collateral and the special-zone rate.",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · distance is ignored · price is based on collateral and the special-zone rate.",
 
                 deliveryCost: "Delivery cost",
 
@@ -2192,11 +2486,12 @@
 
                 infoPricingTitle: "Delivery price",
                 infoPricingText:
-                    "The calculator uses the higher of collateral-based or route-based pricing. Standard is the base price, Rush adds 30%, Heavy cargo adds 25%, and Wormhole / Thera / Pochven uses collateral-only pricing at 30% above the Nullsec rate.",
+                    
+                    "The calculator compares route-based and collateral-based pricing and uses the applicable amount for the selected service. Cargo size, delivery priority and delivery zone can change the final price. For eligible multi-contract Standard cargo, the calculator may offer a bundled price when it is cheaper than Heavy Cargo.",
 
                 infoRouteTitle: "Route requirements",
                 infoRouteText:
-                    "Distances are calculated using the shortest route, not the safest route. The pickup location must be a public station, while the destination may be non-public. Wormhole / Thera / Pochven pricing ignores distance.",
+                    "Distances are calculated using the shortest route, not the safest route. The pickup location must be a public station, while the destination may be non-public. Pochven / Thera pricing ignores distance.",
 
                 infoContractTitle: "Contract description",
                 infoContractText: "When creating the courier contract, specify Standard or Rush in the contract description so the delivery priority is unambiguous.",
@@ -2210,13 +2505,37 @@
                 title: "Курьерская доставка",
                 subtitle: "Мгновенный расчёт стоимости доставки.",
                 capacity: "Максимальный объём: 13 400 м³",
+                cargoVolume: "Общий объём груза",
+                cargoVolumeHint: "Необязательно",
+                cargoVolumePlaceholder: "Введите общий объём",
+                bestValue: "Выгодный вариант",
+                useStandard: "Выбрать Standard Cargo",
+                bundleContracts: "{count} × контрактов Standard Cargo · вместимость {capacity} м³",
+                bundleSaving: "Пакет Standard экономит {saving} по сравнению с Heavy Cargo",
+                contractCountOne: "Нужен {count} контракт Standard Cargo",
+                contractCountMany: "Нужно контрактов Standard Cargo: {count}",
+                contractSplit: "Разбивка контрактов: {split}",
+                cargoTierTitle: "Для этого груза подходит меньший тариф",
+                cargoTierStandardText: "Ваш груз помещается в Standard Cargo, поэтому Heavy Cargo не требуется.",
+                cargoTierHeavyText: "Ваш груз помещается в Heavy Cargo, поэтому Freighter не требуется.",
+                useStandardCargo: "Выбрать Standard Cargo",
+                useHeavyCargo: "Выбрать Heavy Cargo",
+                autoStandard: "Груз слишком мал для выбранного тарифа. Автоматически выбран Standard Cargo.",
+                autoHeavy: "Груз слишком мал для Freighter. Автоматически выбран Heavy Cargo.",
+                heavyVolumeLimit: "Максимальный объём для Heavy Cargo — 62 500 м³.",
+                freighterVolumeLimit: "Максимальный объём для Freighter — 1 080 000 м³.",
+                switchedToFreighter: "Груз превышает лимит Heavy Cargo. Автоматически выбран Freighter.",
+                singleContractRequired: "Нужен 1 контракт",
+                contractsRequired: "Нужен {count} контракт",
+                contractsRequiredMany: "Нужно контрактов: {count}",
+                contractLine: "Контракт {index}",
 
                 cargoSize: "Объём груза",
                 standardCargo: "Обычный груз",
                 heavyCargo: "Крупный груз",
                 freighterCargo: "Только Highsec",
                 deliveryMode: "Режим доставки",
-                standardDelivery: "Обычная",
+                standardDelivery: "Обычная доставка",
                 standardDeliveryHint: "Дешевле",
                 rushDelivery: "⚡ Срочная",
                 rushDeliveryHint: "Приоритетная",
@@ -2250,8 +2569,8 @@
                 highsecRate: "2% от залога",
                 lowsecRate: "2,5% от залога",
                 nullsecRate: "3% от залога",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · расстояние не учитывается · цена зависит от залога и ставки специальной зоны.",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · расстояние не учитывается · цена зависит от залога и ставки специальной зоны.",
 
                 deliveryCost: "Стоимость доставки",
 
@@ -2278,11 +2597,12 @@
 
                 infoPricingTitle: "Стоимость доставки",
                 infoPricingText:
-                    "Калькулятор использует большее значение из цены по залогу и по маршруту. Standard — базовая цена, Rush добавляет 30%, Heavy Cargo — 25%, а Wormhole / Thera / Pochven считается только от залога по ставке на 30% выше Nullsec.",
+                    
+                    "Калькулятор сравнивает стоимость по маршруту и по залогу и применяет подходящий вариант для выбранной услуги. На итоговую цену влияют размер груза, приоритет доставки и зона. Для подходящего объёма из нескольких Standard-контрактов калькулятор может предложить пакетную цену, если она выгоднее Heavy Cargo.",
 
                 infoRouteTitle: "Требования к маршруту",
                 infoRouteText:
-                    "Расстояние считается по кратчайшему маршруту, а не по безопасному. Точка отправления должна быть публичной станцией, точка назначения может быть непубличной. Для Wormhole / Thera / Pochven расстояние не учитывается.",
+                    "Расстояние считается по кратчайшему маршруту, а не по безопасному. Точка отправления должна быть публичной станцией, точка назначения может быть непубличной. Для Pochven / Thera расстояние не учитывается.",
 
                 infoContractTitle: "Описание контракта",
                 infoContractText: "При создании курьерского контракта укажите в описании Standard или Rush, чтобы приоритет доставки был однозначно понятен.",
@@ -2296,13 +2616,30 @@
                 title: "Kurierlieferung",
                 subtitle: "Berechne die Lieferkosten sofort.",
                 capacity: "Maximales Volumen: 13.400 m³",
+                cargoVolume: "Gesamtvolumen",
+                cargoVolumeHint: "Optional",
+                cargoVolumePlaceholder: "Gesamtvolumen eingeben",
+                bestValue: "Bestes Angebot",
+                useStandard: "Standard Cargo wählen",
+                bundleContracts: "{count} × Standard-Cargo-Verträge · {capacity} m³ Kapazität",
+                bundleSaving: "Das Standard-Paket spart {saving} gegenüber Heavy Cargo",
+                contractCountOne: "{count} Standard-Cargo-Vertrag erforderlich",
+                contractCountMany: "{count} Standard-Cargo-Verträge erforderlich",
+                contractSplit: "Vertragsaufteilung: {split}",
+                cargoTierTitle: "Für diese Fracht reicht eine kleinere Kategorie",
+                cargoTierStandardText: "Die Fracht passt in Standard Cargo; Heavy Cargo ist nicht erforderlich.",
+                cargoTierHeavyText: "Die Fracht passt in Heavy Cargo; Freighter ist nicht erforderlich.",
+                useStandardCargo: "Standard Cargo wählen",
+                useHeavyCargo: "Heavy Cargo wählen",
+                autoStandard: "Die Fracht ist für die gewählte Kategorie zu klein. Automatisch auf Standard Cargo gewechselt.",
+                autoHeavy: "Die Fracht ist für Freighter zu klein. Automatisch auf Heavy Cargo gewechselt.",
 
                 cargoSize: "Frachtgröße",
                 standardCargo: "Standardfracht",
                 heavyCargo: "Großfracht",
                 freighterCargo: "Nur Highsec",
                 deliveryMode: "Liefermodus",
-                standardDelivery: "Standard",
+                standardDelivery: "Standardlieferung",
                 standardDeliveryHint: "Günstiger",
                 rushDelivery: "⚡ Express",
                 rushDeliveryHint: "Priorisiert",
@@ -2336,8 +2673,8 @@
                 highsecRate: "2% Sicherheit",
                 lowsecRate: "2,5% Sicherheit",
                 nullsecRate: "3% Sicherheit",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · Entfernung wird nicht berücksichtigt · Preis basiert auf Sicherheit und Sonderzonen-Tarif.",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · Entfernung wird nicht berücksichtigt · Preis basiert auf Sicherheit und Sonderzonen-Tarif.",
 
                 deliveryCost: "Lieferkosten",
 
@@ -2364,11 +2701,12 @@
 
                 infoPricingTitle: "Lieferpreis",
                 infoPricingText:
-                    "Der Rechner verwendet den höheren Wert aus Sicherheits- und Routenpreis. Standard ist der Basispreis, Rush erhöht ihn um 30%, Heavy Cargo um 25%, und Wormhole / Thera / Pochven wird nur nach Sicherheit mit 30% Aufschlag auf den Nullsec-Tarif berechnet.",
+                    
+                    "Der Rechner vergleicht routen- und sicherheitsbasierte Preise und verwendet den passenden Betrag für den gewählten Service. Frachtgröße, Lieferpriorität und Lieferzone können den Endpreis verändern. Für geeignete Fracht, die auf mehrere Standard-Verträge verteilt wird, kann ein Paketpreis angeboten werden, wenn dieser günstiger als Heavy Cargo ist.",
 
                 infoRouteTitle: "Routenanforderungen",
                 infoRouteText:
-                    "Entfernungen werden über die kürzeste Route berechnet, nicht über die sicherste. Der Abholort muss eine öffentliche Station sein; das Ziel darf nicht öffentlich sein. Für Wormhole / Thera / Pochven wird die Entfernung nicht berücksichtigt.",
+                    "Entfernungen werden über die kürzeste Route berechnet, nicht über die sicherste. Der Abholort muss eine öffentliche Station sein; das Ziel darf nicht öffentlich sein. Für Pochven / Thera wird die Entfernung nicht berücksichtigt.",
 
                 infoContractTitle: "Vertragsbeschreibung",
                 infoContractText: "Gib beim Erstellen des Kuriervertrags Standard oder Rush in der Beschreibung an, damit die Lieferpriorität eindeutig ist.",
@@ -2382,13 +2720,30 @@
                 title: "Livraison par coursier",
                 subtitle: "Calculez instantanément le coût de livraison.",
                 capacity: "Volume maximum : 13 400 m³",
+                cargoVolume: "Volume total du cargo",
+                cargoVolumeHint: "Facultatif",
+                cargoVolumePlaceholder: "Saisissez le volume total",
+                bestValue: "Meilleur rapport",
+                useStandard: "Choisir Standard Cargo",
+                bundleContracts: "{count} × contrats Standard Cargo · capacité {capacity} m³",
+                bundleSaving: "Le pack Standard économise {saving} par rapport à Heavy Cargo",
+                contractCountOne: "{count} contrat Standard Cargo requis",
+                contractCountMany: "{count} contrats Standard Cargo requis",
+                contractSplit: "Répartition des contrats : {split}",
+                cargoTierTitle: "Une catégorie plus petite suffit pour cette cargaison",
+                cargoTierStandardText: "Votre cargaison tient en Standard Cargo ; Heavy Cargo n’est pas nécessaire.",
+                cargoTierHeavyText: "Votre cargaison tient en Heavy Cargo ; Freighter n’est pas nécessaire.",
+                useStandardCargo: "Choisir Standard Cargo",
+                useHeavyCargo: "Choisir Heavy Cargo",
+                autoStandard: "La cargaison est trop petite pour la catégorie choisie. Passage automatique à Standard Cargo.",
+                autoHeavy: "La cargaison est trop petite pour Freighter. Passage automatique à Heavy Cargo.",
 
                 cargoSize: "Volume de cargaison",
                 standardCargo: "Cargaison standard",
                 heavyCargo: "Cargaison lourde",
                 freighterCargo: "Highsec uniquement",
                 deliveryMode: "Mode de livraison",
-                standardDelivery: "Standard",
+                standardDelivery: "Livraison standard",
                 standardDeliveryHint: "Moins cher",
                 rushDelivery: "⚡ Express",
                 rushDeliveryHint: "Prioritaire",
@@ -2422,8 +2777,8 @@
                 highsecRate: "2% de garantie",
                 lowsecRate: "2,5% de garantie",
                 nullsecRate: "3% de garantie",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · la distance n’est pas prise en compte · le prix dépend de la garantie et du tarif zone spéciale.",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · la distance n’est pas prise en compte · le prix dépend de la garantie et du tarif zone spéciale.",
 
                 deliveryCost: "Coût de livraison",
 
@@ -2450,11 +2805,12 @@
 
                 infoPricingTitle: "Prix de livraison",
                 infoPricingText:
-                    "Le calculateur retient le montant le plus élevé entre le tarif basé sur la garantie et celui basé sur l’itinéraire. Standard est le tarif de base, Rush ajoute 30 %, Heavy Cargo 25 %, et Wormhole / Thera / Pochven est calculé uniquement sur la garantie avec 30 % de plus que le tarif Nullsec.",
+                    
+                    "Le calculateur compare la tarification liée à l’itinéraire et à la garantie et applique le montant adapté au service choisi. Le volume, la priorité et la zone de livraison peuvent modifier le prix final. Pour un volume éligible réparti sur plusieurs contrats Standard, un prix groupé peut être proposé lorsqu’il est moins cher que Heavy Cargo.",
 
                 infoRouteTitle: "Conditions de l’itinéraire",
                 infoRouteText:
-                    "La distance est calculée selon l’itinéraire le plus court, et non le plus sûr. Le point de départ doit être une station publique ; la destination peut être non publique. Pour Wormhole / Thera / Pochven, la distance n’est pas prise en compte.",
+                    "La distance est calculée selon l’itinéraire le plus court, et non le plus sûr. Le point de départ doit être une station publique ; la destination peut être non publique. Pour Pochven / Thera, la distance n’est pas prise en compte.",
 
                 infoContractTitle: "Description du contrat",
                 infoContractText: "Lors de la création du contrat de transport, indiquez Standard ou Rush dans la description afin que la priorité de livraison soit claire.",
@@ -2468,13 +2824,30 @@
                 title: "Entrega por mensajería",
                 subtitle: "Calcula al instante el coste de entrega.",
                 capacity: "Volumen máximo: 13.400 m³",
+                cargoVolume: "Volumen total de carga",
+                cargoVolumeHint: "Opcional",
+                cargoVolumePlaceholder: "Introduce el volumen total",
+                bestValue: "Mejor opción",
+                useStandard: "Usar Standard Cargo",
+                bundleContracts: "{count} × contratos Standard Cargo · capacidad {capacity} m³",
+                bundleSaving: "El paquete Standard ahorra {saving} frente a Heavy Cargo",
+                contractCountOne: "Se requiere {count} contrato Standard Cargo",
+                contractCountMany: "Se requieren {count} contratos Standard Cargo",
+                contractSplit: "Distribución de contratos: {split}",
+                cargoTierTitle: "Una categoría menor es suficiente para esta carga",
+                cargoTierStandardText: "La carga cabe en Standard Cargo, por lo que Heavy Cargo no es necesario.",
+                cargoTierHeavyText: "La carga cabe en Heavy Cargo, por lo que Freighter no es necesario.",
+                useStandardCargo: "Usar Standard Cargo",
+                useHeavyCargo: "Usar Heavy Cargo",
+                autoStandard: "La carga es demasiado pequeña para la categoría seleccionada. Se cambió automáticamente a Standard Cargo.",
+                autoHeavy: "La carga es demasiado pequeña para Freighter. Se cambió automáticamente a Heavy Cargo.",
 
                 cargoSize: "Volumen de carga",
                 standardCargo: "Carga estándar",
                 heavyCargo: "Carga pesada",
                 freighterCargo: "Solo Highsec",
                 deliveryMode: "Modo de entrega",
-                standardDelivery: "Estándar",
+                standardDelivery: "Entrega estándar",
                 standardDeliveryHint: "Más barato",
                 rushDelivery: "⚡ Urgente",
                 rushDeliveryHint: "Prioritario",
@@ -2508,8 +2881,8 @@
                 highsecRate: "2% de garantía",
                 lowsecRate: "2,5% de garantía",
                 nullsecRate: "3% de garantía",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · la distancia no se tiene en cuenta · el precio depende de la garantía y la tarifa de zona especial.",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · la distancia no se tiene en cuenta · el precio depende de la garantía y la tarifa de zona especial.",
 
                 deliveryCost: "Coste de entrega",
 
@@ -2536,11 +2909,12 @@
 
                 infoPricingTitle: "Precio de entrega",
                 infoPricingText:
-                    "La calculadora usa el mayor valor entre el precio por garantía y el precio por ruta. Standard es la base, Rush añade un 30 %, Heavy Cargo un 25 %, y Wormhole / Thera / Pochven se calcula solo por garantía con una tarifa un 30 % superior a Nullsec.",
+                    
+                    "La calculadora compara el precio basado en la ruta y el basado en la garantía y aplica el importe correspondiente al servicio elegido. El tamaño de la carga, la prioridad y la zona pueden cambiar el precio final. Para volúmenes aptos divididos en varios contratos Standard, puede ofrecerse un precio de paquete cuando resulte más barato que Heavy Cargo.",
 
                 infoRouteTitle: "Requisitos de ruta",
                 infoRouteText:
-                    "La distancia se calcula por la ruta más corta, no por la más segura. El origen debe ser una estación pública; el destino puede no ser público. En Wormhole / Thera / Pochven no se tiene en cuenta la distancia.",
+                    "La distancia se calcula por la ruta más corta, no por la más segura. El origen debe ser una estación pública; el destino puede no ser público. En Pochven / Thera no se tiene en cuenta la distancia.",
 
                 infoContractTitle: "Descripción del contrato",
                 infoContractText: "Al crear el contrato de mensajería, indica Standard o Rush en la descripción para que la prioridad de entrega quede clara.",
@@ -2554,13 +2928,30 @@
                 title: "クーリエ配送",
                 subtitle: "配送費用をすぐに計算できます。",
                 capacity: "最大容量: 13,400 m³",
+                cargoVolume: "貨物の合計容量",
+                cargoVolumeHint: "任意",
+                cargoVolumePlaceholder: "合計容量を入力",
+                bestValue: "お得な選択",
+                useStandard: "Standard Cargoを使用",
+                bundleContracts: "Standard Cargo契約 {count}件 · 容量 {capacity} m³",
+                bundleSaving: "StandardパックならHeavy Cargoより{saving}お得",
+                contractCountOne: "Standard Cargo契約が{count}件必要",
+                contractCountMany: "Standard Cargo契約が{count}件必要",
+                contractSplit: "契約分割: {split}",
+                cargoTierTitle: "この貨物には小さいカーゴ区分で十分です",
+                cargoTierStandardText: "この貨物はStandard Cargoに収まるため、Heavy Cargoは不要です。",
+                cargoTierHeavyText: "この貨物はHeavy Cargoに収まるため、Freighterは不要です。",
+                useStandardCargo: "Standard Cargoを使用",
+                useHeavyCargo: "Heavy Cargoを使用",
+                autoStandard: "貨物量が選択中の区分には小さすぎるため、Standard Cargoへ自動的に切り替えました。",
+                autoHeavy: "貨物量がFreighterには小さすぎるため、Heavy Cargoへ自動的に切り替えました。",
 
                 cargoSize: "貨物サイズ",
                 standardCargo: "通常貨物",
                 heavyCargo: "大型貨物",
                 freighterCargo: "Highsec限定",
                 deliveryMode: "配送モード",
-                standardDelivery: "通常",
+                standardDelivery: "通常配送",
                 standardDeliveryHint: "低コスト",
                 rushDelivery: "⚡ 緊急",
                 rushDeliveryHint: "優先対応",
@@ -2594,8 +2985,8 @@
                 highsecRate: "担保の2%",
                 lowsecRate: "担保の2.5%",
                 nullsecRate: "担保の3%",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · 距離は計算に含めません · 担保額と特殊宙域レートのみで価格を算出します。",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · 距離は計算に含めません · 担保額と特殊宙域レートのみで価格を算出します。",
 
                 deliveryCost: "配送費用",
 
@@ -2622,11 +3013,12 @@
 
                 infoPricingTitle: "配送料金",
                 infoPricingText:
-                    "計算機は担保ベース料金とルートベース料金の高い方を使用します。Standard が基準、Rush は30%増、Heavy Cargo は25%増、Wormhole / Thera / Pochven は Nullsec より30%高い担保レートのみで計算します。",
+                    
+                    "計算機はルート基準と担保基準の料金を比較し、選択したサービスに適用される金額を使用します。貨物サイズ、配送優先度、配送ゾーンによって最終料金が変わります。複数のStandard契約に分割できる対象貨物では、Heavy Cargoより安い場合にパック料金が提示されます。",
 
                 infoRouteTitle: "ルート条件",
                 infoRouteText:
-                    "距離は安全ルートではなく最短ルートで計算されます。集荷地点は公開ステーションである必要がありますが、配送先は非公開でも構いません。Wormhole / Thera / Pochven では距離を計算に含めません。",
+                    "距離は安全ルートではなく最短ルートで計算されます。集荷地点は公開ステーションである必要がありますが、配送先は非公開でも構いません。Pochven / Thera では距離を計算に含めません。",
 
                 infoContractTitle: "契約の説明",
                 infoContractText: "宅配契約を作成する際、配送優先度が明確になるよう説明欄に Standard または Rush と記載してください。",
@@ -2640,13 +3032,30 @@
                 title: "택배 배송",
                 subtitle: "배송 비용을 즉시 계산합니다.",
                 capacity: "최대 화물: 13,400 m³",
+                cargoVolume: "총 화물 부피",
+                cargoVolumeHint: "선택 사항",
+                cargoVolumePlaceholder: "총 부피 입력",
+                bestValue: "가성비 추천",
+                useStandard: "Standard Cargo 사용",
+                bundleContracts: "Standard Cargo 계약 {count}개 · 용량 {capacity} m³",
+                bundleSaving: "Standard 묶음은 Heavy Cargo보다 {saving} 절약",
+                contractCountOne: "Standard Cargo 계약 {count}개 필요",
+                contractCountMany: "Standard Cargo 계약 {count}개 필요",
+                contractSplit: "계약 분할: {split}",
+                cargoTierTitle: "이 화물에는 더 작은 카고 등급으로 충분합니다",
+                cargoTierStandardText: "화물이 Standard Cargo에 들어가므로 Heavy Cargo가 필요하지 않습니다.",
+                cargoTierHeavyText: "화물이 Heavy Cargo에 들어가므로 Freighter가 필요하지 않습니다.",
+                useStandardCargo: "Standard Cargo 사용",
+                useHeavyCargo: "Heavy Cargo 사용",
+                autoStandard: "화물량이 선택한 등급에 너무 작아 Standard Cargo로 자동 전환했습니다.",
+                autoHeavy: "화물량이 Freighter에 너무 작아 Heavy Cargo로 자동 전환했습니다.",
 
                 cargoSize: "화물 크기",
                 standardCargo: "일반 화물",
                 heavyCargo: "대형 화물",
                 freighterCargo: "Highsec 전용",
                 deliveryMode: "배송 모드",
-                standardDelivery: "일반",
+                standardDelivery: "일반 배송",
                 standardDeliveryHint: "저렴한 요금",
                 rushDelivery: "⚡ 긴급",
                 rushDeliveryHint: "우선 처리",
@@ -2680,8 +3089,8 @@
                 highsecRate: "담보의 2%",
                 lowsecRate: "담보의 2.5%",
                 nullsecRate: "담보의 3%",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · 거리는 계산하지 않으며 · 담보 금액과 특수 구역 요율로 가격을 계산합니다.",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · 거리는 계산하지 않으며 · 담보 금액과 특수 구역 요율로 가격을 계산합니다.",
 
                 deliveryCost: "배송 비용",
 
@@ -2708,11 +3117,12 @@
 
                 infoPricingTitle: "배송 가격",
                 infoPricingText:
-                    "계산기는 담보 기준 가격과 경로 기준 가격 중 더 높은 값을 사용합니다. Standard가 기본이며 Rush는 30%, Heavy Cargo는 25%가 추가되고, Wormhole / Thera / Pochven은 Nullsec보다 30% 높은 담보 요율만 적용합니다.",
+                    
+                    "계산기는 경로 기준 가격과 담보 기준 가격을 비교해 선택한 서비스에 맞는 금액을 적용합니다. 화물 크기, 배송 우선순위, 배송 구역에 따라 최종 가격이 달라질 수 있습니다. 여러 Standard 계약으로 나눌 수 있는 대상 화물은 Heavy Cargo보다 저렴할 때 묶음 가격이 제안됩니다.",
 
                 infoRouteTitle: "경로 조건",
                 infoRouteText:
-                    "거리는 안전 경로가 아니라 최단 경로로 계산됩니다. 출발지는 공개 스테이션이어야 하며 도착지는 비공개여도 됩니다. Wormhole / Thera / Pochven 요금에는 거리를 반영하지 않습니다.",
+                    "거리는 안전 경로가 아니라 최단 경로로 계산됩니다. 출발지는 공개 스테이션이어야 하며 도착지는 비공개여도 됩니다. Pochven / Thera 요금에는 거리를 반영하지 않습니다.",
 
                 infoContractTitle: "계약 설명",
                 infoContractText: "운송 계약을 만들 때 배송 우선순위가 명확하도록 설명에 Standard 또는 Rush를 적어 주세요.",
@@ -2726,13 +3136,30 @@
                 title: "快递运输",
                 subtitle: "即时计算快递运输费用。",
                 capacity: "最大货舱容量：13,400 m³",
+                cargoVolume: "货物总体积",
+                cargoVolumeHint: "可选",
+                cargoVolumePlaceholder: "输入总体积",
+                bestValue: "更划算",
+                useStandard: "使用 Standard Cargo",
+                bundleContracts: "{count} 份 Standard Cargo 合同 · 容量 {capacity} m³",
+                bundleSaving: "Standard 组合比 Heavy Cargo 节省 {saving}",
+                contractCountOne: "需要 {count} 份 Standard Cargo 合同",
+                contractCountMany: "需要 {count} 份 Standard Cargo 合同",
+                contractSplit: "合同拆分：{split}",
+                cargoTierTitle: "此货物适合更小的货运档位",
+                cargoTierStandardText: "货物可使用 Standard Cargo，因此无需 Heavy Cargo。",
+                cargoTierHeavyText: "货物可使用 Heavy Cargo，因此无需 Freighter。",
+                useStandardCargo: "使用 Standard Cargo",
+                useHeavyCargo: "使用 Heavy Cargo",
+                autoStandard: "货物量过小，不适合当前档位，已自动切换到 Standard Cargo。",
+                autoHeavy: "货物量过小，不适合 Freighter，已自动切换到 Heavy Cargo。",
 
                 cargoSize: "货物体积",
                 standardCargo: "标准货物",
                 heavyCargo: "大型货物",
                 freighterCargo: "仅限 Highsec",
                 deliveryMode: "运输模式",
-                standardDelivery: "标准",
+                standardDelivery: "标准配送",
                 standardDeliveryHint: "价格更低",
                 rushDelivery: "⚡ 加急",
                 rushDeliveryHint: "优先处理",
@@ -2766,8 +3193,8 @@
                 highsecRate: "抵押金额的 2%",
                 lowsecRate: "抵押金额的 2.5%",
                 nullsecRate: "抵押金额的 3%",
-                wormholeRate: "WH / Thera / Pochven",
-                wormholeNote: "Wormhole / Thera / Pochven · 不计算距离 · 价格仅按抵押金额和特殊区域费率计算。",
+                wormholeRate: "Pochven / Thera",
+                wormholeNote: "Pochven / Thera · 不计算距离 · 价格仅按抵押金额和特殊区域费率计算。",
 
                 deliveryCost: "运输费用",
 
@@ -2794,11 +3221,12 @@
 
                 infoPricingTitle: "运输费用",
                 infoPricingText:
-                    "计算器取抵押金额定价和路线定价中的较高值。Standard 为基础价格，Rush 加价 30%，Heavy Cargo 加价 25%；Wormhole / Thera / Pochven 仅按抵押金额计算，费率比 Nullsec 高 30%。",
+                    
+                    "计算器会比较基于路线和基于抵押金的价格，并对所选服务采用适用金额。货物大小、配送优先级和配送区域都会影响最终价格。对于可拆分为多个 Standard 合同的合适货量，当组合价格低于 Heavy Cargo 时，计算器会提供组合方案。",
 
                 infoRouteTitle: "路线要求",
                 infoRouteText:
-                    "距离按最短路线计算，而不是最安全路线。取货地点必须是公共空间站，目的地可以是非公开地点。Wormhole / Thera / Pochven 的价格不计算距离。",
+                    "距离按最短路线计算，而不是最安全路线。取货地点必须是公共空间站，目的地可以是非公开地点。Pochven / Thera 的价格不计算距离。",
 
                 infoContractTitle: "合同说明",
                 infoContractText: "创建快递合同时，请在合同说明中注明 Standard 或 Rush，以明确配送优先级。",
@@ -2826,11 +3254,56 @@
         const collateralSlider =
             document.getElementById("collateralSlider");
 
+        const sliderScale =
+            document.querySelector(".slider-scale");
+
         const sliderValue =
             document.getElementById("sliderValue");
 
         const jumpsInput =
             document.getElementById("jumps");
+
+        const cargoVolumeInput =
+            document.getElementById("cargoVolume");
+
+        const bundleRecommendation =
+            document.getElementById("bundleRecommendation");
+
+        const bundleRecommendationText =
+            document.getElementById("bundleRecommendationText");
+
+        const bundleSavingText =
+            document.getElementById("bundleSavingText");
+
+        const useStandardBundle =
+            document.getElementById("useStandardBundle");
+
+        const contractCountNote =
+            document.getElementById("contractCountNote");
+
+        const contractBreakdown =
+            document.getElementById("contractBreakdown");
+
+        const cargoTierGuidance =
+            document.getElementById("cargoTierGuidance");
+
+        const cargoTierGuidanceTitle =
+            document.getElementById("cargoTierGuidanceTitle");
+
+        const cargoTierGuidanceText =
+            document.getElementById("cargoTierGuidanceText");
+
+        const cargoTierGuidanceAction =
+            document.getElementById("cargoTierGuidanceAction");
+
+        const cargoAutoToast =
+            document.getElementById("cargoAutoToast");
+
+        let cargoAutoToastTimer =
+            null;
+
+        let autoTierAdjustmentInProgress =
+            false;
 
         const result =
             document.getElementById("result");
@@ -2926,6 +3399,9 @@
 
         let selectedPriorityMode =
             "standard";
+
+        let bundleRecommendationDismissed =
+            false;
 
         function getModeMultiplier() {
             const cargoMultiplier =
@@ -3052,6 +3528,8 @@
                     ? "Max 2B ISK"
                     : t.maxCollateral;
 
+            updateSliderScale();
+
             const currentCollateral =
                 parseNumber(collateralInput.value);
 
@@ -3064,6 +3542,10 @@
 
                 updateSliderFromCollateral(
                     CONFIG.FREIGHTER_MAX_COLLATERAL
+                );
+            } else if (currentCollateral) {
+                updateSliderFromCollateral(
+                    currentCollateral
                 );
             }
 
@@ -3252,6 +3734,67 @@
             }
         ];
 
+        /*
+            Freighter uses the same physical slider travel,
+            but its scale ends at the hard 2B collateral limit.
+            Other cargo modes keep the original 100M–10B scale.
+        */
+        const freighterSliderSegments = [
+            {
+                p1: 0,
+                p2: 160,
+                v1: 100_000_000,
+                v2: 300_000_000,
+                step: 25_000_000
+            },
+            {
+                p1: 160,
+                p2: 390,
+                v1: 300_000_000,
+                v2: 1_000_000_000,
+                step: 50_000_000
+            },
+            {
+                p1: 390,
+                p2: 1000,
+                v1: 1_000_000_000,
+                v2: 2_000_000_000,
+                step: 50_000_000
+            }
+        ];
+
+        function getActiveSliderSegments() {
+            return selectedCargoMode === "freighter"
+                ? freighterSliderSegments
+                : sliderSegments;
+        }
+
+        function getActiveSliderMaxCollateral() {
+            return selectedCargoMode === "freighter"
+                ? CONFIG.FREIGHTER_MAX_COLLATERAL
+                : CONFIG.SLIDER_MAX_COLLATERAL;
+        }
+
+        function updateSliderScale() {
+            if (selectedCargoMode === "freighter") {
+                sliderScale.innerHTML = `
+                    <span style="left: 0%">100M</span>
+                    <span style="left: 16%">300M</span>
+                    <span style="left: 39%">1B</span>
+                    <span style="left: 100%">2B</span>
+                `;
+            } else {
+                sliderScale.innerHTML = `
+                    <span style="left: 0%">100M</span>
+                    <span style="left: 16%">300M</span>
+                    <span style="left: 39%">1B</span>
+                    <span style="left: 66%">3B</span>
+                    <span style="left: 82%">5B</span>
+                    <span style="left: 100%">10B</span>
+                `;
+            }
+        }
+
         function roundToStep(value, step) {
             return Math.round(value / step) * step;
         }
@@ -3259,14 +3802,17 @@
         function sliderPositionToCollateral(position) {
             position = Number(position);
 
+            const activeSegments =
+                getActiveSliderSegments();
+
             const segment =
-                sliderSegments.find(
+                activeSegments.find(
                     item =>
                         position >= item.p1 &&
                         position <= item.p2
                 ) ||
-                sliderSegments[
-                    sliderSegments.length - 1
+                activeSegments[
+                    activeSegments.length - 1
                 ];
 
             const progress =
@@ -3294,9 +3840,12 @@
         }
 
         function collateralToSliderPosition(value) {
+            const activeSegments =
+                getActiveSliderSegments();
+
             value =
                 Math.min(
-                    CONFIG.SLIDER_MAX_COLLATERAL,
+                    getActiveSliderMaxCollateral(),
                     Math.max(
                         CONFIG.SLIDER_MIN_COLLATERAL,
                         value
@@ -3304,13 +3853,13 @@
                 );
 
             const segment =
-                sliderSegments.find(
+                activeSegments.find(
                     item =>
                         value >= item.v1 &&
                         value <= item.v2
                 ) ||
-                sliderSegments[
-                    sliderSegments.length - 1
+                activeSegments[
+                    activeSegments.length - 1
                 ];
 
             const progress =
@@ -3346,7 +3895,7 @@
                 value >=
                 CONFIG.SLIDER_MIN_COLLATERAL &&
                 value <=
-                CONFIG.SLIDER_MAX_COLLATERAL
+                getActiveSliderMaxCollateral()
             ) {
                 collateralSlider.value =
                     collateralToSliderPosition(
@@ -3359,7 +3908,7 @@
                 updateSliderVisual();
             } else if (
                 value >
-                CONFIG.SLIDER_MAX_COLLATERAL
+                getActiveSliderMaxCollateral()
             ) {
                 collateralSlider.value = 1000;
 
@@ -3462,56 +4011,93 @@
                 value;
         }
 
-        function calculate() {
-            const collateral =
-                parseNumber(
-                    collateralInput.value
-                );
+        function getCargoVolume() {
+            const raw = cargoVolumeInput.value.replace(/[^\d]/g, "");
+            return raw ? Number(raw) : 0;
+        }
 
-            const jumps =
-                Number(
-                    jumpsInput.value
-                );
+        function formatCargoVolumeInput() {
+            const value = getCargoVolume();
 
-            const securityInput =
-                document.querySelector(
-                    'input[name="security"]:checked'
-                );
+            cargoVolumeInput.value =
+                value
+                    ? formatter.format(value)
+                    : "";
+        }
 
-            const isWormhole =
-                securityInput &&
-                securityInput.id === "wormhole";
+        function enforceCargoVolumeInputLimit(showNotice = true) {
+            const volume = getCargoVolume();
 
-            if (
-                !collateral ||
-                !securityInput ||
-                (
-                    !isWormhole &&
-                    (
-                        !Number.isFinite(jumps) ||
-                        jumps < CONFIG.MIN_JUMPS
-                    )
-                )
-            ) {
-                result.classList.add(
-                    "empty"
-                );
-
-                return;
+            if (!Number.isFinite(volume) || volume <= 0) {
+                return false;
             }
 
-            const modeMultiplier =
-                getModeMultiplier();
+            let maxVolume = null;
+            let messageKey = null;
+
+            if (selectedCargoMode === "heavy") {
+                maxVolume = CONFIG.HEAVY_CARGO_CAPACITY;
+                messageKey = "heavyVolumeLimit";
+            } else if (selectedCargoMode === "freighter") {
+                maxVolume = CONFIG.FREIGHTER_CARGO_CAPACITY;
+                messageKey = "freighterVolumeLimit";
+            }
+
+            if (!maxVolume || volume <= maxVolume) {
+                return false;
+            }
+
+            cargoVolumeInput.value = formatter.format(maxVolume);
+
+            if (showNotice) {
+                const t = translations[currentLanguage] || translations.en;
+                showCargoAutoToast(
+                    t[messageKey] || translations.en[messageKey]
+                );
+            }
+
+            return true;
+        }
+
+        function getStandardContractCount(volume) {
+            if (
+                !Number.isFinite(volume) ||
+                volume <= CONFIG.STANDARD_CARGO_CAPACITY
+            ) {
+                return 1;
+            }
+
+            return Math.ceil(
+                volume / CONFIG.STANDARD_CARGO_CAPACITY
+            );
+        }
+
+        function getPricingSnapshot(cargoMode, collateral, jumps, securityId) {
+            const isWormhole =
+                securityId === "wormhole";
 
             const isFreighter =
-                selectedCargoMode === "freighter";
+                cargoMode === "freighter";
+
+            const cargoMultiplier =
+                cargoMode === "heavy"
+                    ? CONFIG.HEAVY_CARGO_MULTIPLIER
+                    : 1;
+
+            const priorityMultiplier =
+                selectedPriorityMode === "rush" && !isFreighter
+                    ? CONFIG.RUSH_MULTIPLIER
+                    : 1;
+
+            const modeMultiplier =
+                cargoMultiplier * priorityMultiplier;
 
             const baseRate =
-                securityInput.id === "highsec"
+                securityId === "highsec"
                     ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
-                    : securityInput.id === "lowsec"
+                    : securityId === "lowsec"
                     ? CONFIG.STANDARD_SMALL_LOWSEC_RATE
-                    : securityInput.id === "nullsec"
+                    : securityId === "nullsec"
                     ? CONFIG.STANDARD_SMALL_NULLSEC_RATE
                     : CONFIG.STANDARD_SMALL_NULLSEC_RATE *
                       CONFIG.WORMHOLE_PREMIUM;
@@ -3528,46 +4114,567 @@
                 CONFIG.STANDARD_SMALL_BASE_PRICE +
                 Math.max(
                     0,
-                    jumps -
-                        CONFIG.STANDARD_SMALL_BASE_JUMPS
-                ) *
-                    CONFIG.STANDARD_SMALL_EXTRA_JUMP_PRICE;
+                    jumps - CONFIG.STANDARD_SMALL_BASE_JUMPS
+                ) * CONFIG.STANDARD_SMALL_EXTRA_JUMP_PRICE;
 
             const distancePrice =
-                isWormhole
-                    ? 0
-                    : isFreighter
+                isFreighter
                     ? CONFIG.FREIGHTER_BASE_PRICE +
                       Math.max(
                           0,
-                          jumps -
-                              CONFIG.FREIGHTER_BASE_JUMPS
-                      ) *
-                          CONFIG.FREIGHTER_EXTRA_JUMP_PRICE
-                    : standardRoutePrice *
-                      modeMultiplier;
+                          jumps - CONFIG.FREIGHTER_BASE_JUMPS
+                      ) * CONFIG.FREIGHTER_EXTRA_JUMP_PRICE
+                    : standardRoutePrice * modeMultiplier;
+
+            return {
+                securityRate,
+                collateralPrice,
+                distancePrice,
+                finalPrice:
+                    Math.max(collateralPrice, distancePrice)
+            };
+        }
+
+        function getBundleOffer(collateral, jumps, securityId) {
+            const volume =
+                getCargoVolume();
+
+            const contractCount =
+                getStandardContractCount(volume);
+
+            const maxBundleVolume =
+                CONFIG.STANDARD_CARGO_CAPACITY *
+                CONFIG.STANDARD_BUNDLE_MAX_CONTRACTS;
+
+            if (
+                volume <= CONFIG.STANDARD_CARGO_CAPACITY ||
+                volume > maxBundleVolume ||
+                contractCount < 2 ||
+                contractCount > CONFIG.STANDARD_BUNDLE_MAX_CONTRACTS
+            ) {
+                return null;
+            }
+
+            const heavy =
+                getPricingSnapshot(
+                    "heavy",
+                    collateral,
+                    jumps,
+                    securityId
+                );
+
+            const bundlePrice =
+                heavy.finalPrice *
+                CONFIG.STANDARD_BUNDLE_FACTOR;
+
+            const saving =
+                Math.max(
+                    0,
+                    heavy.finalPrice - bundlePrice
+                );
+
+            return {
+                volume,
+                contractCount,
+                capacity:
+                    contractCount *
+                    CONFIG.STANDARD_CARGO_CAPACITY,
+                bundlePrice,
+                heavyPrice:
+                    heavy.finalPrice,
+                saving
+            };
+        }
+
+        function showCargoAutoToast(message) {
+            if (!cargoAutoToast || !message) {
+                return;
+            }
+
+            cargoAutoToast.textContent =
+                message;
+
+            cargoAutoToast.classList.add(
+                "show"
+            );
+
+            window.clearTimeout(
+                cargoAutoToastTimer
+            );
+
+            cargoAutoToastTimer =
+                window.setTimeout(
+                    () => {
+                        cargoAutoToast.classList.remove(
+                            "show"
+                        );
+                    },
+                    3200
+                );
+        }
+
+        function isOrderFormComplete() {
+            const collateral = Number(
+                String(
+                    document.getElementById("collateral")?.value || ""
+                ).replace(/[^\d.]/g, "")
+            );
+
+            const jumps = Number(
+                String(
+                    document.getElementById("jumps")?.value || ""
+                ).replace(/[^\d.]/g, "")
+            );
+
+            const volume =
+                getCargoVolume();
+
+            return (
+                Number.isFinite(volume) &&
+                volume > 0 &&
+                Number.isFinite(collateral) &&
+                collateral > 0 &&
+                Number.isFinite(jumps) &&
+                jumps >= CONFIG.MIN_JUMPS
+            );
+        }
+
+        function enforceCargoTierByVolume() {
+            if (
+                autoTierAdjustmentInProgress ||
+                !isOrderFormComplete()
+            ) {
+                return false;
+            }
+
+            const volume = getCargoVolume();
+            let target = null;
+            let messageKey = null;
+
+            if (
+                selectedCargoMode === "heavy" &&
+                volume <= CONFIG.STANDARD_CARGO_CAPACITY
+            ) {
+                target = "standard";
+                messageKey = "autoStandard";
+            } else if (
+                selectedCargoMode === "heavy" &&
+                volume > CONFIG.HEAVY_CARGO_CAPACITY
+            ) {
+                target = "freighter";
+                messageKey = "switchedToFreighter";
+            }
+
+            if (!target) {
+                return false;
+            }
+
+            autoTierAdjustmentInProgress = true;
+            selectedCargoMode = target;
+
+            if (target === "standard") {
+                bundleRecommendationDismissed = true;
+            }
+
+            if (target === "freighter") {
+                selectedPriorityMode = "standard";
+                document.getElementById("highsec").checked = true;
+            }
+
+            updateModeUI();
+
+            const t = translations[currentLanguage] || translations.en;
+            showCargoAutoToast(
+                t[messageKey] || translations.en[messageKey]
+            );
+
+            autoTierAdjustmentInProgress = false;
+            return true;
+        }
+
+        function getCargoTierGuidance() {
+            const volume = getCargoVolume();
+
+            if (
+                !Number.isFinite(volume) ||
+                volume <= 0
+            ) {
+                return null;
+            }
+
+            if (
+                selectedCargoMode === "heavy" &&
+                volume <= CONFIG.STANDARD_CARGO_CAPACITY
+            ) {
+                return {
+                    target: "standard",
+                    textKey: "cargoTierStandardText",
+                    actionKey: "useStandardCargo"
+                };
+            }
+
+            return null;
+        }
+
+        function updateCargoTierGuidance() {
+            if (
+                !cargoTierGuidance ||
+                !cargoTierGuidanceTitle ||
+                !cargoTierGuidanceText ||
+                !cargoTierGuidanceAction
+            ) {
+                return;
+            }
+
+            const guidance =
+                getCargoTierGuidance();
+
+            if (!guidance) {
+                cargoTierGuidance.hidden =
+                    true;
+                cargoTierGuidanceAction.dataset.target =
+                    "";
+                return;
+            }
+
+            const t =
+                translations[currentLanguage];
+
+            cargoTierGuidanceTitle.textContent =
+                t.cargoTierTitle;
+
+            cargoTierGuidanceText.textContent =
+                t[guidance.textKey];
+
+            cargoTierGuidanceAction.textContent =
+                t[guidance.actionKey];
+
+            cargoTierGuidanceAction.dataset.target =
+                guidance.target;
+
+            cargoTierGuidance.hidden =
+                false;
+        }
+
+        function getContractVolumePlan() {
+            const volume = getCargoVolume();
+
+            if (!Number.isFinite(volume) || volume <= 0) {
+                return null;
+            }
+
+            if (selectedCargoMode === "standard") {
+                const capacity = CONFIG.STANDARD_CARGO_CAPACITY;
+                const count = Math.ceil(volume / capacity);
+                const volumes = [];
+                let remaining = volume;
+
+                for (let index = 0; index < count; index += 1) {
+                    const contractVolume = Math.min(capacity, remaining);
+                    volumes.push(contractVolume);
+                    remaining = Math.max(0, remaining - contractVolume);
+                }
+
+                return { volume, capacity, count, volumes };
+            }
+
+            return {
+                volume,
+                capacity:
+                    selectedCargoMode === "heavy"
+                        ? CONFIG.HEAVY_CARGO_CAPACITY
+                        : CONFIG.FREIGHTER_CARGO_CAPACITY,
+                count: 1,
+                volumes: [volume]
+            };
+        }
+
+        function updateContractCountUI() {
+            if (!contractCountNote) {
+                return;
+            }
+
+            const plan = getContractVolumePlan();
+
+            if (!plan || selectedCargoMode !== "standard") {
+                contractCountNote.textContent = "";
+                return;
+            }
+
+            const t = translations[currentLanguage] || translations.en;
+            const template =
+                plan.count === 1
+                    ? (t.contractCountOne || translations.en.contractCountOne)
+                    : (t.contractCountMany || translations.en.contractCountMany);
+
+            contractCountNote.textContent =
+                formatTemplate(template, { count: plan.count });
+        }
+
+        function renderContractPricing(perContractPrices) {
+            if (!contractBreakdown) {
+                return;
+            }
+
+            const plan = getContractVolumePlan();
+
+            if (!plan || !Array.isArray(perContractPrices) || !perContractPrices.length) {
+                contractBreakdown.innerHTML = "";
+                return;
+            }
+
+            const t = translations[currentLanguage] || translations.en;
+            const summary = document.createElement("div");
+            summary.className = "contract-summary";
+
+            if (plan.count === 1) {
+                summary.textContent =
+                    t.singleContractRequired ||
+                    translations.en.singleContractRequired;
+            } else {
+                const countTemplate =
+                    t.contractsRequiredMany ||
+                    translations.en.contractsRequiredMany;
+                summary.textContent =
+                    formatTemplate(countTemplate, { count: plan.count });
+            }
+
+            const list = document.createElement("div");
+            list.className = "contract-price-list";
+
+            const rows =
+                selectedCargoMode === "standard"
+                    ? perContractPrices
+                    : perContractPrices.slice(0, 1);
+
+            rows.forEach((price, index) => {
+                const row = document.createElement("div");
+                row.className = "contract-price-row";
+
+                const label = document.createElement("span");
+                label.textContent =
+                    `Contract ${index + 1} · ${formatter.format(plan.volumes[index] || plan.volume)} m³`;
+
+                const value = document.createElement("strong");
+                value.textContent = `${formatISK(price)} ISK`;
+
+                row.append(label, value);
+                list.append(row);
+            });
+
+            contractBreakdown.replaceChildren(summary, list);
+        }
+
+        function formatTemplate(template, values) {
+            return Object.keys(values).reduce(
+                (resultText, key) =>
+                    resultText.replace(
+                        new RegExp(`\\{${key}\\}`, "g"),
+                        values[key]
+                    ),
+                template
+            );
+        }
+
+        function updateBundleRecommendation(collateral, jumps, securityId) {
+            const t =
+                translations[currentLanguage];
+
+            const offer =
+                getBundleOffer(
+                    collateral,
+                    jumps,
+                    securityId
+                );
+
+            if (
+                !offer ||
+                !collateral ||
+                !securityId ||
+                (
+                    securityId !== "wormhole" &&
+                    (
+                        !Number.isFinite(jumps) ||
+                        jumps < CONFIG.MIN_JUMPS
+                    )
+                )
+            ) {
+                bundleRecommendation.hidden =
+                    true;
+                return null;
+            }
+
+            bundleRecommendationText.textContent =
+                formatTemplate(
+                    t.bundleContracts,
+                    {
+                        count:
+                            offer.contractCount,
+                        capacity:
+                            formatter.format(
+                                offer.capacity
+                            )
+                    }
+                );
+
+            bundleSavingText.textContent =
+                formatTemplate(
+                    t.bundleSaving,
+                    {
+                        saving:
+                            `${formatISK(offer.saving)} ISK`
+                    }
+                );
+
+            if (
+                selectedCargoMode === "standard"
+            ) {
+                bundleRecommendation.hidden =
+                    true;
+                return offer;
+            }
+
+            bundleRecommendation.hidden =
+                false;
+
+            return offer;
+        }
+
+        function calculate() {
+            if (enforceCargoTierByVolume()) {
+                return;
+            }
+
+            updateContractCountUI();
+            if (cargoTierGuidance) {
+                cargoTierGuidance.hidden = true;
+            }
+
+            const collateral =
+                parseNumber(
+                    collateralInput.value
+                );
+
+            const jumps =
+                Number(
+                    jumpsInput.value
+                );
+
+            const securityInput =
+                document.querySelector(
+                    'input[name="security"]:checked'
+                );
+
+            const securityId =
+                securityInput
+                    ? securityInput.id
+                    : null;
+
+            const isWormhole =
+                securityId === "wormhole";
+
+            const offer =
+                updateBundleRecommendation(
+                    collateral,
+                    jumps,
+                    securityId
+                );
+
+            if (
+                !collateral ||
+                !securityInput ||
+                (
+                    !isWormhole &&
+                    (
+                        !Number.isFinite(jumps) ||
+                        jumps < CONFIG.MIN_JUMPS
+                    )
+                )
+            ) {
+                result.classList.add(
+                    "empty"
+                );
+
+                resultNumber.textContent = "—";
+                routeInfo.textContent = "";
+                pricingMethod.textContent = "";
+                if (contractBreakdown) {
+                    contractBreakdown.innerHTML = "";
+                }
+
+                return;
+            }
+
+            const isFreighter =
+                selectedCargoMode === "freighter";
+
+            const snapshot =
+                getPricingSnapshot(
+                    selectedCargoMode,
+                    collateral,
+                    jumps,
+                    securityId
+                );
+
+            const useBundlePrice =
+                selectedCargoMode === "standard" &&
+                !!offer;
+
+            const contractPlan =
+                getContractVolumePlan();
+
+            const standardContractCount =
+                selectedCargoMode === "standard" && contractPlan
+                    ? contractPlan.count
+                    : 1;
 
             const finalPrice =
-                isWormhole
-                    ? collateralPrice
-                    : Math.max(
-                        collateralPrice,
-                        distancePrice
+                useBundlePrice
+                    ? offer.bundlePrice
+                    : selectedCargoMode === "standard"
+                    ? snapshot.finalPrice * standardContractCount
+                    : snapshot.finalPrice;
+
+            let perContractPrices = [];
+
+            if (selectedCargoMode === "standard" && standardContractCount > 1) {
+                if (useBundlePrice) {
+                    const roundedTotal = Math.round(finalPrice);
+                    const basePerContract = Math.floor(roundedTotal / standardContractCount);
+                    let remainingPrice = roundedTotal;
+
+                    perContractPrices = Array.from(
+                        { length: standardContractCount },
+                        (_, index) => {
+                            if (index === standardContractCount - 1) {
+                                return remainingPrice;
+                            }
+
+                            remainingPrice -= basePerContract;
+                            return basePerContract;
+                        }
                     );
+                } else {
+                    perContractPrices =
+                        Array(standardContractCount).fill(snapshot.finalPrice);
+                }
+            } else {
+                perContractPrices = [finalPrice];
+            }
 
             const usedCollateralPricing =
                 isWormhole ||
-                collateralPrice >=
-                    distancePrice;
+                snapshot.collateralPrice >=
+                    snapshot.distancePrice;
 
             const securityName =
-                securityInput.id === "highsec"
+                securityId === "highsec"
                     ? "Highsec"
-                    : securityInput.id === "lowsec"
+                    : securityId === "lowsec"
                     ? "Lowsec"
-                    : securityInput.id === "nullsec"
+                    : securityId === "nullsec"
                     ? "Nullsec"
-                    : "Wormhole / Thera / Pochven";
+                    : "Pochven / Thera";
 
             const t =
                 translations[currentLanguage];
@@ -3577,13 +4684,19 @@
                     finalPrice
                 );
 
+            renderContractPricing(
+                perContractPrices
+            );
+
             const modeLabel =
                 selectedPriorityMode === "rush"
                     ? t.rushDelivery.replace("⚡ ", "")
                     : t.standardDelivery;
 
             const cargoLabel =
-                selectedCargoMode === "freighter"
+                useBundlePrice
+                    ? `${offer.contractCount} × 13,400 m³`
+                    : selectedCargoMode === "freighter"
                     ? "Freighter"
                     : selectedCargoMode === "heavy"
                     ? "62,500 m³"
@@ -3598,33 +4711,38 @@
                             : t.jumps
                     } · ${securityName} · ${modeLabel} · ${cargoLabel}`;
 
-            pricingMethod.textContent =
-                isWormhole
-                    ? `${formatPercent(securityRate)}% ${t.collateralRate} · ${t.wormholeNote}`
-                    : isFreighter
-                    ? usedCollateralPricing
-                        ? `${formatPercent(securityRate)}% ${t.collateralRate} · ${t.freighterNote}`
-                        : t.freighterNote
-                    : usedCollateralPricing
-                    ? `${formatPercent(securityRate)}% ${t.collateralRate}`
-                    : `${formatISK(distancePrice)} route minimum`;
+            if (useBundlePrice) {
+                pricingMethod.textContent =
+                    `${t.bestValue} · ${formatISK(offer.saving)} ISK saved vs Heavy Cargo`;
+            } else {
+                pricingMethod.textContent =
+                    isWormhole
+                        ? `${formatPercent(snapshot.securityRate)}% ${t.collateralRate} · ${t.wormholeNote}`
+                        : isFreighter
+                        ? usedCollateralPricing
+                            ? `${formatPercent(snapshot.securityRate)}% ${t.collateralRate} · ${t.freighterNote}`
+                            : t.freighterNote
+                        : usedCollateralPricing
+                        ? `${formatPercent(snapshot.securityRate)}% ${t.collateralRate}`
+                        : `${formatISK(snapshot.distancePrice)} route minimum`;
 
-            if (
-                !isWormhole &&
-                !isFreighter
-            ) {
-                const priorityText =
-                    selectedPriorityMode === "rush"
-                        ? " · Rush +30%"
-                        : "";
+                if (
+                    !isWormhole &&
+                    !isFreighter
+                ) {
+                    const priorityText =
+                        selectedPriorityMode === "rush"
+                            ? " · Rush +30%"
+                            : "";
 
-                const cargoText =
-                    selectedCargoMode === "heavy"
-                        ? " · Heavy ×1.25"
-                        : "";
+                    const cargoText =
+                        selectedCargoMode === "heavy"
+                            ? " · Heavy ×1.25"
+                            : "";
 
-                pricingMethod.textContent +=
-                    `${priorityText}${cargoText}`;
+                    pricingMethod.textContent +=
+                        `${priorityText}${cargoText}`;
+                }
             }
 
             result.classList.remove(
@@ -3633,6 +4751,7 @@
         }
 
         function setLanguage(language) {
+            window.setTimeout(updateContractCountUI, 0);
             if (
                 !translations[language]
             ) {
@@ -3686,6 +4805,10 @@
             jumpsInput.placeholder =
                 translations[language]
                     .jumpsPlaceholder;
+
+            cargoVolumeInput.placeholder =
+                translations[language]
+                    .cargoVolumePlaceholder;
 
             document
                 .querySelectorAll(
@@ -3829,6 +4952,63 @@
             }
         );
 
+        cargoVolumeInput.addEventListener(
+            "input",
+            () => {
+                formatCargoVolumeInput();
+
+                if (selectedCargoMode === "freighter") {
+                    enforceCargoVolumeInputLimit(true);
+                }
+
+                calculate();
+            }
+        );
+
+        cargoTierGuidanceAction.addEventListener(
+            "click",
+            () => {
+                const target =
+                    cargoTierGuidanceAction.dataset.target;
+
+                if (
+                    target !== "standard" &&
+                    target !== "heavy"
+                ) {
+                    return;
+                }
+
+                selectedCargoMode =
+                    target;
+
+                // If the user explicitly follows this guidance,
+                // hide the Best Value prompt until Heavy Cargo
+                // is deliberately selected again.
+                if (target === "standard") {
+                    bundleRecommendationDismissed =
+                        true;
+                }
+
+                updateModeUI();
+            }
+        );
+
+        useStandardBundle.addEventListener(
+            "click",
+            () => {
+                bundleRecommendationDismissed =
+                    true;
+
+                selectedCargoMode =
+                    "standard";
+
+                bundleRecommendation.hidden =
+                    true;
+
+                updateModeUI();
+            }
+        );
+
         cargoModeButtons.forEach(
             button => {
                 button.addEventListener(
@@ -3836,6 +5016,18 @@
                     () => {
                         selectedCargoMode =
                             button.dataset.cargoMode;
+
+                        if (selectedCargoMode === "freighter") {
+                            enforceCargoVolumeInputLimit(true);
+                        }
+
+                        if (
+                            selectedCargoMode ===
+                            "heavy"
+                        ) {
+                            bundleRecommendationDismissed =
+                                false;
+                        }
 
                         if (
                             selectedCargoMode ===
@@ -3919,7 +5111,7 @@
             );
 
 
-        [collateralInput, jumpsInput].forEach(
+        [collateralInput, jumpsInput, cargoVolumeInput].forEach(
             input => {
                 input.setAttribute(
                     "enterkeyhint",
@@ -4046,6 +5238,6 @@
             currentLanguage
         );
     </script>
-
+<div aria-live="polite" class="cargo-auto-toast" id="cargoAutoToast" role="status"></div>
 </body>
 </html>
