@@ -2440,7 +2440,7 @@
                 capacityFreighter: "Freighter · approx. 300,000–1,080,000 m³ · Highsec only",
                 rateSuffix: "collateral",
 
-                collateral: "Collateral",
+                collateral: "Total collateral",
                 maxCollateral: "Max 20B ISK",
 
                 sliderLabel: "Quick adjustment",
@@ -2551,7 +2551,7 @@
                 capacityFreighter: "Freighter · примерно 300 000–1 080 000 м³ · только Highsec",
                 rateSuffix: "от залога",
 
-                collateral: "Залог",
+                collateral: "Общий залог",
                 maxCollateral: "Макс. 20B ISK",
 
                 sliderLabel: "Быстрая настройка",
@@ -2655,7 +2655,7 @@
                 capacityFreighter: "Freighter · ca. 300.000–1.080.000 m³ · nur Highsec",
                 rateSuffix: "der Sicherheit",
 
-                collateral: "Sicherheit",
+                collateral: "Gesamtsicherheit",
                 maxCollateral: "Max. 20B ISK",
 
                 sliderLabel: "Schnelleinstellung",
@@ -2759,7 +2759,7 @@
                 capacityFreighter: "Freighter · env. 300 000–1 080 000 m³ · Highsec uniquement",
                 rateSuffix: "de garantie",
 
-                collateral: "Garantie",
+                collateral: "Garantie totale",
                 maxCollateral: "Max. 20B ISK",
 
                 sliderLabel: "Réglage rapide",
@@ -2863,7 +2863,7 @@
                 capacityFreighter: "Freighter · aprox. 300.000–1.080.000 m³ · solo Highsec",
                 rateSuffix: "de garantía",
 
-                collateral: "Garantía",
+                collateral: "Garantía total",
                 maxCollateral: "Máx. 20B ISK",
 
                 sliderLabel: "Ajuste rápido",
@@ -2967,7 +2967,7 @@
                 capacityFreighter: "Freighter · 約300,000–1,080,000 m³ · Highsec限定",
                 rateSuffix: "担保",
 
-                collateral: "担保",
+                collateral: "合計担保額",
                 maxCollateral: "最大 20B ISK",
 
                 sliderLabel: "クイック調整",
@@ -3071,7 +3071,7 @@
                 capacityFreighter: "Freighter · 약 300,000–1,080,000 m³ · Highsec 전용",
                 rateSuffix: "담보",
 
-                collateral: "담보",
+                collateral: "총 담보금",
                 maxCollateral: "최대 20B ISK",
 
                 sliderLabel: "빠른 조정",
@@ -4540,6 +4540,120 @@
             return offer;
         }
 
+
+        function getStandardContractPricing(totalCollateral, jumps, securityId) {
+            const plan = getContractVolumePlan();
+
+            if (
+                selectedCargoMode !== "standard" ||
+                !plan ||
+                !plan.count ||
+                plan.volume <= 0
+            ) {
+                return null;
+            }
+
+            let remainingCollateral = Math.round(totalCollateral);
+
+            const contracts = plan.volumes.map(
+                (volume, index) => {
+                    const isLast =
+                        index === plan.volumes.length - 1;
+
+                    const collateralShare =
+                        isLast
+                            ? remainingCollateral
+                            : Math.floor(
+                                totalCollateral *
+                                (volume / plan.volume)
+                            );
+
+                    remainingCollateral -=
+                        collateralShare;
+
+                    const snapshot =
+                        getPricingSnapshot(
+                            "standard",
+                            collateralShare,
+                            jumps,
+                            securityId
+                        );
+
+                    return {
+                        volume,
+                        collateral:
+                            collateralShare,
+                        price:
+                            snapshot.finalPrice,
+                        snapshot
+                    };
+                }
+            );
+
+            return {
+                ...plan,
+                contracts,
+                totalPrice:
+                    contracts.reduce(
+                        (sum, contract) =>
+                            sum + contract.price,
+                        0
+                    )
+            };
+        }
+
+        function allocateTotalByWeights(total, weights) {
+            const roundedTotal =
+                Math.round(total);
+
+            const safeWeights =
+                weights.map(
+                    weight =>
+                        Number.isFinite(weight) &&
+                        weight > 0
+                            ? weight
+                            : 0
+                );
+
+            const weightSum =
+                safeWeights.reduce(
+                    (sum, weight) =>
+                        sum + weight,
+                    0
+                );
+
+            if (
+                !safeWeights.length ||
+                weightSum <= 0
+            ) {
+                return [];
+            }
+
+            let remaining =
+                roundedTotal;
+
+            return safeWeights.map(
+                (weight, index) => {
+                    if (
+                        index ===
+                        safeWeights.length - 1
+                    ) {
+                        return remaining;
+                    }
+
+                    const share =
+                        Math.floor(
+                            roundedTotal *
+                            (weight / weightSum)
+                        );
+
+                    remaining -= share;
+
+                    return share;
+                }
+            );
+        }
+
         function calculate() {
             if (enforceCargoTierByVolume()) {
                 return;
@@ -4620,52 +4734,57 @@
                 selectedCargoMode === "standard" &&
                 !!offer;
 
-            const contractPlan =
-                getContractVolumePlan();
-
-            const standardContractCount =
-                selectedCargoMode === "standard" && contractPlan
-                    ? contractPlan.count
-                    : 1;
+            const standardPricing =
+                selectedCargoMode === "standard"
+                    ? getStandardContractPricing(
+                        collateral,
+                        jumps,
+                        securityId
+                    )
+                    : null;
 
             const finalPrice =
                 useBundlePrice
                     ? offer.bundlePrice
-                    : selectedCargoMode === "standard"
-                    ? snapshot.finalPrice * standardContractCount
+                    : standardPricing
+                    ? standardPricing.totalPrice
                     : snapshot.finalPrice;
 
             let perContractPrices = [];
 
-            if (selectedCargoMode === "standard" && standardContractCount > 1) {
-                if (useBundlePrice) {
-                    const roundedTotal = Math.round(finalPrice);
-                    const basePerContract = Math.floor(roundedTotal / standardContractCount);
-                    let remainingPrice = roundedTotal;
-
-                    perContractPrices = Array.from(
-                        { length: standardContractCount },
-                        (_, index) => {
-                            if (index === standardContractCount - 1) {
-                                return remainingPrice;
-                            }
-
-                            remainingPrice -= basePerContract;
-                            return basePerContract;
-                        }
+            if (standardPricing) {
+                const normalPrices =
+                    standardPricing.contracts.map(
+                        contract =>
+                            contract.price
                     );
-                } else {
-                    perContractPrices =
-                        Array(standardContractCount).fill(snapshot.finalPrice);
-                }
+
+                perContractPrices =
+                    useBundlePrice
+                        ? allocateTotalByWeights(
+                            finalPrice,
+                            normalPrices
+                        )
+                        : normalPrices;
             } else {
-                perContractPrices = [finalPrice];
+                perContractPrices =
+                    [finalPrice];
             }
 
             const usedCollateralPricing =
-                isWormhole ||
-                snapshot.collateralPrice >=
-                    snapshot.distancePrice;
+                standardPricing
+                    ? standardPricing.contracts.some(
+                        contract =>
+                            contract.snapshot
+                                .collateralPrice >=
+                            contract.snapshot
+                                .distancePrice
+                    )
+                    : (
+                        isWormhole ||
+                        snapshot.collateralPrice >=
+                            snapshot.distancePrice
+                    );
 
             const securityName =
                 securityId === "highsec"
@@ -4694,8 +4813,10 @@
                     : t.standardDelivery;
 
             const cargoLabel =
-                useBundlePrice
-                    ? `${offer.contractCount} × 13,400 m³`
+                selectedCargoMode === "standard" &&
+                standardPricing &&
+                standardPricing.count > 1
+                    ? `${standardPricing.count} × Standard Cargo`
                     : selectedCargoMode === "freighter"
                     ? "Freighter"
                     : selectedCargoMode === "heavy"
