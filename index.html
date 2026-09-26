@@ -392,6 +392,60 @@
             color: var(--text-muted);
         }
 
+
+        .field-help {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 7px;
+            font: inherit;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            cursor: help;
+        }
+
+        .field-help:hover {
+            color: var(--text-secondary);
+            border-color: var(--border-hover);
+        }
+
+        .input-wrapper input:disabled {
+            opacity: 0.42;
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.018);
+        }
+
+        .wormhole-option label {
+            border-color: rgba(255, 82, 82, 0.22);
+        }
+
+        .wormhole-option input:checked + label {
+            color: #ffb0b0;
+            background: rgba(255, 74, 74, 0.09);
+            border-color: rgba(255, 82, 82, 0.52);
+            box-shadow: inset 0 0 20px rgba(255, 70, 70, 0.035);
+        }
+
+        .wormhole-option input:checked + label .security-rate {
+            color: rgba(255, 165, 165, 0.74);
+        }
+
+        .security-mode-note {
+            min-height: 15px;
+            margin-top: 7px;
+            font-size: 10px;
+            line-height: 1.45;
+            color: var(--text-muted);
+        }
+
+        .security-mode-note.wormhole-active {
+            color: #d58b8b;
+        }
+
         .input-wrapper {
             position: relative;
         }
@@ -722,6 +776,12 @@
             }
         }
 
+        @media (max-width: 560px) {
+            .security-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             body.rush-just-enabled .calculator {
                 animation: none;
@@ -908,7 +968,7 @@
 
         .security-selector {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr) 0.78fr;
             gap: 7px;
 
             margin-top: 8px;
@@ -1667,12 +1727,15 @@
                         Distance
                     </label>
 
-                    <span
-                        class="field-limit"
-                        data-i18n="jumpsLimit"
+                    <button
+                        class="field-help"
+                        id="distanceHelp"
+                        type="button"
+                        title="Distance is calculated using the shortest route, not the safest route."
                     >
-                        1–100 jumps
-                    </span>
+                        <span aria-hidden="true">ⓘ</span>
+                        <span data-i18n="distanceHint">Shortest route</span>
+                    </button>
 
                 </div>
 
@@ -1735,7 +1798,7 @@
                             type="radio"
                             name="security"
                             id="highsec"
-                            value="0.04"
+                            value="0.02"
                             checked
                         >
 
@@ -1762,7 +1825,7 @@
                             type="radio"
                             name="security"
                             id="lowsec"
-                            value="0.05"
+                            value="0.025"
                         >
 
                         <label for="lowsec">
@@ -1788,7 +1851,7 @@
                             type="radio"
                             name="security"
                             id="nullsec"
-                            value="0.06"
+                            value="0.03"
                         >
 
                         <label for="nullsec">
@@ -1801,7 +1864,33 @@
                                 class="security-rate"
                                 data-i18n="nullsecRate"
                             >
-                                6% collateral
+                                3% collateral
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                    <div class="security-option wormhole-option">
+
+                        <input
+                            type="radio"
+                            name="security"
+                            id="wormhole"
+                            value="0"
+                        >
+
+                        <label for="wormhole">
+
+                            <span class="security-name">
+                                Wormhole
+                            </span>
+
+                            <span
+                                class="security-rate"
+                                data-i18n="wormholeRate"
+                            >
+                                WH / Thera / Pochven
                             </span>
 
                         </label>
@@ -1809,6 +1898,11 @@
                     </div>
 
                 </div>
+
+                <div
+                    class="security-mode-note"
+                    id="securityModeNote"
+                ></div>
 
             </div>
 
@@ -1956,6 +2050,26 @@
                 <div class="info-section">
 
                     <div class="info-section-icon">
+                        ✎
+                    </div>
+
+                    <div>
+
+                        <h3 data-i18n="infoContractTitle">
+                            Contract description
+                        </h3>
+
+                        <p data-i18n="infoContractText">
+                            When creating the courier contract, specify Standard or Rush in the contract description so the delivery priority is unambiguous.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="info-section">
+
+                    <div class="info-section-icon">
                         ✦
                     </div>
 
@@ -1988,11 +2102,9 @@
             SLIDER_MAX_COLLATERAL: 10_000_000_000,
             MIN_JUMPS: 1,
             MAX_JUMPS: 100,
-            PRICE_PER_JUMP: 1_000_000,
-            STANDARD_PRIORITY_MULTIPLIER: 0.8,
             HEAVY_CARGO_MULTIPLIER: 1.25,
-            LONG_HAUL_THRESHOLD: 30,
-            LONG_HAUL_MULTIPLIER: 2,
+            RUSH_MULTIPLIER: 1.30,
+            WORMHOLE_PREMIUM: 1.30,
             STANDARD_SMALL_HIGHSEC_RATE: 0.02,
             STANDARD_SMALL_LOWSEC_RATE: 0.025,
             STANDARD_SMALL_NULLSEC_RATE: 0.03,
@@ -2001,7 +2113,7 @@
             STANDARD_SMALL_EXTRA_JUMP_PRICE: 2_000_000,
             FREIGHTER_HIGHSEC_RATE: 0.025,
             FREIGHTER_MAX_COLLATERAL: 2_000_000_000,
-            FREIGHTER_BASE_PRICE: 30_000_000,
+            FREIGHTER_BASE_PRICE: 40_000_000,
             FREIGHTER_BASE_JUMPS: 20,
             FREIGHTER_EXTRA_JUMP_PRICE: 1_000_000
         };
@@ -2044,17 +2156,21 @@
                 distance: "Distance",
                 jumpsLimit: "1–100 jumps",
                 jumpsUnit: "JUMPS",
+                distanceHint: "Shortest route",
+                distanceHintLong: "Distance is calculated using the shortest route, not the safest route.",
 
                 securitySpace: "Security space",
 
-                highsecRate: "4% collateral",
-                lowsecRate: "5% collateral",
-                nullsecRate: "6% collateral",
+                highsecRate: "2% collateral",
+                lowsecRate: "2.5% collateral",
+                nullsecRate: "3% collateral",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · distance is ignored · price is based on collateral and the special-zone rate.",
 
                 deliveryCost: "Delivery cost",
 
                 footer:
-                    "Rush delivery price is calculated using the higher of collateral-based or distance-based pricing.",
+                    "Price uses the higher of collateral-based or route-based pricing; special zones use collateral-only pricing.",
 
                 collateralPlaceholder: "Enter collateral",
                 jumpsPlaceholder: "Enter jumps",
@@ -2069,18 +2185,21 @@
                 perJump: "ISK / jump",
                 longHaulNote: "Jumps beyond 30 are charged at double the per-jump rate.",
                 smallStandardNote: "13,400 m³ Standard has a 40M ISK minimum route price for up to 30 jumps, then +2M ISK per additional jump.",
-                freighterNote: "Freighter: 30M ISK up to 20 jumps, then +1M ISK per additional jump. Maximum collateral: 2B ISK. Approx. cargo range: 300,000–1,080,000 m³.",
+                freighterNote: "* 40M ≤20j · +1M/j after · 2B max collateral · 300k–1.08M m³",
 
                 infoKicker: "Delivery information",
                 infoTitle: "How pricing works",
 
                 infoPricingTitle: "Delivery price",
                 infoPricingText:
-                    "The calculator uses the higher of collateral-based or distance-based pricing. The selected cargo size and delivery mode adjust both rates.",
+                    "The calculator uses the higher of collateral-based or route-based pricing. Standard is the base price, Rush adds 30%, Heavy cargo adds 25%, and Wormhole / Thera / Pochven uses collateral-only pricing at 30% above the Nullsec rate.",
 
                 infoRouteTitle: "Route requirements",
                 infoRouteText:
-                    "The specific origin and destination systems do not affect the price. The pickup location must be a public station, while the destination may be non-public.",
+                    "Distances are calculated using the shortest route, not the safest route. The pickup location must be a public station, while the destination may be non-public. Wormhole / Thera / Pochven pricing ignores distance.",
+
+                infoContractTitle: "Contract description",
+                infoContractText: "When creating the courier contract, specify Standard or Rush in the contract description so the delivery priority is unambiguous.",
 
                 infoCustomTitle: "Custom deliveries",
                 infoCustomText:
@@ -2123,12 +2242,16 @@
                 distance: "Расстояние",
                 jumpsLimit: "1–100 прыжков",
                 jumpsUnit: "ПРЫЖКИ",
+                distanceHint: "Кратчайший маршрут",
+                distanceHintLong: "Расстояние считается по кратчайшему маршруту, а не по безопасному.",
 
                 securitySpace: "Тип пространства",
 
-                highsecRate: "4% от залога",
-                lowsecRate: "5% от залога",
-                nullsecRate: "6% от залога",
+                highsecRate: "2% от залога",
+                lowsecRate: "2,5% от залога",
+                nullsecRate: "3% от залога",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · расстояние не учитывается · цена зависит от залога и ставки специальной зоны.",
 
                 deliveryCost: "Стоимость доставки",
 
@@ -2148,18 +2271,21 @@
                 perJump: "ISK / прыжок",
                 longHaulNote: "Прыжки после 30-го рассчитываются по двойной ставке.",
                 smallStandardNote: "Для 13 400 м³ Standard минимальная стоимость маршрута — 40M ISK до 30 прыжков, затем +2M ISK за каждый следующий прыжок.",
-                freighterNote: "Freighter: 30M ISK до 20 прыжков, затем +1M ISK за каждый следующий. Максимальный залог — 2B ISK. Примерный объём груза: 300 000–1 080 000 м³.",
+                freighterNote: "* 40M ≤20 прыжков · +1M/прыжок далее · залог до 2B · 300k–1.08M m³",
 
                 infoKicker: "Информация о доставке",
                 infoTitle: "Как рассчитывается цена",
 
                 infoPricingTitle: "Стоимость доставки",
                 infoPricingText:
-                    "Калькулятор выбирает большее из двух значений: тариф от залога или стоимость маршрута. Выбранный объём груза и режим доставки изменяют обе ставки.",
+                    "Калькулятор использует большее значение из цены по залогу и по маршруту. Standard — базовая цена, Rush добавляет 30%, Heavy Cargo — 25%, а Wormhole / Thera / Pochven считается только от залога по ставке на 30% выше Nullsec.",
 
                 infoRouteTitle: "Требования к маршруту",
                 infoRouteText:
-                    "Конкретная система отправления или назначения не влияет на стоимость. Точка отправления должна находиться на публичной станции, при этом пункт назначения может быть непубличным.",
+                    "Расстояние считается по кратчайшему маршруту, а не по безопасному. Точка отправления должна быть публичной станцией, точка назначения может быть непубличной. Для Wormhole / Thera / Pochven расстояние не учитывается.",
+
+                infoContractTitle: "Описание контракта",
+                infoContractText: "При создании курьерского контракта укажите в описании Standard или Rush, чтобы приоритет доставки был однозначно понятен.",
 
                 infoCustomTitle: "Нестандартные доставки",
                 infoCustomText:
@@ -2202,12 +2328,16 @@
                 distance: "Entfernung",
                 jumpsLimit: "1–100 Sprünge",
                 jumpsUnit: "SPRÜNGE",
+                distanceHint: "Kürzeste Route",
+                distanceHintLong: "Die Entfernung wird über die kürzeste Route berechnet, nicht über die sicherste.",
 
                 securitySpace: "Sicherheitsgebiet",
 
-                highsecRate: "4% Sicherheit",
-                lowsecRate: "5% Sicherheit",
-                nullsecRate: "6% Sicherheit",
+                highsecRate: "2% Sicherheit",
+                lowsecRate: "2,5% Sicherheit",
+                nullsecRate: "3% Sicherheit",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · Entfernung wird nicht berücksichtigt · Preis basiert auf Sicherheit und Sonderzonen-Tarif.",
 
                 deliveryCost: "Lieferkosten",
 
@@ -2227,18 +2357,21 @@
                 perJump: "ISK / Sprung",
                 longHaulNote: "Sprünge über 30 werden zum doppelten Preis pro Sprung berechnet.",
                 smallStandardNote: "Für 13.400 m³ Standard beträgt der Mindestpreis bis 30 Sprünge 40M ISK, danach +2M ISK pro weiterem Sprung.",
-                freighterNote: "Freighter: 30M ISK bis 20 Sprünge, danach +1M ISK je weiterem Sprung. Maximale Sicherheit: 2B ISK. Ungefähres Frachtvolumen: 300.000–1.080.000 m³.",
+                freighterNote: "* 40M ≤20 Sprünge · danach +1M/Sprung · max. 2B Sicherheit · 300k–1,08M m³",
 
                 infoKicker: "Lieferinformationen",
                 infoTitle: "So wird der Preis berechnet",
 
                 infoPricingTitle: "Lieferpreis",
                 infoPricingText:
-                    "Der Rechner verwendet den höheren Wert aus sicherheits- oder entfernungsbasierter Berechnung. Frachtgröße und Liefermodus passen beide Tarife an.",
+                    "Der Rechner verwendet den höheren Wert aus Sicherheits- und Routenpreis. Standard ist der Basispreis, Rush erhöht ihn um 30%, Heavy Cargo um 25%, und Wormhole / Thera / Pochven wird nur nach Sicherheit mit 30% Aufschlag auf den Nullsec-Tarif berechnet.",
 
                 infoRouteTitle: "Routenanforderungen",
                 infoRouteText:
-                    "Das konkrete Start- und Zielsystem hat keinen Einfluss auf den Preis. Der Abholort muss eine öffentliche Station sein, während das Ziel auch nicht öffentlich sein darf.",
+                    "Entfernungen werden über die kürzeste Route berechnet, nicht über die sicherste. Der Abholort muss eine öffentliche Station sein; das Ziel darf nicht öffentlich sein. Für Wormhole / Thera / Pochven wird die Entfernung nicht berücksichtigt.",
+
+                infoContractTitle: "Vertragsbeschreibung",
+                infoContractText: "Gib beim Erstellen des Kuriervertrags Standard oder Rush in der Beschreibung an, damit die Lieferpriorität eindeutig ist.",
 
                 infoCustomTitle: "Sonderlieferungen",
                 infoCustomText:
@@ -2281,12 +2414,16 @@
                 distance: "Distance",
                 jumpsLimit: "1–100 sauts",
                 jumpsUnit: "SAUTS",
+                distanceHint: "Route la plus courte",
+                distanceHintLong: "La distance est calculée selon l’itinéraire le plus court, et non le plus sûr.",
 
                 securitySpace: "Zone de sécurité",
 
-                highsecRate: "4% de garantie",
-                lowsecRate: "5% de garantie",
-                nullsecRate: "6% de garantie",
+                highsecRate: "2% de garantie",
+                lowsecRate: "2,5% de garantie",
+                nullsecRate: "3% de garantie",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · la distance n’est pas prise en compte · le prix dépend de la garantie et du tarif zone spéciale.",
 
                 deliveryCost: "Coût de livraison",
 
@@ -2306,18 +2443,21 @@
                 perJump: "ISK / saut",
                 longHaulNote: "Les sauts au-delà de 30 sont facturés au double du tarif par saut.",
                 smallStandardNote: "Pour 13 400 m³ Standard, le prix minimum est de 40M ISK jusqu’à 30 sauts, puis +2M ISK par saut supplémentaire.",
-                freighterNote: "Freighter : 30M ISK jusqu’à 20 sauts, puis +1M ISK par saut supplémentaire. Garantie maximale : 2B ISK. Volume approximatif : 300 000–1 080 000 m³.",
+                freighterNote: "* 40M ≤20 sauts · puis +1M/saut · garantie max. 2B · 300k–1,08M m³",
 
                 infoKicker: "Informations de livraison",
                 infoTitle: "Calcul du tarif",
 
                 infoPricingTitle: "Prix de livraison",
                 infoPricingText:
-                    "Le calculateur utilise le montant le plus élevé entre le tarif basé sur la garantie et celui basé sur la distance. Le volume et le mode de livraison ajustent les deux tarifs.",
+                    "Le calculateur retient le montant le plus élevé entre le tarif basé sur la garantie et celui basé sur l’itinéraire. Standard est le tarif de base, Rush ajoute 30 %, Heavy Cargo 25 %, et Wormhole / Thera / Pochven est calculé uniquement sur la garantie avec 30 % de plus que le tarif Nullsec.",
 
                 infoRouteTitle: "Conditions de l’itinéraire",
                 infoRouteText:
-                    "Les systèmes de départ et d’arrivée n’influencent pas le prix. Le point de départ doit être une station publique, tandis que la destination peut être non publique.",
+                    "La distance est calculée selon l’itinéraire le plus court, et non le plus sûr. Le point de départ doit être une station publique ; la destination peut être non publique. Pour Wormhole / Thera / Pochven, la distance n’est pas prise en compte.",
+
+                infoContractTitle: "Description du contrat",
+                infoContractText: "Lors de la création du contrat de transport, indiquez Standard ou Rush dans la description afin que la priorité de livraison soit claire.",
 
                 infoCustomTitle: "Livraisons personnalisées",
                 infoCustomText:
@@ -2360,12 +2500,16 @@
                 distance: "Distancia",
                 jumpsLimit: "1–100 saltos",
                 jumpsUnit: "SALTOS",
+                distanceHint: "Ruta más corta",
+                distanceHintLong: "La distancia se calcula por la ruta más corta, no por la más segura.",
 
                 securitySpace: "Espacio de seguridad",
 
-                highsecRate: "4% de garantía",
-                lowsecRate: "5% de garantía",
-                nullsecRate: "6% de garantía",
+                highsecRate: "2% de garantía",
+                lowsecRate: "2,5% de garantía",
+                nullsecRate: "3% de garantía",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · la distancia no se tiene en cuenta · el precio depende de la garantía y la tarifa de zona especial.",
 
                 deliveryCost: "Coste de entrega",
 
@@ -2385,18 +2529,21 @@
                 perJump: "ISK / salto",
                 longHaulNote: "Los saltos después del 30 se cobran al doble de la tarifa por salto.",
                 smallStandardNote: "Para 13.400 m³ Standard, el precio mínimo es de 40M ISK hasta 30 saltos y luego +2M ISK por cada salto adicional.",
-                freighterNote: "Freighter: 30M ISK hasta 20 saltos y después +1M ISK por salto adicional. Garantía máxima: 2B ISK. Volumen aproximado: 300.000–1.080.000 m³.",
+                freighterNote: "* 40M ≤20 saltos · después +1M/salto · garantía máx. 2B · 300k–1,08M m³",
 
                 infoKicker: "Información de entrega",
                 infoTitle: "Cómo se calcula el precio",
 
                 infoPricingTitle: "Precio de entrega",
                 infoPricingText:
-                    "La calculadora utiliza el valor más alto entre la tarifa basada en la garantía y la basada en la distancia. El volumen y el modo de entrega ajustan ambas tarifas.",
+                    "La calculadora usa el mayor valor entre el precio por garantía y el precio por ruta. Standard es la base, Rush añade un 30 %, Heavy Cargo un 25 %, y Wormhole / Thera / Pochven se calcula solo por garantía con una tarifa un 30 % superior a Nullsec.",
 
                 infoRouteTitle: "Requisitos de ruta",
                 infoRouteText:
-                    "Los sistemas específicos de origen y destino no afectan al precio. El punto de recogida debe ser una estación pública, mientras que el destino puede ser no público.",
+                    "La distancia se calcula por la ruta más corta, no por la más segura. El origen debe ser una estación pública; el destino puede no ser público. En Wormhole / Thera / Pochven no se tiene en cuenta la distancia.",
+
+                infoContractTitle: "Descripción del contrato",
+                infoContractText: "Al crear el contrato de mensajería, indica Standard o Rush en la descripción para que la prioridad de entrega quede clara.",
 
                 infoCustomTitle: "Entregas especiales",
                 infoCustomText:
@@ -2439,12 +2586,16 @@
                 distance: "距離",
                 jumpsLimit: "1～100ジャンプ",
                 jumpsUnit: "ジャンプ",
+                distanceHint: "最短ルート",
+                distanceHintLong: "距離は安全ルートではなく最短ルートで計算されます。",
 
                 securitySpace: "セキュリティ領域",
 
-                highsecRate: "担保の4%",
-                lowsecRate: "担保の5%",
-                nullsecRate: "担保の6%",
+                highsecRate: "担保の2%",
+                lowsecRate: "担保の2.5%",
+                nullsecRate: "担保の3%",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · 距離は計算に含めません · 担保額と特殊宙域レートのみで価格を算出します。",
 
                 deliveryCost: "配送費用",
 
@@ -2464,18 +2615,21 @@
                 perJump: "ISK / ジャンプ",
                 longHaulNote: "30ジャンプを超える分は、1ジャンプあたりの料金が2倍になります。",
                 smallStandardNote: "13,400 m³ Standardは30ジャンプまで最低40M ISK、31ジャンプ目以降は1ジャンプごとに+2M ISKです。",
-                freighterNote: "Freighter：20ジャンプまで30M ISK、以降は1ジャンプごとに+1M ISK。最大担保は2B ISK。貨物量の目安は300,000–1,080,000 m³。",
+                freighterNote: "* 20ジャンプまで40M · 以降+1M/ジャンプ · 担保上限2B · 300k–1.08M m³",
 
                 infoKicker: "配送情報",
                 infoTitle: "料金の計算方法",
 
                 infoPricingTitle: "配送料金",
                 infoPricingText:
-                    "担保額ベースと距離ベースの料金のうち高い方が適用されます。貨物サイズと配送モードによって両方の料金が調整されます。",
+                    "計算機は担保ベース料金とルートベース料金の高い方を使用します。Standard が基準、Rush は30%増、Heavy Cargo は25%増、Wormhole / Thera / Pochven は Nullsec より30%高い担保レートのみで計算します。",
 
                 infoRouteTitle: "ルート条件",
                 infoRouteText:
-                    "出発地や目的地のシステム自体は料金に影響しません。集荷地点は公開ステーションである必要がありますが、配送先は非公開でも構いません。",
+                    "距離は安全ルートではなく最短ルートで計算されます。集荷地点は公開ステーションである必要がありますが、配送先は非公開でも構いません。Wormhole / Thera / Pochven では距離を計算に含めません。",
+
+                infoContractTitle: "契約の説明",
+                infoContractText: "宅配契約を作成する際、配送優先度が明確になるよう説明欄に Standard または Rush と記載してください。",
 
                 infoCustomTitle: "特別配送",
                 infoCustomText:
@@ -2518,12 +2672,16 @@
                 distance: "거리",
                 jumpsLimit: "1–100 점프",
                 jumpsUnit: "점프",
+                distanceHint: "최단 경로",
+                distanceHintLong: "거리는 안전 경로가 아니라 최단 경로를 기준으로 계산됩니다.",
 
                 securitySpace: "보안 구역",
 
-                highsecRate: "담보의 4%",
-                lowsecRate: "담보의 5%",
-                nullsecRate: "담보의 6%",
+                highsecRate: "담보의 2%",
+                lowsecRate: "담보의 2.5%",
+                nullsecRate: "담보의 3%",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · 거리는 계산하지 않으며 · 담보 금액과 특수 구역 요율로 가격을 계산합니다.",
 
                 deliveryCost: "배송 비용",
 
@@ -2543,18 +2701,21 @@
                 perJump: "ISK / 점프",
                 longHaulNote: "30점을 초과한 점프는 점프당 요금의 2배로 계산됩니다.",
                 smallStandardNote: "13,400 m³ Standard는 30점프까지 최소 40M ISK이며, 이후 점프당 +2M ISK가 추가됩니다.",
-                freighterNote: "Freighter: 20점프까지 30M ISK, 이후 점프당 +1M ISK. 최대 담보는 2B ISK. 대략적인 화물 범위는 300,000–1,080,000 m³입니다.",
+                freighterNote: "* 20점프까지 40M · 이후 +1M/점프 · 최대 담보 2B · 300k–1.08M m³",
 
                 infoKicker: "배송 안내",
                 infoTitle: "가격 계산 방식",
 
                 infoPricingTitle: "배송 가격",
                 infoPricingText:
-                    "담보 기준 요금과 거리 기준 요금 중 더 높은 금액이 적용됩니다. 화물 크기와 배송 모드에 따라 두 요금이 모두 조정됩니다.",
+                    "계산기는 담보 기준 가격과 경로 기준 가격 중 더 높은 값을 사용합니다. Standard가 기본이며 Rush는 30%, Heavy Cargo는 25%가 추가되고, Wormhole / Thera / Pochven은 Nullsec보다 30% 높은 담보 요율만 적용합니다.",
 
                 infoRouteTitle: "경로 조건",
                 infoRouteText:
-                    "출발 및 도착 성계 자체는 가격에 영향을 주지 않습니다. 출발지는 공개 스테이션이어야 하지만 목적지는 비공개 위치도 가능합니다.",
+                    "거리는 안전 경로가 아니라 최단 경로로 계산됩니다. 출발지는 공개 스테이션이어야 하며 도착지는 비공개여도 됩니다. Wormhole / Thera / Pochven 요금에는 거리를 반영하지 않습니다.",
+
+                infoContractTitle: "계약 설명",
+                infoContractText: "운송 계약을 만들 때 배송 우선순위가 명확하도록 설명에 Standard 또는 Rush를 적어 주세요.",
 
                 infoCustomTitle: "맞춤 배송",
                 infoCustomText:
@@ -2597,12 +2758,16 @@
                 distance: "距离",
                 jumpsLimit: "1–100 跳",
                 jumpsUnit: "跳",
+                distanceHint: "最短路线",
+                distanceHintLong: "距离按最短路线计算，而不是最安全路线。",
 
                 securitySpace: "安全等级",
 
-                highsecRate: "抵押金额的 4%",
-                lowsecRate: "抵押金额的 5%",
-                nullsecRate: "抵押金额的 6%",
+                highsecRate: "抵押金额的 2%",
+                lowsecRate: "抵押金额的 2.5%",
+                nullsecRate: "抵押金额的 3%",
+                wormholeRate: "WH / Thera / Pochven",
+                wormholeNote: "Wormhole / Thera / Pochven · 不计算距离 · 价格仅按抵押金额和特殊区域费率计算。",
 
                 deliveryCost: "运输费用",
 
@@ -2622,18 +2787,21 @@
                 perJump: "ISK / 跳",
                 longHaulNote: "超过 30 跳的部分按每跳费率的 2 倍计算。",
                 smallStandardNote: "13,400 m³ Standard 在 30 跳以内最低为 40M ISK，超过 30 跳后每跳增加 2M ISK。",
-                freighterNote: "Freighter：20 跳以内 30M ISK，之后每跳 +1M ISK。最大抵押额 2B ISK。货物量约 300,000–1,080,000 m³。",
+                freighterNote: "* 20跳内 40M · 之后 +1M/跳 · 最高抵押 2B · 300k–1.08M m³",
 
                 infoKicker: "运输说明",
                 infoTitle: "价格计算方式",
 
                 infoPricingTitle: "运输费用",
                 infoPricingText:
-                    "计算器会采用抵押金额计价和距离计价中较高的一项。货物体积和运输模式会同时调整两种费率。",
+                    "计算器取抵押金额定价和路线定价中的较高值。Standard 为基础价格，Rush 加价 30%，Heavy Cargo 加价 25%；Wormhole / Thera / Pochven 仅按抵押金额计算，费率比 Nullsec 高 30%。",
 
                 infoRouteTitle: "路线要求",
                 infoRouteText:
-                    "具体的起点和终点星系不会影响价格。取货地点必须是公共空间站，但目的地可以是非公开地点。",
+                    "距离按最短路线计算，而不是最安全路线。取货地点必须是公共空间站，目的地可以是非公开地点。Wormhole / Thera / Pochven 的价格不计算距离。",
+
+                infoContractTitle: "合同说明",
+                infoContractText: "创建快递合同时，请在合同说明中注明 Standard 或 Rush，以明确配送优先级。",
 
                 infoCustomTitle: "特殊运输",
                 infoCustomText:
@@ -2709,6 +2877,12 @@
         const priorityModeNote =
             document.getElementById("priorityModeNote");
 
+        const securityModeNote =
+            document.getElementById("securityModeNote");
+
+        const distanceHelp =
+            document.getElementById("distanceHelp");
+
         const cargoModeButtons =
             document.querySelectorAll("[data-cargo-mode]");
 
@@ -2718,7 +2892,8 @@
         const securityRateElements = {
             highsec: document.querySelector("#highsec + label .security-rate"),
             lowsec: document.querySelector("#lowsec + label .security-rate"),
-            nullsec: document.querySelector("#nullsec + label .security-rate")
+            nullsec: document.querySelector("#nullsec + label .security-rate"),
+            wormhole: document.querySelector("#wormhole + label .security-rate")
         };
 
         const formatter =
@@ -2759,8 +2934,8 @@
                     : 1;
 
             const priorityMultiplier =
-                selectedPriorityMode === "standard"
-                    ? CONFIG.STANDARD_PRIORITY_MULTIPLIER
+                selectedPriorityMode === "rush"
+                    ? CONFIG.RUSH_MULTIPLIER
                     : 1;
 
             return cargoMultiplier * priorityMultiplier;
@@ -2784,6 +2959,18 @@
             const multiplier =
                 getModeMultiplier();
 
+            const isFreighter =
+                selectedCargoMode === "freighter";
+
+            const selectedSecurity =
+                document.querySelector(
+                    'input[name="security"]:checked'
+                );
+
+            const isWormhole =
+                selectedSecurity &&
+                selectedSecurity.id === "wormhole";
+
             document.body.classList.toggle(
                 "heavy-mode",
                 selectedCargoMode === "heavy"
@@ -2791,13 +2978,13 @@
 
             document.body.classList.toggle(
                 "freighter-mode",
-                selectedCargoMode === "freighter"
+                isFreighter
             );
 
             document.body.classList.toggle(
                 "rush-mode",
                 selectedPriorityMode === "rush" &&
-                selectedCargoMode !== "freighter"
+                !isFreighter
             );
 
             cargoModeButtons.forEach(
@@ -2818,60 +3005,6 @@
                 }
             );
 
-            priorityModeButtons.forEach(
-                button => {
-                    const active =
-                        button.dataset.priorityMode ===
-                        selectedPriorityMode;
-
-                    button.classList.toggle(
-                        "active",
-                        active
-                    );
-
-                    button.setAttribute(
-                        "aria-pressed",
-                        String(active)
-                    );
-                }
-            );
-
-            const isFreighter =
-                selectedCargoMode === "freighter";
-
-            collateralLimit.textContent =
-                isFreighter
-                    ? "Max 2B ISK"
-                    : translations[currentLanguage].maxCollateral;
-
-            const currentCollateral =
-                parseNumber(collateralInput.value);
-
-            if (
-                isFreighter &&
-                currentCollateral > CONFIG.FREIGHTER_MAX_COLLATERAL
-            ) {
-                collateralInput.value =
-                    formatISK(CONFIG.FREIGHTER_MAX_COLLATERAL);
-                updateSliderFromCollateral(
-                    CONFIG.FREIGHTER_MAX_COLLATERAL
-                );
-            }
-
-            capacityElement.textContent =
-                isFreighter
-                    ? t.capacityFreighter
-                    : selectedCargoMode === "heavy"
-                    ? t.capacityHeavy
-                    : t.capacityStandard;
-
-            cargoModeNote.textContent =
-                isFreighter
-                    ? t.cargoFreighterNote
-                    : selectedCargoMode === "heavy"
-                    ? t.cargoHeavyNote
-                    : t.cargoStandardNote;
-
             const rushButton =
                 document.querySelector(
                     '[data-priority-mode="rush"]'
@@ -2884,16 +3017,12 @@
                 selectedPriorityMode =
                     "standard";
 
-                const highsec =
-                    document.getElementById(
-                        "highsec"
-                    );
-
-                highsec.checked =
-                    true;
+                document.getElementById(
+                    "highsec"
+                ).checked = true;
             }
 
-            ["lowsec", "nullsec"].forEach(
+            ["lowsec", "nullsec", "wormhole"].forEach(
                 id => {
                     document.getElementById(id).disabled =
                         isFreighter;
@@ -2918,6 +3047,40 @@
                 }
             );
 
+            collateralLimit.textContent =
+                isFreighter
+                    ? "Max 2B ISK"
+                    : t.maxCollateral;
+
+            const currentCollateral =
+                parseNumber(collateralInput.value);
+
+            if (
+                isFreighter &&
+                currentCollateral > CONFIG.FREIGHTER_MAX_COLLATERAL
+            ) {
+                collateralInput.value =
+                    formatISK(CONFIG.FREIGHTER_MAX_COLLATERAL);
+
+                updateSliderFromCollateral(
+                    CONFIG.FREIGHTER_MAX_COLLATERAL
+                );
+            }
+
+            capacityElement.textContent =
+                isFreighter
+                    ? t.capacityFreighter
+                    : selectedCargoMode === "heavy"
+                    ? t.capacityHeavy
+                    : t.capacityStandard;
+
+            cargoModeNote.textContent =
+                isFreighter
+                    ? t.cargoFreighterNote
+                    : selectedCargoMode === "heavy"
+                    ? t.cargoHeavyNote
+                    : t.cargoStandardNote;
+
             if (selectedPriorityMode === "rush") {
                 priorityModeNote.classList.add(
                     "rush-highlight"
@@ -2938,15 +3101,40 @@
                     t.priorityStandardNote;
             }
 
-            const isSmallStandard =
-                selectedCargoMode === "standard" &&
-                selectedPriorityMode === "standard";
+            const currentSecurity =
+                document.querySelector(
+                    'input[name="security"]:checked'
+                );
 
-            ["highsec", "lowsec", "nullsec"].forEach(
+            const wormholeActive =
+                currentSecurity &&
+                currentSecurity.id === "wormhole" &&
+                !isFreighter;
+
+            jumpsInput.disabled =
+                wormholeActive;
+
+            if (wormholeActive) {
+                securityModeNote.textContent =
+                    t.wormholeNote;
+
+                securityModeNote.classList.add(
+                    "wormhole-active"
+                );
+            } else {
+                securityModeNote.textContent =
+                    "";
+
+                securityModeNote.classList.remove(
+                    "wormhole-active"
+                );
+            }
+
+            distanceHelp.title =
+                t.distanceHintLong;
+
+            ["highsec", "lowsec", "nullsec", "wormhole"].forEach(
                 id => {
-                    const input =
-                        document.getElementById(id);
-
                     let effectiveRate;
 
                     if (isFreighter) {
@@ -2954,21 +3142,27 @@
                             id === "highsec"
                                 ? CONFIG.FREIGHTER_HIGHSEC_RATE
                                 : 0;
-                    } else if (isSmallStandard) {
-                        effectiveRate =
+                    } else {
+                        const baseNull =
+                            CONFIG.STANDARD_SMALL_NULLSEC_RATE;
+
+                        const baseRate =
                             id === "highsec"
                                 ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
                                 : id === "lowsec"
                                 ? CONFIG.STANDARD_SMALL_LOWSEC_RATE
-                                : CONFIG.STANDARD_SMALL_NULLSEC_RATE;
-                    } else {
+                                : id === "nullsec"
+                                ? baseNull
+                                : baseNull * CONFIG.WORMHOLE_PREMIUM;
+
                         effectiveRate =
-                            Number(input.value) *
-                            multiplier;
+                            baseRate * multiplier;
                     }
 
                     securityRateElements[id].textContent =
-                        `${formatPercent(effectiveRate)}% ${t.rateSuffix}`;
+                        id === "wormhole"
+                            ? `${formatPercent(effectiveRate)}% ${t.rateSuffix}`
+                            : `${formatPercent(effectiveRate)}% ${t.rateSuffix}`;
                 }
             );
 
@@ -3284,10 +3478,20 @@
                     'input[name="security"]:checked'
                 );
 
+            const isWormhole =
+                securityInput &&
+                securityInput.id === "wormhole";
+
             if (
                 !collateral ||
-                !Number.isFinite(jumps) ||
-                jumps < CONFIG.MIN_JUMPS
+                !securityInput ||
+                (
+                    !isWormhole &&
+                    (
+                        !Number.isFinite(jumps) ||
+                        jumps < CONFIG.MIN_JUMPS
+                    )
+                )
             ) {
                 result.classList.add(
                     "empty"
@@ -3299,60 +3503,40 @@
             const modeMultiplier =
                 getModeMultiplier();
 
-            const isSmallStandard =
-                selectedCargoMode === "standard" &&
-                selectedPriorityMode === "standard";
-
             const isFreighter =
                 selectedCargoMode === "freighter";
 
-            let securityRate;
-            let pricePerJump;
+            const baseRate =
+                securityInput.id === "highsec"
+                    ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
+                    : securityInput.id === "lowsec"
+                    ? CONFIG.STANDARD_SMALL_LOWSEC_RATE
+                    : securityInput.id === "nullsec"
+                    ? CONFIG.STANDARD_SMALL_NULLSEC_RATE
+                    : CONFIG.STANDARD_SMALL_NULLSEC_RATE *
+                      CONFIG.WORMHOLE_PREMIUM;
 
-            if (isFreighter) {
-                securityRate =
-                    CONFIG.FREIGHTER_HIGHSEC_RATE;
-
-                pricePerJump = 0;
-            } else if (isSmallStandard) {
-                securityRate =
-                    securityInput.id === "highsec"
-                        ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
-                        : securityInput.id === "lowsec"
-                        ? CONFIG.STANDARD_SMALL_LOWSEC_RATE
-                        : CONFIG.STANDARD_SMALL_NULLSEC_RATE;
-
-                pricePerJump = 0;
-            } else {
-                securityRate =
-                    Number(
-                        securityInput.value
-                    ) *
-                    modeMultiplier;
-
-                pricePerJump =
-                    CONFIG.PRICE_PER_JUMP *
-                    modeMultiplier;
-            }
+            const securityRate =
+                isFreighter
+                    ? CONFIG.FREIGHTER_HIGHSEC_RATE
+                    : baseRate * modeMultiplier;
 
             const collateralPrice =
-                collateral *
-                securityRate;
+                collateral * securityRate;
 
-            const regularJumps =
-                Math.min(
-                    jumps,
-                    CONFIG.LONG_HAUL_THRESHOLD
-                );
-
-            const longHaulJumps =
+            const standardRoutePrice =
+                CONFIG.STANDARD_SMALL_BASE_PRICE +
                 Math.max(
                     0,
-                    jumps - CONFIG.LONG_HAUL_THRESHOLD
-                );
+                    jumps -
+                        CONFIG.STANDARD_SMALL_BASE_JUMPS
+                ) *
+                    CONFIG.STANDARD_SMALL_EXTRA_JUMP_PRICE;
 
             const distancePrice =
-                isFreighter
+                isWormhole
+                    ? 0
+                    : isFreighter
                     ? CONFIG.FREIGHTER_BASE_PRICE +
                       Math.max(
                           0,
@@ -3360,36 +3544,30 @@
                               CONFIG.FREIGHTER_BASE_JUMPS
                       ) *
                           CONFIG.FREIGHTER_EXTRA_JUMP_PRICE
-                    : isSmallStandard
-                    ? CONFIG.STANDARD_SMALL_BASE_PRICE +
-                      Math.max(
-                          0,
-                          jumps -
-                              CONFIG.STANDARD_SMALL_BASE_JUMPS
-                      ) *
-                          CONFIG.STANDARD_SMALL_EXTRA_JUMP_PRICE
-                    : regularJumps *
-                          pricePerJump +
-                      longHaulJumps *
-                          pricePerJump *
-                          CONFIG.LONG_HAUL_MULTIPLIER;
+                    : standardRoutePrice *
+                      modeMultiplier;
 
             const finalPrice =
-                Math.max(
-                    collateralPrice,
-                    distancePrice
-                );
+                isWormhole
+                    ? collateralPrice
+                    : Math.max(
+                        collateralPrice,
+                        distancePrice
+                    );
 
             const usedCollateralPricing =
+                isWormhole ||
                 collateralPrice >=
-                distancePrice;
+                    distancePrice;
 
             const securityName =
                 securityInput.id === "highsec"
                     ? "Highsec"
                     : securityInput.id === "lowsec"
                     ? "Lowsec"
-                    : "Nullsec";
+                    : securityInput.id === "nullsec"
+                    ? "Nullsec"
+                    : "Wormhole / Thera / Pochven";
 
             const t =
                 translations[currentLanguage];
@@ -3412,39 +3590,41 @@
                     : "13,400 m³";
 
             routeInfo.textContent =
-                `${jumps} ${
-                    jumps === 1
-                        ? t.jump
-                        : t.jumps
-                } · ${securityName} · ${modeLabel} · ${cargoLabel}`;
+                isWormhole
+                    ? `${securityName} · ${modeLabel} · ${cargoLabel}`
+                    : `${jumps} ${
+                        jumps === 1
+                            ? t.jump
+                            : t.jumps
+                    } · ${securityName} · ${modeLabel} · ${cargoLabel}`;
 
             pricingMethod.textContent =
-                usedCollateralPricing
-                    ? `${securityRate * 100}% ${t.collateralRate}`
+                isWormhole
+                    ? `${formatPercent(securityRate)}% ${t.collateralRate} · ${t.wormholeNote}`
                     : isFreighter
-                    ? `30M base · +1M after 20`
-                    : isSmallStandard
-                    ? `40M base · +2M after 30`
-                    : `${formatISK(pricePerJump)} ${t.perJump}`;
+                    ? usedCollateralPricing
+                        ? `${formatPercent(securityRate)}% ${t.collateralRate} · ${t.freighterNote}`
+                        : t.freighterNote
+                    : usedCollateralPricing
+                    ? `${formatPercent(securityRate)}% ${t.collateralRate}`
+                    : `${formatISK(distancePrice)} route minimum`;
 
             if (
-                !usedCollateralPricing &&
-                !isSmallStandard &&
-                !isFreighter &&
-                jumps > CONFIG.LONG_HAUL_THRESHOLD
+                !isWormhole &&
+                !isFreighter
             ) {
-                pricingMethod.textContent +=
-                    ` · ${t.longHaulNote}`;
-            }
+                const priorityText =
+                    selectedPriorityMode === "rush"
+                        ? " · Rush +30%"
+                        : "";
 
-            if (isSmallStandard) {
-                pricingMethod.textContent +=
-                    ` · ${t.smallStandardNote}`;
-            }
+                const cargoText =
+                    selectedCargoMode === "heavy"
+                        ? " · Heavy ×1.25"
+                        : "";
 
-            if (isFreighter) {
                 pricingMethod.textContent +=
-                    ` · ${t.freighterNote}`;
+                    `${priorityText}${cargoText}`;
             }
 
             result.classList.remove(
@@ -3474,6 +3654,11 @@
 
             currentLanguageElement.textContent =
                 languageCodes[language];
+
+            if (distanceHelp) {
+                distanceHelp.title =
+                    translations[language].distanceHintLong;
+            }
 
             document
                 .querySelectorAll(
@@ -3728,7 +3913,7 @@
                 input => {
                     input.addEventListener(
                         "change",
-                        calculate
+                        updateModeUI
                     );
                 }
             );
