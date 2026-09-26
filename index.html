@@ -108,6 +108,11 @@
             width: min(100%, 500px);
             padding: 30px;
 
+            transition:
+                border-color 0.28s ease,
+                box-shadow 0.28s ease,
+                transform 0.22s ease;
+
             background:
                 linear-gradient(
                     145deg,
@@ -657,6 +662,72 @@
             --accent-soft: rgba(240, 165, 58, 0.12);
         }
 
+        body.freighter-mode {
+            --accent: #e45858;
+            --accent-rgb: 228, 88, 88;
+            --accent-light: #ff7a7a;
+            --accent-soft: rgba(228, 88, 88, 0.12);
+        }
+
+        body.rush-mode .calculator {
+            border-color: rgba(240, 165, 58, 0.36);
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.45),
+                0 2px 10px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(240, 165, 58, 0.10),
+                0 0 34px rgba(240, 165, 58, 0.10);
+        }
+
+        body.rush-mode .calculator::after {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            z-index: -1;
+            pointer-events: none;
+            border-radius: calc(var(--radius-lg) + 1px);
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(240, 165, 58, 0.13),
+                    transparent 58%
+                );
+            opacity: 1;
+        }
+
+        body.rush-just-enabled .calculator {
+            animation: rushActivate 0.55s ease-out;
+        }
+
+        @keyframes rushActivate {
+            0% {
+                box-shadow:
+                    0 30px 80px rgba(0, 0, 0, 0.45),
+                    0 2px 10px rgba(0, 0, 0, 0.25),
+                    0 0 0 1px rgba(240, 165, 58, 0.10),
+                    0 0 10px rgba(240, 165, 58, 0.04);
+            }
+            45% {
+                box-shadow:
+                    0 30px 80px rgba(0, 0, 0, 0.45),
+                    0 2px 10px rgba(0, 0, 0, 0.25),
+                    0 0 0 1px rgba(240, 165, 58, 0.22),
+                    0 0 46px rgba(240, 165, 58, 0.18);
+            }
+            100% {
+                box-shadow:
+                    0 30px 80px rgba(0, 0, 0, 0.45),
+                    0 2px 10px rgba(0, 0, 0, 0.25),
+                    0 0 0 1px rgba(240, 165, 58, 0.10),
+                    0 0 34px rgba(240, 165, 58, 0.10);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body.rush-just-enabled .calculator {
+                animation: none;
+            }
+        }
+
         .mode-settings {
             display: grid;
             gap: 16px;
@@ -676,6 +747,23 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
+        }
+
+        #cargoMode {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 92px;
+        }
+
+        #cargoMode [data-cargo-mode="freighter"] {
+            min-height: 44px;
+            padding-inline: 7px;
+        }
+
+        #cargoMode [data-cargo-mode="freighter"] strong {
+            font-size: 12px;
+        }
+
+        #cargoMode [data-cargo-mode="freighter"] small {
+            font-size: 8px;
         }
 
         .segment-button {
@@ -730,6 +818,17 @@
 
         .segment-button.active small {
             color: rgba(var(--accent-rgb), 0.72);
+        }
+
+        .segment-button:disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-option input:disabled + label {
+            opacity: 0.35;
+            cursor: not-allowed;
         }
 
         .mode-note {
@@ -1388,6 +1487,16 @@
                             <strong>62,500 m³</strong>
                             <small data-i18n="heavyCargo">Heavy cargo</small>
                         </button>
+
+                        <button
+                            class="segment-button freighter-button"
+                            type="button"
+                            data-cargo-mode="freighter"
+                            aria-pressed="false"
+                        >
+                            <strong>Freighter</strong>
+                            <small data-i18n="freighterCargo">Highsec only</small>
+                        </button>
                     </div>
 
                     <div class="mode-note" id="cargoModeNote"></div>
@@ -1438,6 +1547,7 @@
 
                     <span
                         class="field-limit"
+                        id="collateralLimit"
                         data-i18n="maxCollateral"
                     >
                         Max 20B ISK
@@ -1888,7 +1998,12 @@
             STANDARD_SMALL_NULLSEC_RATE: 0.03,
             STANDARD_SMALL_BASE_PRICE: 40_000_000,
             STANDARD_SMALL_BASE_JUMPS: 30,
-            STANDARD_SMALL_EXTRA_JUMP_PRICE: 2_000_000
+            STANDARD_SMALL_EXTRA_JUMP_PRICE: 2_000_000,
+            FREIGHTER_HIGHSEC_RATE: 0.025,
+            FREIGHTER_MAX_COLLATERAL: 2_000_000_000,
+            FREIGHTER_BASE_PRICE: 30_000_000,
+            FREIGHTER_BASE_JUMPS: 20,
+            FREIGHTER_EXTRA_JUMP_PRICE: 1_000_000
         };
 
         const translations = {
@@ -1901,6 +2016,7 @@
                 cargoSize: "Cargo size",
                 standardCargo: "Standard cargo",
                 heavyCargo: "Heavy cargo",
+                freighterCargo: "Highsec only",
                 deliveryMode: "Delivery mode",
                 standardDelivery: "Standard",
                 standardDeliveryHint: "Lower cost",
@@ -1908,12 +2024,14 @@
                 rushDeliveryHint: "Priority handling",
                 cargoStandardNote: "Fast, flexible hauling for cargo up to 13,400 m³.",
                 cargoHeavyNote: "Larger cargo requires slower, more vulnerable hauling ships and carries higher transport risk.",
+                cargoFreighterNote: "Freighter service · approx. 300,000–1,080,000 m³ · Highsec only · Rush unavailable.",
                 priorityStandardNote: "Lower-cost delivery for cargo that does not require priority handling.",
                 priorityRushNote: "Delivery within 1 hour after the contract is accepted.",
                 priorityRushHeadline: "Delivery within 1 hour",
                 priorityRushSubtitle: "after the contract is accepted",
                 capacityStandard: "Maximum cargo: 13,400 m³",
                 capacityHeavy: "Heavy cargo: up to 62,500 m³",
+                capacityFreighter: "Freighter · approx. 300,000–1,080,000 m³ · Highsec only",
                 rateSuffix: "collateral",
 
                 collateral: "Collateral",
@@ -1951,6 +2069,7 @@
                 perJump: "ISK / jump",
                 longHaulNote: "Jumps beyond 30 are charged at double the per-jump rate.",
                 smallStandardNote: "13,400 m³ Standard has a 40M ISK minimum route price for up to 30 jumps, then +2M ISK per additional jump.",
+                freighterNote: "Freighter: 30M ISK up to 20 jumps, then +1M ISK per additional jump. Maximum collateral: 2B ISK. Approx. cargo range: 300,000–1,080,000 m³.",
 
                 infoKicker: "Delivery information",
                 infoTitle: "How pricing works",
@@ -1976,6 +2095,7 @@
                 cargoSize: "Объём груза",
                 standardCargo: "Обычный груз",
                 heavyCargo: "Крупный груз",
+                freighterCargo: "Только Highsec",
                 deliveryMode: "Режим доставки",
                 standardDelivery: "Обычная",
                 standardDeliveryHint: "Дешевле",
@@ -1983,12 +2103,14 @@
                 rushDeliveryHint: "Приоритетная",
                 cargoStandardNote: "Быстрая и гибкая перевозка грузов объёмом до 13 400 м³.",
                 cargoHeavyNote: "Для крупного груза нужны более медленные и уязвимые корабли, поэтому риск перевозки выше.",
+                cargoFreighterNote: "Freighter · примерно 300 000–1 080 000 м³ · только Highsec · Rush недоступен.",
                 priorityStandardNote: "Более доступная доставка для грузов, которым не требуется приоритет.",
                 priorityRushNote: "Доставка до 1 часа после принятия контракта.",
                 priorityRushHeadline: "Доставка до 1 часа",
                 priorityRushSubtitle: "после принятия контракта",
                 capacityStandard: "Максимальный объём: 13 400 м³",
                 capacityHeavy: "Крупный груз: до 62 500 м³",
+                capacityFreighter: "Freighter · примерно 300 000–1 080 000 м³ · только Highsec",
                 rateSuffix: "от залога",
 
                 collateral: "Залог",
@@ -2026,6 +2148,7 @@
                 perJump: "ISK / прыжок",
                 longHaulNote: "Прыжки после 30-го рассчитываются по двойной ставке.",
                 smallStandardNote: "Для 13 400 м³ Standard минимальная стоимость маршрута — 40M ISK до 30 прыжков, затем +2M ISK за каждый следующий прыжок.",
+                freighterNote: "Freighter: 30M ISK до 20 прыжков, затем +1M ISK за каждый следующий. Максимальный залог — 2B ISK. Примерный объём груза: 300 000–1 080 000 м³.",
 
                 infoKicker: "Информация о доставке",
                 infoTitle: "Как рассчитывается цена",
@@ -2051,6 +2174,7 @@
                 cargoSize: "Frachtgröße",
                 standardCargo: "Standardfracht",
                 heavyCargo: "Großfracht",
+                freighterCargo: "Nur Highsec",
                 deliveryMode: "Liefermodus",
                 standardDelivery: "Standard",
                 standardDeliveryHint: "Günstiger",
@@ -2058,12 +2182,14 @@
                 rushDeliveryHint: "Priorisiert",
                 cargoStandardNote: "Flexible Lieferung für Fracht bis 13.400 m³.",
                 cargoHeavyNote: "Größere Fracht erfordert langsamere, verwundbarere Schiffe und erhöht das Transportrisiko.",
+                cargoFreighterNote: "Freighter · ca. 300.000–1.080.000 m³ · nur Highsec · Rush nicht verfügbar.",
                 priorityStandardNote: "Günstigere Lieferung ohne Prioritätsabwicklung.",
                 priorityRushNote: "Lieferung innerhalb von 1 Stunde nach Annahme des Vertrags.",
                 priorityRushHeadline: "Lieferung innerhalb von 1 Stunde",
                 priorityRushSubtitle: "nach Annahme des Vertrags",
                 capacityStandard: "Maximales Volumen: 13.400 m³",
                 capacityHeavy: "Großfracht: bis 62.500 m³",
+                capacityFreighter: "Freighter · ca. 300.000–1.080.000 m³ · nur Highsec",
                 rateSuffix: "der Sicherheit",
 
                 collateral: "Sicherheit",
@@ -2101,6 +2227,7 @@
                 perJump: "ISK / Sprung",
                 longHaulNote: "Sprünge über 30 werden zum doppelten Preis pro Sprung berechnet.",
                 smallStandardNote: "Für 13.400 m³ Standard beträgt der Mindestpreis bis 30 Sprünge 40M ISK, danach +2M ISK pro weiterem Sprung.",
+                freighterNote: "Freighter: 30M ISK bis 20 Sprünge, danach +1M ISK je weiterem Sprung. Maximale Sicherheit: 2B ISK. Ungefähres Frachtvolumen: 300.000–1.080.000 m³.",
 
                 infoKicker: "Lieferinformationen",
                 infoTitle: "So wird der Preis berechnet",
@@ -2126,6 +2253,7 @@
                 cargoSize: "Volume de cargaison",
                 standardCargo: "Cargaison standard",
                 heavyCargo: "Cargaison lourde",
+                freighterCargo: "Highsec uniquement",
                 deliveryMode: "Mode de livraison",
                 standardDelivery: "Standard",
                 standardDeliveryHint: "Moins cher",
@@ -2133,12 +2261,14 @@
                 rushDeliveryHint: "Prioritaire",
                 cargoStandardNote: "Transport flexible pour les cargaisons jusqu’à 13 400 m³.",
                 cargoHeavyNote: "Les cargaisons plus volumineuses nécessitent des vaisseaux plus lents et vulnérables, avec un risque accru.",
+                cargoFreighterNote: "Freighter · env. 300 000–1 080 000 m³ · Highsec uniquement · Rush indisponible.",
                 priorityStandardNote: "Livraison moins coûteuse sans traitement prioritaire.",
                 priorityRushNote: "Livraison sous 1 heure après acceptation du contrat.",
                 priorityRushHeadline: "Livraison sous 1 heure",
                 priorityRushSubtitle: "après acceptation du contrat",
                 capacityStandard: "Volume maximum : 13 400 m³",
                 capacityHeavy: "Cargaison lourde : jusqu’à 62 500 m³",
+                capacityFreighter: "Freighter · env. 300 000–1 080 000 m³ · Highsec uniquement",
                 rateSuffix: "de garantie",
 
                 collateral: "Garantie",
@@ -2176,6 +2306,7 @@
                 perJump: "ISK / saut",
                 longHaulNote: "Les sauts au-delà de 30 sont facturés au double du tarif par saut.",
                 smallStandardNote: "Pour 13 400 m³ Standard, le prix minimum est de 40M ISK jusqu’à 30 sauts, puis +2M ISK par saut supplémentaire.",
+                freighterNote: "Freighter : 30M ISK jusqu’à 20 sauts, puis +1M ISK par saut supplémentaire. Garantie maximale : 2B ISK. Volume approximatif : 300 000–1 080 000 m³.",
 
                 infoKicker: "Informations de livraison",
                 infoTitle: "Calcul du tarif",
@@ -2201,6 +2332,7 @@
                 cargoSize: "Volumen de carga",
                 standardCargo: "Carga estándar",
                 heavyCargo: "Carga pesada",
+                freighterCargo: "Solo Highsec",
                 deliveryMode: "Modo de entrega",
                 standardDelivery: "Estándar",
                 standardDeliveryHint: "Más barato",
@@ -2208,12 +2340,14 @@
                 rushDeliveryHint: "Prioritario",
                 cargoStandardNote: "Transporte flexible para cargas de hasta 13.400 m³.",
                 cargoHeavyNote: "Las cargas grandes requieren naves más lentas y vulnerables, lo que aumenta el riesgo del transporte.",
+                cargoFreighterNote: "El servicio Freighter solo está disponible en Highsec. Rush no está disponible.",
                 priorityStandardNote: "Entrega más económica sin tratamiento prioritario.",
                 priorityRushNote: "Entrega en un plazo de 1 hora tras aceptar el contrato.",
                 priorityRushHeadline: "Entrega en 1 hora",
                 priorityRushSubtitle: "después de aceptar el contrato",
                 capacityStandard: "Volumen máximo: 13.400 m³",
                 capacityHeavy: "Carga pesada: hasta 62.500 m³",
+                capacityFreighter: "Freighter · aprox. 300.000–1.080.000 m³ · solo Highsec",
                 rateSuffix: "de garantía",
 
                 collateral: "Garantía",
@@ -2251,6 +2385,7 @@
                 perJump: "ISK / salto",
                 longHaulNote: "Los saltos después del 30 se cobran al doble de la tarifa por salto.",
                 smallStandardNote: "Para 13.400 m³ Standard, el precio mínimo es de 40M ISK hasta 30 saltos y luego +2M ISK por cada salto adicional.",
+                freighterNote: "Freighter: 30M ISK hasta 20 saltos y después +1M ISK por salto adicional. Garantía máxima: 2B ISK. Volumen aproximado: 300.000–1.080.000 m³.",
 
                 infoKicker: "Información de entrega",
                 infoTitle: "Cómo se calcula el precio",
@@ -2276,6 +2411,7 @@
                 cargoSize: "貨物サイズ",
                 standardCargo: "通常貨物",
                 heavyCargo: "大型貨物",
+                freighterCargo: "Highsec限定",
                 deliveryMode: "配送モード",
                 standardDelivery: "通常",
                 standardDeliveryHint: "低コスト",
@@ -2283,12 +2419,14 @@
                 rushDeliveryHint: "優先対応",
                 cargoStandardNote: "13,400 m³までの貨物向けの柔軟な配送です。",
                 cargoHeavyNote: "大型貨物にはより遅く脆弱な船が必要となり、輸送リスクが高くなります。",
+                cargoFreighterNote: "FreighterサービスはHighsec限定です。Rushは利用できません。",
                 priorityStandardNote: "優先対応を必要としない貨物向けの低コスト配送です。",
                 priorityRushNote: "契約受諾後1時間以内に配送します。",
                 priorityRushHeadline: "1時間以内に配送",
                 priorityRushSubtitle: "契約受諾後",
                 capacityStandard: "最大容量: 13,400 m³",
                 capacityHeavy: "大型貨物: 最大 62,500 m³",
+                capacityFreighter: "Freighter · 約300,000–1,080,000 m³ · Highsec限定",
                 rateSuffix: "担保",
 
                 collateral: "担保",
@@ -2326,6 +2464,7 @@
                 perJump: "ISK / ジャンプ",
                 longHaulNote: "30ジャンプを超える分は、1ジャンプあたりの料金が2倍になります。",
                 smallStandardNote: "13,400 m³ Standardは30ジャンプまで最低40M ISK、31ジャンプ目以降は1ジャンプごとに+2M ISKです。",
+                freighterNote: "Freighter：20ジャンプまで30M ISK、以降は1ジャンプごとに+1M ISK。最大担保は2B ISK。貨物量の目安は300,000–1,080,000 m³。",
 
                 infoKicker: "配送情報",
                 infoTitle: "料金の計算方法",
@@ -2351,6 +2490,7 @@
                 cargoSize: "화물 크기",
                 standardCargo: "일반 화물",
                 heavyCargo: "대형 화물",
+                freighterCargo: "Highsec 전용",
                 deliveryMode: "배송 모드",
                 standardDelivery: "일반",
                 standardDeliveryHint: "저렴한 요금",
@@ -2358,12 +2498,14 @@
                 rushDeliveryHint: "우선 처리",
                 cargoStandardNote: "13,400 m³ 이하 화물을 위한 유연한 운송입니다.",
                 cargoHeavyNote: "대형 화물은 더 느리고 취약한 함선을 필요로 하므로 운송 위험이 더 높습니다.",
+                cargoFreighterNote: "Freighter · 약 300,000–1,080,000 m³ · Highsec 전용 · Rush 사용 불가.",
                 priorityStandardNote: "우선 처리가 필요하지 않은 화물을 위한 저렴한 배송입니다.",
                 priorityRushNote: "계약 수락 후 1시간 이내에 배송됩니다.",
                 priorityRushHeadline: "1시간 이내 배송",
                 priorityRushSubtitle: "계약 수락 후",
                 capacityStandard: "최대 화물: 13,400 m³",
                 capacityHeavy: "대형 화물: 최대 62,500 m³",
+                capacityFreighter: "Freighter · 약 300,000–1,080,000 m³ · Highsec 전용",
                 rateSuffix: "담보",
 
                 collateral: "담보",
@@ -2401,6 +2543,7 @@
                 perJump: "ISK / 점프",
                 longHaulNote: "30점을 초과한 점프는 점프당 요금의 2배로 계산됩니다.",
                 smallStandardNote: "13,400 m³ Standard는 30점프까지 최소 40M ISK이며, 이후 점프당 +2M ISK가 추가됩니다.",
+                freighterNote: "Freighter: 20점프까지 30M ISK, 이후 점프당 +1M ISK. 최대 담보는 2B ISK. 대략적인 화물 범위는 300,000–1,080,000 m³입니다.",
 
                 infoKicker: "배송 안내",
                 infoTitle: "가격 계산 방식",
@@ -2426,6 +2569,7 @@
                 cargoSize: "货物体积",
                 standardCargo: "标准货物",
                 heavyCargo: "大型货物",
+                freighterCargo: "仅限 Highsec",
                 deliveryMode: "运输模式",
                 standardDelivery: "标准",
                 standardDeliveryHint: "价格更低",
@@ -2433,12 +2577,14 @@
                 rushDeliveryHint: "优先处理",
                 cargoStandardNote: "适用于不超过 13,400 m³ 货物的灵活运输。",
                 cargoHeavyNote: "大型货物需要更慢、更脆弱的运输舰船，因此运输风险更高。",
+                cargoFreighterNote: "Freighter 服务仅限 Highsec，且不提供 Rush。",
                 priorityStandardNote: "适用于无需优先处理货物的低成本运输。",
                 priorityRushNote: "合同接受后 1 小时内完成运输。",
                 priorityRushHeadline: "1 小时内完成运输",
                 priorityRushSubtitle: "合同接受后",
                 capacityStandard: "最大货舱容量：13,400 m³",
                 capacityHeavy: "大型货物：最高 62,500 m³",
+                capacityFreighter: "Freighter · 约 300,000–1,080,000 m³ · 仅限 Highsec",
                 rateSuffix: "抵押金额",
 
                 collateral: "抵押金额",
@@ -2476,6 +2622,7 @@
                 perJump: "ISK / 跳",
                 longHaulNote: "超过 30 跳的部分按每跳费率的 2 倍计算。",
                 smallStandardNote: "13,400 m³ Standard 在 30 跳以内最低为 40M ISK，超过 30 跳后每跳增加 2M ISK。",
+                freighterNote: "Freighter：20 跳以内 30M ISK，之后每跳 +1M ISK。最大抵押额 2B ISK。货物量约 300,000–1,080,000 m³。",
 
                 infoKicker: "运输说明",
                 infoTitle: "价格计算方式",
@@ -2532,6 +2679,9 @@
         const collateralError =
             document.getElementById("collateral-error");
 
+        const collateralLimit =
+            document.getElementById("collateralLimit");
+
         const languageButton =
             document.getElementById("languageButton");
 
@@ -2576,14 +2726,31 @@
                 maximumFractionDigits: 0
             });
 
+        function safeStorageGet(key) {
+            try {
+                return window.localStorage.getItem(key);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function safeStorageSet(key, value) {
+            try {
+                window.localStorage.setItem(key, value);
+            } catch (error) {
+                // Local file:// mode may block storage. The calculator still works
+                // normally; only language persistence is skipped for this session.
+            }
+        }
+
         let currentLanguage =
-            localStorage.getItem("language") || "en";
+            safeStorageGet("language") || "en";
 
         let selectedCargoMode =
             "standard";
 
         let selectedPriorityMode =
-            "rush";
+            "standard";
 
         function getModeMultiplier() {
             const cargoMultiplier =
@@ -2622,6 +2789,17 @@
                 selectedCargoMode === "heavy"
             );
 
+            document.body.classList.toggle(
+                "freighter-mode",
+                selectedCargoMode === "freighter"
+            );
+
+            document.body.classList.toggle(
+                "rush-mode",
+                selectedPriorityMode === "rush" &&
+                selectedCargoMode !== "freighter"
+            );
+
             cargoModeButtons.forEach(
                 button => {
                     const active =
@@ -2658,15 +2836,87 @@
                 }
             );
 
+            const isFreighter =
+                selectedCargoMode === "freighter";
+
+            collateralLimit.textContent =
+                isFreighter
+                    ? "Max 2B ISK"
+                    : translations[currentLanguage].maxCollateral;
+
+            const currentCollateral =
+                parseNumber(collateralInput.value);
+
+            if (
+                isFreighter &&
+                currentCollateral > CONFIG.FREIGHTER_MAX_COLLATERAL
+            ) {
+                collateralInput.value =
+                    formatISK(CONFIG.FREIGHTER_MAX_COLLATERAL);
+                updateSliderFromCollateral(
+                    CONFIG.FREIGHTER_MAX_COLLATERAL
+                );
+            }
+
             capacityElement.textContent =
-                selectedCargoMode === "heavy"
+                isFreighter
+                    ? t.capacityFreighter
+                    : selectedCargoMode === "heavy"
                     ? t.capacityHeavy
                     : t.capacityStandard;
 
             cargoModeNote.textContent =
-                selectedCargoMode === "heavy"
+                isFreighter
+                    ? t.cargoFreighterNote
+                    : selectedCargoMode === "heavy"
                     ? t.cargoHeavyNote
                     : t.cargoStandardNote;
+
+            const rushButton =
+                document.querySelector(
+                    '[data-priority-mode="rush"]'
+                );
+
+            rushButton.disabled =
+                isFreighter;
+
+            if (isFreighter) {
+                selectedPriorityMode =
+                    "standard";
+
+                const highsec =
+                    document.getElementById(
+                        "highsec"
+                    );
+
+                highsec.checked =
+                    true;
+            }
+
+            ["lowsec", "nullsec"].forEach(
+                id => {
+                    document.getElementById(id).disabled =
+                        isFreighter;
+                }
+            );
+
+            priorityModeButtons.forEach(
+                button => {
+                    const active =
+                        button.dataset.priorityMode ===
+                        selectedPriorityMode;
+
+                    button.classList.toggle(
+                        "active",
+                        active
+                    );
+
+                    button.setAttribute(
+                        "aria-pressed",
+                        String(active)
+                    );
+                }
+            );
 
             if (selectedPriorityMode === "rush") {
                 priorityModeNote.classList.add(
@@ -2699,7 +2949,12 @@
 
                     let effectiveRate;
 
-                    if (isSmallStandard) {
+                    if (isFreighter) {
+                        effectiveRate =
+                            id === "highsec"
+                                ? CONFIG.FREIGHTER_HIGHSEC_RATE
+                                : 0;
+                    } else if (isSmallStandard) {
                         effectiveRate =
                             id === "highsec"
                                 ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
@@ -2937,16 +3192,23 @@
             collateralError.hidden =
                 true;
 
+            const maxCollateral =
+                selectedCargoMode === "freighter"
+                    ? CONFIG.FREIGHTER_MAX_COLLATERAL
+                    : CONFIG.MAX_COLLATERAL;
+
             if (
                 value >
-                CONFIG.MAX_COLLATERAL
+                maxCollateral
             ) {
                 value =
-                    CONFIG.MAX_COLLATERAL;
+                    maxCollateral;
 
                 collateralError.textContent =
-                    translations[currentLanguage]
-                        .maxCollateralError;
+                    selectedCargoMode === "freighter"
+                        ? "Maximum collateral for Freighter is 2B ISK."
+                        : translations[currentLanguage]
+                            .maxCollateralError;
 
                 collateralError.hidden =
                     false;
@@ -3041,10 +3303,18 @@
                 selectedCargoMode === "standard" &&
                 selectedPriorityMode === "standard";
 
+            const isFreighter =
+                selectedCargoMode === "freighter";
+
             let securityRate;
             let pricePerJump;
 
-            if (isSmallStandard) {
+            if (isFreighter) {
+                securityRate =
+                    CONFIG.FREIGHTER_HIGHSEC_RATE;
+
+                pricePerJump = 0;
+            } else if (isSmallStandard) {
                 securityRate =
                     securityInput.id === "highsec"
                         ? CONFIG.STANDARD_SMALL_HIGHSEC_RATE
@@ -3082,7 +3352,15 @@
                 );
 
             const distancePrice =
-                isSmallStandard
+                isFreighter
+                    ? CONFIG.FREIGHTER_BASE_PRICE +
+                      Math.max(
+                          0,
+                          jumps -
+                              CONFIG.FREIGHTER_BASE_JUMPS
+                      ) *
+                          CONFIG.FREIGHTER_EXTRA_JUMP_PRICE
+                    : isSmallStandard
                     ? CONFIG.STANDARD_SMALL_BASE_PRICE +
                       Math.max(
                           0,
@@ -3127,7 +3405,9 @@
                     : t.standardDelivery;
 
             const cargoLabel =
-                selectedCargoMode === "heavy"
+                selectedCargoMode === "freighter"
+                    ? "Freighter"
+                    : selectedCargoMode === "heavy"
                     ? "62,500 m³"
                     : "13,400 m³";
 
@@ -3141,6 +3421,8 @@
             pricingMethod.textContent =
                 usedCollateralPricing
                     ? `${securityRate * 100}% ${t.collateralRate}`
+                    : isFreighter
+                    ? `30M base · +1M after 20`
                     : isSmallStandard
                     ? `40M base · +2M after 30`
                     : `${formatISK(pricePerJump)} ${t.perJump}`;
@@ -3148,6 +3430,7 @@
             if (
                 !usedCollateralPricing &&
                 !isSmallStandard &&
+                !isFreighter &&
                 jumps > CONFIG.LONG_HAUL_THRESHOLD
             ) {
                 pricingMethod.textContent +=
@@ -3157,6 +3440,11 @@
             if (isSmallStandard) {
                 pricingMethod.textContent +=
                     ` · ${t.smallStandardNote}`;
+            }
+
+            if (isFreighter) {
+                pricingMethod.textContent +=
+                    ` · ${t.freighterNote}`;
             }
 
             result.classList.remove(
@@ -3174,7 +3462,7 @@
             currentLanguage =
                 language;
 
-            localStorage.setItem(
+            safeStorageSet(
                 "language",
                 language
             );
@@ -3318,10 +3606,20 @@
         collateralSlider.addEventListener(
             "input",
             () => {
-                const collateral =
+                let collateral =
                     sliderPositionToCollateral(
                         collateralSlider.value
                     );
+
+                if (
+                    selectedCargoMode === "freighter"
+                ) {
+                    collateral =
+                        Math.min(
+                            collateral,
+                            CONFIG.FREIGHTER_MAX_COLLATERAL
+                        );
+                }
 
                 collateralInput.value =
                     formatISK(collateral);
@@ -3354,6 +3652,18 @@
                         selectedCargoMode =
                             button.dataset.cargoMode;
 
+                        if (
+                            selectedCargoMode ===
+                            "freighter"
+                        ) {
+                            selectedPriorityMode =
+                                "standard";
+
+                            document.getElementById(
+                                "highsec"
+                            ).checked = true;
+                        }
+
                         updateModeUI();
                     }
                 );
@@ -3365,10 +3675,46 @@
                 button.addEventListener(
                     "click",
                     () => {
+                        if (
+                            selectedCargoMode ===
+                                "freighter" &&
+                            button.dataset.priorityMode ===
+                                "rush"
+                        ) {
+                            return;
+                        }
+
+                        const wasRush =
+                            selectedPriorityMode === "rush";
+
                         selectedPriorityMode =
                             button.dataset.priorityMode;
 
                         updateModeUI();
+
+                        if (
+                            !wasRush &&
+                            selectedPriorityMode === "rush"
+                        ) {
+                            document.body.classList.remove(
+                                "rush-just-enabled"
+                            );
+
+                            void document.body.offsetWidth;
+
+                            document.body.classList.add(
+                                "rush-just-enabled"
+                            );
+
+                            window.setTimeout(
+                                () => {
+                                    document.body.classList.remove(
+                                        "rush-just-enabled"
+                                    );
+                                },
+                                600
+                            );
+                        }
                     }
                 );
             }
